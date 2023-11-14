@@ -5,10 +5,10 @@
 > | --- | --- | --- |
 > | ***Abraham Melgozad de la Torre** | 244021 | Eriarer |
 > | Mariana Avila Rivera | 332830 | mariana-avila-rivera |
-> | Leonardo Daniel Gutiérrez Flores | **id** | LaxLev |
-> | Gerardo Diosdado Escalera | **id** | diosescalera |
+> | Leonardo Daniel Gutiérrez Flores | 260818 | LaxLev |
+> | Gerardo Diosdado Escalera | 217108 | diosescalera |
 > | Ahylin Aketzali Castorena Rodriguez | 336248 | AketzaliCastorena |
-> | Michelle Monserrat Gómez López | **id** | Michh13 |
+> | Michelle Monserrat Gómez López | 336931 | Michh13 |
 > | Ana Paulina Martinez Luevano | **id** | paniniL8 |
 > 
 > ## Profesora: Geprgoma Salazar Partida
