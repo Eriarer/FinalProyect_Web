@@ -11,6 +11,6 @@
 > | Michelle Monserrat Gómez López | 336931 | Michh13 |
 > | Ana Paulina Martinez Luevano | 291682 | paniniL8 |
 > 
-> ## Profesora: Geprgoma Salazar Partida
+> ## Profesora: Georgina Salazar Partida
 
 ### Temática de la Tienda: Peluches
