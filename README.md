@@ -3,7 +3,7 @@
 > ## Alumnos
 > | **Nombre** | **ID** | **Usuario Github** |
 > | --- | --- | --- |
-> | *Abraham Melgozad de la Torre | 244021 | Eriarer |
+> | ***Abraham Melgozad de la Torre** | 244021 | Eriarer |
 > | Mariana Avila Rivera | 332830 | mariana-avila-rivera |
 > | Leonardo Daniel Gutiérrez Flores | **id** | LaxLev |
 > | Gerardo Diosdado Escalera | **id** | diosescalera |
