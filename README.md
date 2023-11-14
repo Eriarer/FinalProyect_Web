@@ -9,7 +9,7 @@
 > | Gerardo Diosdado Escalera | **id** | diosescalera |
 > | Ahylin Aketzali Castorena Rodriguez | 336248 | AketzaliCastorena |
 > | Michelle Monserrat Gómez López | **id** | Michh13 |
-> | Ana Paulina Martinez Luevano | **id** | PaniniL_8 |
+> | Ana Paulina Martinez Luevano | **id** | paniniL8 |
 > 
 > ## Profesora: Geprgoma Salazar Partida
 
