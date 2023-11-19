@@ -1,0 +1,5 @@
+/* incluir archivos dentro de headers/ */
+@import url('headers/colors.css');
+@import url('headers/fonts.css');
+@import url('headers/footer.css');
+@import url('headers/navbar.css');
