@@ -1,4 +1,14 @@
 <?php
+/*
+Estructura de la tabla productos:
+Field: prod_id - Type: int(6)
+Field: prod_name - Type: varchar(255)
+Field: prod_description - Type: text
+Field: prod_imgPath - Type: varchar(255)
+Field: prod_stock - Type: int(11)
+Field: prod_precio - Type: float
+Field: prod_descuento - Type: float
+*/
 class dataBase {
 
   private $connexion;
