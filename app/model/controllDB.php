@@ -1,16 +1,19 @@
 <?php
 /*
 Estructura de la tabla productos:
-Field: prod_id - Type: int(6)
-Field: prod_name - Type: varchar(255)
-Field: prod_description - Type: text
-Field: prod_imgPath - Type: varchar(255)
-Field: prod_stock - Type: int(11)
-Field: prod_precio - Type: float
-Field: prod_descuento - Type: float
-*/
-class dataBase {
 
+Field	            Type	        Null	Key  Default	Extra
+prod_id	          int(6)	      NO	  PRI	 auto_increment
+categoria	        varchar(255)	YES			
+prod_name	        varchar(255)	NO			
+prod_description	text	        YES			
+prod_imgPath	    varchar(255)	NO			
+prod_stock	      int(11)	      NO			
+prod_precio	      float	        NO			
+prod_descuento	  float	        NO	
+*/
+class dataBase
+{
   private $connexion;
   private $host;
   private $user;
@@ -18,7 +21,9 @@ class dataBase {
   private $db;
   private $config;
 
-  public function __construct($credentials, $config) {
+  //En PHP solo se permite un constructor por clase
+  public function __construct($credentials, $config)
+  {
     $this->host = $credentials['host'];
     $this->user = $credentials['user'];
     $this->pass = $credentials['pass'];
@@ -30,46 +35,44 @@ class dataBase {
     }
   }
 
+  public function __destruct()
+  {
+    $this->connexion->close();
+  }
   /*
   █▀▄ █▀▄ █▀█ █▀▄ █ █ █▀ ▀█▀ █▀█ █▀
   █▀  █▀▄ █▄█ █▄▀ █▄█ █▄  █  █▄█ ▄█
   */
-  public function altaProducto($categoria, $prod_name, $prod_description, $prod_img, $prod_stock, $prod_precio, $prod_descuento) {
-    // verificar que existen parámetros
-    if ($categoria == null || $prod_name == null || $prod_description || $prod_img == null || $prod_stock == null || $prod_precio == null || $prod_descuento == null) {
-      return false;
+  public function altaProducto($categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento)
+  {
+    // Verificar que existen parámetros
+    if ($categoria == null || $prod_name == null || $prod_description == null || $prod_imgPath == null || $prod_stock == null || $prod_precio == null || $prod_descuento == null) {
+      throw new Exception("Todos los campos son obligatorios.");
     }
-    // Guardar la imagen en la carpeta correspondiente
-    $target_dir = $this->config['P_products'];
-    //pendiende
-    //pendiende
-    //pendiende
-    //pendiende
-    //pendiende
-    //pendiende
 
-    // PREPARAR LA SENTENCIA PARA EVITAR <--INYECCIÓN SQL-->
-    //Da de alta al producto con los datos recibidos
-    $sql = "INSERT INTO productos (categoria, pord_name, prod_description, prod_imgPath, prod_stock, prod_precio, prod_descuento) 
-    VALUES (?, ?, ?, ?, ?, ?)";
-
+    // Preparar la sentencia para evitar la inyección SQL
+    $sql = "INSERT INTO productos (categoria, prod_name, prod_description, prod_imgPath, prod_stock, prod_precio, prod_descuento) 
+              VALUES (?, ?, ?, ?, ?, ?, ?)";
+    // Preparar la sentencia
     $stmt = $this->connexion->prepare($sql);
 
     // Vincular parámetros a la sentencia preparada como cadenas
-    $stmt->bind_param("sds", $categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento);
+    $stmt->bind_param("ssssiii", $categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento);
 
     // Ejecutar la sentencia
     $stmt->execute();
 
-    //cerrar la sentencia
+    // Obtener el número de filas afectadas por la última consulta
+    $affected_rows = $stmt->affected_rows;
+
+    // Cerrar la sentencia
     $stmt->close();
 
-    // Devuelve el número de filas afectadas por la última consulta
-    $afected_rows = $stmt->affected_rows;
-    return $afected_rows > 0 ? true : false;
+    return $affected_rows > 0;
   }
 
-  public function bajaProducto($id) {
+  public function bajaProducto($id)
+  {
     // verificar que existen parámetros
     if ($id == null) {
       return false;
@@ -87,15 +90,17 @@ class dataBase {
     // Ejecutar la sentencia
     $stmt->execute();
 
+    // Devuelve el número de filas afectadas por la última consulta
+    $afected_rows = $stmt->affected_rows;
+
     //cerrar la sentencia
     $stmt->close();
 
-    // Devuelve el número de filas afectadas por la última consulta
-    $afected_rows = $stmt->affected_rows;
     return $afected_rows > 0 ? true : false;
   }
 
-  public function modifyProduct($id, $categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento) {
+  public function modifyProduct($id, $categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento)
+  {
     // verificar que id no sea nulo
     if ($id == null) {
       return false;
@@ -134,14 +139,15 @@ class dataBase {
     $stmt->bind_param("sds", $categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento, $id);
     // Ejecutar la sentencia
     $stmt->execute();
-    //cerrar la sentencia
-    $stmt->close();
     // Devuelve el número de filas afectadas por la última consulta
     $afected_rows = $stmt->affected_rows;
+    //cerrar la sentencia
+    $stmt->close();
     return $afected_rows > 0 ? true : false;
   }
 
-  public function getProduct($id) {
+  public function getProduct($id)
+  {
     // verificar que existen parámetros
     if ($id == null) {
       return false;
@@ -153,22 +159,26 @@ class dataBase {
     $stmt->execute();
     //crear un array asociativo
     $result = $stmt->get_result();
+    $stmt->close();
     $json = json_encode($result->fetch_assoc());
     return $json;
   }
 
-  public function getAllProducts() {
+  public function getAllProducts()
+  {
     //Devuelve todos los productos
     $sql = "SELECT * FROM productos";
     $stmt = $this->connexion->prepare($sql);
     $stmt->execute();
     //crear un array asociativo
     $result = $stmt->get_result();
+    $stmt->close();
     $json = json_encode($result->fetch_all(MYSQLI_ASSOC));
     return $json;
   }
 
-  public function queryProducts($categoria, $price_min, $price_max, $stock_min, $stock_max, $discount_min, $discount_max) {
+  public function queryProducts($categoria, $price_min, $price_max, $stock_min, $stock_max, $discount_min, $discount_max)
+  {
     // Los parametros son opcionales, si todos son null, devuelve todos los productos
     if ($categoria == null && $price_min == null && $price_max == null && $stock_min == null && $stock_max == null && $discount_min == null && $discount_max == null) {
       return $this->getAllProducts();
@@ -192,7 +202,23 @@ class dataBase {
     $stmt->execute();
     //crear un array asociativo
     $result = $stmt->get_result();
+    $stmt->close();
     $json = json_encode($result->fetch_all(MYSQLI_ASSOC));
     return $json;
+  }
+
+  public function getLastProductId()
+  {
+    //Devuelve el id del último producto creado
+    $sql = "SELECT prod_id FROM productos ORDER BY prod_id DESC";
+    $result = $this->connexion->query($sql);
+    $last = $result->fetch_assoc();
+    if ($last == null) {
+      return 0;
+    }else{
+      $last = $last['prod_id'];
+    }
+    // retornar el id
+    return $last;
   }
 }
