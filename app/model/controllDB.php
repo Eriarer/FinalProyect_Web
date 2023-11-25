@@ -215,7 +215,7 @@ class dataBase
     $last = $result->fetch_assoc();
     if ($last == null) {
       return 0;
-    }else{
+    } else {
       $last = $last['prod_id'];
     }
     // retornar el id
