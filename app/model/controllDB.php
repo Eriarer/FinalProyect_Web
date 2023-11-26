@@ -217,4 +217,30 @@ class dataBase
     // retornar el id
     return $last;
   }
+
+  /*
+  █ █ █▀ █ █ ▄▀▄ █▀▄ ▀█▀ █▀█ █▀
+  █▄█ ▄█ █▄█ █▀█ █▀▄ ▄█▄ █▄█ ▄█
+  */
+
+  public function altaUsuarios($usr_email, $usr_name, $usr_pwd, $usr_admin, $pregunta, $respuesta){
+    // Verificar que existen parámetros
+    $usr_admin = 0;
+    if ($usr_email == null || $usr_name == null || $usr_pwd == null || $usr_admin === null || $pregunta == null || $respuesta == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    // Preparar la sentencia para evitar la <--inyección SQL-->
+    $sql = "INSERT INTO usuarios (usr_email, usr_name, usr_pwd, usr_admin) 
+              VALUES (?, ?, ?, ?)";
+    // Preparar la sentencia
+    $stmt = $this->connexion->prepare($sql);
+
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("sssi", $usr_email, $usr_name, $usr_pwd, $usr_admin);
+
+    // Ejecutar la sentencia
+    $stmt->execute();
+
+  }
 }
