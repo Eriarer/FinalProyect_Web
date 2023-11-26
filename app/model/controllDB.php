@@ -242,5 +242,73 @@ class dataBase
     // Ejecutar la sentencia
     $stmt->execute();
 
+    // Obtener el id de usuario recien creado
+    $usr_id = $this->getLasUsrId();
+    if ($usr_id == 0) {
+      return false;
+    }
+
+    // Crear la pregunta de seguridad
+    return $this->altaPreguntaSeguridad($usr_id, $pregunta, $respuesta);
+  }
+
+  public function altaPreguntaSeguridad($user_id, $pregunta, $respuesta){
+    // Verificar que existen parámetros
+    if ($user_id == null || $pregunta == null || $respuesta == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    // Preparar la sentencia para evitar la <--inyección SQL-->
+    $sql = "INSERT INTO preguntas_seguridad (usr_id, pregunta, respuesta) 
+              VALUES (?, ?, ?)";
+    // Preparar la sentencia
+    $stmt = $this->connexion->prepare($sql);
+
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("iss", $user_id, $pregunta, $respuesta);
+
+    // Ejecutar la sentencia
+    $stmt->execute();
+
+    // Obtener el número de filas afectadas por la última consulta
+    $affected_rows = $stmt->affected_rows;
+    return $affected_rows > 0;
+    }
+
+  public function getLasUsrId(){
+    //Devuelve el id del último usuario creado
+    $sql = "SELECT usr_id FROM usuarios ORDER BY usr_id DESC";
+    $result = $this->connexion->query($sql);
+    $last = $result->fetch_assoc();
+    if ($last == null) {
+      return 0;
+    } else {
+      $last = $last['usr_id'];
+    }
+    // retornar el id
+    return $last;
+  }
+
+  public function emailExist($email){
+    // Verificar que existen parámetros
+    if ($email == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    // Preparar la sentencia para evitar la <--inyección SQL-->
+    $sql = "SELECT usr_email FROM usuarios WHERE usr_email = ?";
+    // Preparar la sentencia
+    $stmt = $this->connexion->prepare($sql);
+
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("s", $email);
+
+    // Ejecutar la sentencia
+    $stmt->execute();
+
+    // Obtener el número de filas afectadas por la última consulta
+    $result = $stmt->get_result();
+
+    return $result->num_rows > 0;
   }
 }
