@@ -66,7 +66,7 @@ class dataBase
     $affected_rows = $stmt->affected_rows;
 
     // Cerrar la sentencia
-    $stmt->close();
+    
 
     return $affected_rows > 0;
   }
@@ -92,9 +92,6 @@ class dataBase
 
     // Devuelve el número de filas afectadas por la última consulta
     $afected_rows = $stmt->affected_rows;
-
-    //cerrar la sentencia
-    $stmt->close();
 
     return $afected_rows > 0 ? true : false;
   }
@@ -141,8 +138,7 @@ class dataBase
     $stmt->execute();
     // Devuelve el número de filas afectadas por la última consulta
     $afected_rows = $stmt->affected_rows;
-    //cerrar la sentencia
-    $stmt->close();
+    
     return $afected_rows > 0 ? true : false;
   }
 
@@ -159,7 +155,7 @@ class dataBase
     $stmt->execute();
     //crear un array asociativo
     $result = $stmt->get_result();
-    $stmt->close();
+    
     $json = json_encode($result->fetch_assoc());
     return $json;
   }
@@ -172,7 +168,7 @@ class dataBase
     $stmt->execute();
     //crear un array asociativo
     $result = $stmt->get_result();
-    $stmt->close();
+    
     $json = json_encode($result->fetch_all(MYSQLI_ASSOC));
     return $json;
   }
@@ -202,7 +198,7 @@ class dataBase
     $stmt->execute();
     //crear un array asociativo
     $result = $stmt->get_result();
-    $stmt->close();
+    
     $json = json_encode($result->fetch_all(MYSQLI_ASSOC));
     return $json;
   }
