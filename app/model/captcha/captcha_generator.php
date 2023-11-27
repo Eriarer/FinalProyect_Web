@@ -88,7 +88,7 @@ for ($x = 0; $x < $WIDTH; $x++) {
 }
 
 // Agregarle blur
-imagefilter($image, IMG_FILTER_GAUSSIAN_BLUR);
+imagefilter($wrapped_image2, IMG_FILTER_GAUSSIAN_BLUR);
 
 // Guardar la imagen
 imagejpeg($wrapped_image2, $TARGETFILE, 100);
