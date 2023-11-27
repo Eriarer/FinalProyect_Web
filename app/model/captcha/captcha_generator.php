@@ -1,22 +1,42 @@
 <?php
 session_start();
 $FONTPATH = __DIR__ . '/../../media/fonts/leadcoat.TTF';
-$TARGETDIR = __DIR__ . '/../../media/images/captcha/captcha.jpg';
+$TARGETDIR = __DIR__ . '/../../media/images/captcha/';
+//contar cuantos archivos hay en el directorio que no sean empty
+$files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
+//destruir lo archivos con una antiguedad mayor a 2 minutos
+foreach ($files as $file) {
+  $file = $TARGETDIR . $file;
+  if (filemtime($file) < time() - 120) {
+    unlink($file);
+  }
+}
+// conseguir el numero mas pequeño que no este en uso
+$files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
+$fileNumber = 1;
+foreach ($files as $file) {
+  $file = explode('.', $file);
+  $file = $file[0];
+  if ($fileNumber == $file) {
+    $fileNumber++;
+  }
+}
+$TARGETFILE = $TARGETDIR . $fileNumber . '.jpg';
+// variables para el captcha
+$TEXTLENGTH = 6;
 $WIDTH = 200;
 $HEIGHT = 100;
 $LINES = rand(6, 10);
 $ANGLE = 10;
-$FREQUENCY_X = 50;
+$FREQUENCY_X = 70;
 $AMPLITUDE_X = 20;
 $FREQUENCY_Y = 15;
 $AMPLITUDE_Y = 10;
 
-$text = captchaText(6);
-// guardar el texto en la sesión
-$_SESSION['captcha'] = implode('', $text);
-// guardar la sesión para que se actualice el valor de $_SESSION['captcha']
-session_write_close();
+// generar cadena de texto
+$text = captchaText($TEXTLENGTH);
 
+//inicializar la imagen
 $image = imagecreatetruecolor($WIDTH, $HEIGHT);
 $backgroundColor = getRandomRGB_Color(210, 255);
 // asignar un color de fondo
@@ -67,22 +87,30 @@ for ($x = 0; $x < $WIDTH; $x++) {
   }
 }
 
-
-
 // Agregarle blur
 imagefilter($image, IMG_FILTER_GAUSSIAN_BLUR);
-//mostrar las 2 imagenes
-header('Content-Type: image/jpeg');
-// guardar la imagen
-imagejpeg($wrapped_image2, $TARGETDIR, 100);
-imagejpeg($wrapped_image2);
-imagedestroy($wrapped_image);
-imagedestroy($wrapped_image);
+
+// Guardar la imagen
+imagejpeg($wrapped_image2, $TARGETFILE, 100);
+// Destruir las imágenes
 imagedestroy($image);
+imagedestroy($wrapped_image);
+imagedestroy($wrapped_image2);
+
+//crear un vector con el texto del captcha y la ruta de la imagen
+$captcha = [
+  'text' => implode('', $text),
+  'image' => $fileNumber . '.jpg'
+];
+$captcha = json_encode($captcha);
+echo $captcha;
 
 
+
+
+// funciones
 function captchaText($length) {
-  $pattern = '123456789abcdefghijklmnopqrstuvwxzABCDEFGHIJKLMNOPQRSTUVWXZ';
+  $pattern = '123456789ABCDEFGHIJKLMNOPQRSTUVWXZ';
   $max = strlen($pattern) - 1;
   $captcha = [];
   for ($i = 0; $i < $length; $i++) {
