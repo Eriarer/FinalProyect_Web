@@ -45,6 +45,8 @@ session_start();
     // Función para verificar el CAPTCHA
     function verifyCaptcha() {
       var captchaInput = $('#captchaInput').val();
+      //limpiar el input de caracteres especiales que no sean letras o numeros
+      captchaInput = captchaInput.replace(/[^a-zA-Z0-9]/g, '');
       if (captchaInput === text) {
         alert('CAPTCHA correcto');
       } else {
