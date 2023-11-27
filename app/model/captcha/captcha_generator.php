@@ -21,11 +21,14 @@ for ($i = 0; $i < count($text); $i++) {
   $color = getRandColor($image, 0, 100);
   imagettftext($image, 30, getRandomAngle(), 15 + ($i * 30), 40, $color, $FONTPATH, $text[$i]);
 }
-// agregarle líneas de izquierda a derecha de la imagen
-for ($i = 0; $i < $LINES; $i++) {
+// agregar 'warps' a la imagen
+for ($i = 0; $i < 10; $i++) {
   $color = getRandColor($image, 0, 100);
-  imageline($image, 0, mt_rand(0, $HEIGHT), $WIDT, mt_rand(0, $HEIGHT), $color);
+  imagearc($image, mt_rand(0, $WIDT), mt_rand(0, $HEIGHT), mt_rand(0, $WIDT), mt_rand(0, $HEIGHT), mt_rand(0, 360), mt_rand(0, 360), $color);
 }
+
+// Agregarle blur
+imagefilter($image, IMG_FILTER_GAUSSIAN_BLUR);
 
 header('Content-type: image/jpeg');
 imagejpeg($image);
