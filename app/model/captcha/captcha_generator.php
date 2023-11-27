@@ -1,15 +1,15 @@
 <?php
 session_start();
-$FONTPATH = __DIR__ . '/../../media/fonts/COMICATE.TTF';
+$FONTPATH = __DIR__ . '/../../media/fonts/leadcoat.TTF';
 $TARGETDIR = __DIR__ . '/../../media/images/captcha/captcha.jpg';
 $WIDTH = 200;
-$HEIGHT = 50;
-$LINES = rand(5, 7);
-$ANGLE = 25;
-$FREQUENCY_X = 20;
-$AMPLITUDE_X = 1;
-$FREQUENCY_Y = 5;
-$AMPLITUDE_Y = 1;
+$HEIGHT = 100;
+$LINES = rand(6, 10);
+$ANGLE = 10;
+$FREQUENCY_X = 50;
+$AMPLITUDE_X = 20;
+$FREQUENCY_Y = 15;
+$AMPLITUDE_Y = 10;
 
 $text = captchaText(6);
 // guardar el texto en la sesión
@@ -18,43 +18,66 @@ $_SESSION['captcha'] = implode('', $text);
 session_write_close();
 
 $image = imagecreatetruecolor($WIDTH, $HEIGHT);
+$backgroundColor = getRandomRGB_Color(210, 255);
 // asignar un color de fondo
-$color_component = getColorForImage($image, 210, 255);
+$color_component = getColorForImage($image, $backgroundColor);
 // dibujar un rectángulo relleno
 imagefilledrectangle($image, 0, 0, $WIDTH, $HEIGHT, $color_component);
 //agregarle el texto
 for ($i = 0; $i < count($text); $i++) {
-  $color_component = getColorForImage($image, 0, 100);
-  imagettftext($image, 30, getRandomAngle($ANGLE), 15 + ($i * 30), 40, $color_component, $FONTPATH, $text[$i]);
+  $textColor = getRandomRGB_Color(0, 100);
+  $textImageColor = getColorForImage($image, $textColor);
+  imagettftext($image, 30, getRandomAngle($ANGLE), ($i * 30), 70, $textImageColor, $FONTPATH, $text[$i]);
 }
+
 
 // agregar lineas a la imagen
 for ($i = 0; $i < $LINES; $i++) {
-  $color_component = getColorForImage($image, 0, 100);
-  imagearc($image, mt_rand(0, $WIDTH), mt_rand(0, $HEIGHT), mt_rand(0, $WIDTH), mt_rand(0, $HEIGHT), mt_rand(0, 360), mt_rand(0, 360), $color_component);
+  $lineColor = getRandomRGB_Color(0, 100);
+  $lineColorImg = getColorForImage($image, $lineColor);
+  imagearc($image, mt_rand(0, $WIDTH), mt_rand(0, $HEIGHT), mt_rand(0, $WIDTH), mt_rand(0, $HEIGHT), mt_rand(0, 360), mt_rand(0, 360), $lineColorImg);
 }
 
-// agregar warped image
+// distorsionar la imagen Y
+//clonar la imagen
+$wrapped_image = imagecreatetruecolor($WIDTH, $HEIGHT);
+//ponerle el color de fondo
+imagefill($wrapped_image, 0, 0, getColorForImage($wrapped_image, $backgroundColor));
 for ($x = 0; $x < $WIDTH; $x++) {
   for ($y = 0; $y < $HEIGHT; $y++) {
     $index = imagecolorat($image, $x, $y);
-    $color_component = imagecolorsforindex($image, $index);
-
-    $color = imagecolorallocate($image, $color_component['red'], $color_component['green'], $color_component['blue']);
-
-    $imageX = $x + sin($y / $FREQUENCY_X) * $AMPLITUDE_X;
-    $imageY = $y + sin($x / $FREQUENCY_Y) * $AMPLITUDE_Y;
-    imagesetpixel($image, $imageX, $imageY, $color);
+    $rgb = imagecolorsforindex($image, $index);
+    $newX = $x;
+    $newY = $y + (sin($x / $FREQUENCY_Y) * $AMPLITUDE_Y);
+    imagesetpixel($wrapped_image, $newX, $newY, getColorForImage($wrapped_image, [$rgb['red'], $rgb['green'], $rgb['blue']]));
+  }
+}
+// distorsionar la imagen X
+//clonar la imagen
+$wrapped_image2 = imagecreatetruecolor($WIDTH, $HEIGHT);
+//ponerle el color de fondo
+imagefill($wrapped_image2, 0, 0, getColorForImage($wrapped_image2, $backgroundColor));
+for ($x = 0; $x < $WIDTH; $x++) {
+  for ($y = 0; $y < $HEIGHT; $y++) {
+    $index = imagecolorat($wrapped_image, $x, $y);
+    $rgb = imagecolorsforindex($wrapped_image, $index);
+    $newX = $x + (sin($y / $FREQUENCY_X) * $AMPLITUDE_X);
+    $newY = $y;
+    imagesetpixel($wrapped_image2, $newX, $newY, getColorForImage($wrapped_image2, [$rgb['red'], $rgb['green'], $rgb['blue']]));
   }
 }
 
 
+
 // Agregarle blur
 imagefilter($image, IMG_FILTER_GAUSSIAN_BLUR);
-
+//mostrar las 2 imagenes
+header('Content-Type: image/jpeg');
 // guardar la imagen
-imagejpeg($image, $TARGETDIR, 100);
-imagejpeg($image);
+imagejpeg($wrapped_image2, $TARGETDIR, 100);
+imagejpeg($wrapped_image2);
+imagedestroy($wrapped_image);
+imagedestroy($wrapped_image);
 imagedestroy($image);
 
 
@@ -68,9 +91,15 @@ function captchaText($length) {
   return $captcha;
 }
 
-function getColorForImage($image, $min, $max) {
+function getRandomRGB_Color($min, $max) {
+  $red = mt_rand($min, $max);
+  $green = mt_rand($min, $max);
+  $blue = mt_rand($min, $max);
+  return $color = [$red, $green, $blue];
+}
+function getColorForImage($image, $color) {
   // crear el objeto de color
-  return imagecolorallocate($image, mt_rand($min, $max), mt_rand($min, $max), mt_rand($min, $max));
+  return imagecolorallocate($image, $color[0], $color[1], $color[2]);
 }
 
 function getRandomAngle($angle) {
