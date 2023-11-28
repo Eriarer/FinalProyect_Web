@@ -1,0 +1,41 @@
+footer {
+    background-color: #143877; /* Color de fondo oscuro */
+    color: #ffffff; /* Texto en color claro para contraste */
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding: 20px 0; /* Espacio alrededor del contenido del footer */
+  }
+  
+  footer a {
+   /* color: #58d1f4;  Un color claro que contrastará con el fondo oscuro */
+    text-decoration: none; /* Elimina el subrayado */
+  }
+  
+  footer a:hover {
+    text-decoration: underline; /* Añade un subrayado al pasar el mouse para destacar los enlaces */
+  }
+  
+  footer h5 {
+    color: #ffffff; /* Color del texto para los encabezados dentro del footer */
+    margin-bottom: 15px; /* Espacio debajo de los encabezados para separar del contenido */
+  }
+  
+  footer p {
+    font-size: 1rem; /* Tamaño de la fuente para el párrafo */
+    color: white;
+  }
+  
+  footer .list-unstyled p, footer a, footer .list-unstyled a {
+    color: white !important;
+  }
+  
+  .contBtn button{
+    color: #143877 !important;
+    background-color:rgb(175, 223, 232);
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .btnSuscribe:hover {
+    border-color: #9d8cff; 
+    background-color:#beceed;
+    transform: scale(1.05);
+  }
