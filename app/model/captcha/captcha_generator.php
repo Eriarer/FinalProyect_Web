@@ -75,7 +75,7 @@ $files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
 //destruir lo archivos con una antiguedad mayor a 2 minutos
 foreach ($files as $file) {
   $file = $TARGETDIR . $file;
-  if (filemtime($file) < time() - 30) {
+  if (filemtime($file) < time() - 5) {
     unlink($file);
   }
 }
