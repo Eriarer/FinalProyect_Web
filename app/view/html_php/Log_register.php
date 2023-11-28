@@ -16,7 +16,6 @@
 <body>
   <?php require_once 'navbar.php'; ?>
   <div class="container mt-5">
-    <h2 class="text-center mb-4">REGISTRAR CUENTA</h2>
     <div class="card-container">
       <!-- Tarjeta de Registro -->
       <div class="card" id="register">
@@ -101,22 +100,27 @@
                 </div>
               </div>
             </div>
-            <img src="" alt="Captcha" id="captchaImage">
-            <button type="button" class="btn btn-link" id="changeCaptcha">Cambiar Captcha</button>
-            <div class="form-group">
-              <label for="captchaInput">Captcha</label>
-              <input type="text" class="form-control" id="captchaInput" name="captchaInput" required>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="captchaInput">Captcha</label>
+                <input type="text" class="form-control" id="captchaInput" name="captchaInput" required>
+              </div>
+              <div class="col-6">
+                <img src="" alt="Captcha" id="captchaImage">
+                <button type="button" class="btn btn-link" id="changeCaptcha">Cambiar Captcha</button>
+              </div>
             </div>
             <div class="form-check">
               <input type="checkbox" class="form-check-input" id="rememberMe">
               <label class="form-check-label" for="rememberMe">Recordarme</label>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Iniciar Sesión</button>
+            <button type="submit" class="btn btn-primary mt-3" id="iniciarSesion">Iniciar Sesión</button>
           </form>
           <p class="mt-3">¿No tienes una cuenta? <a href="#" onclick="toggleForm()">Registrarse</a></p>
         </div>
       </div>
     </div>
+  </div>
   </div>
   <?php require_once 'footer.php'; ?>
   <script>
@@ -168,6 +172,10 @@
         refreshCaptcha();
       });
 
+      $('#iniciarSesion').click(function(e) {
+        e.preventDefault();
+        verifyCaptcha();
+      });
       $('#logIn').hide();
     });
   </script>
