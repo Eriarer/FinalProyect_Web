@@ -1,0 +1,15 @@
+.navbar {
+    height: 90px; /* Establece la altura que prefieras */
+    
+}
+#barramenu{
+    background: #143877;
+}
+
+.navbar-nav .nav-link {
+   /* color: #0044cc;  Azul fuerte en código hexadecimal */
+    font-weight: bold;
+}
+.nav-item{
+    padding: 18px;
+}
