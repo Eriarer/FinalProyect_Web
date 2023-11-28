@@ -2,28 +2,6 @@
 session_start();
 $FONTPATH = __DIR__ . '/../../media/fonts/leadcoat.TTF';
 $TARGETDIR = __DIR__ . '/../../media/images/captcha/';
-//contar cuantos archivos hay en el directorio que no sean empty
-$files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
-//destruir lo archivos con una antiguedad mayor a 2 minutos
-foreach ($files as $file) {
-  $file = $TARGETDIR . $file;
-  if (filemtime($file) < time() - 30) {
-    unlink($file);
-  }
-}
-// conseguir el numero mas pequeño que no este en uso
-$files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
-foreach ($files as $file) {
-  $fileParts = explode('.', $file);
-  $fileNumber = (int)$fileParts[0];
-  $usedNumbers[$fileNumber] = true;
-}
-
-$fileNumber = 1;
-while (isset($usedNumbers[$fileNumber])) {
-  $fileNumber++;
-}
-$TARGETFILE = $TARGETDIR . $fileNumber . '.jpg';
 // variables para el captcha
 $TEXTLENGTH = 6;
 $WIDTH = 200;
@@ -88,12 +66,35 @@ for ($x = 0; $x < $WIDTH; $x++) {
     imagesetpixel($wrapped_image2, $newX, $newY, getColorForImage($wrapped_image2, [$rgb['red'], $rgb['green'], $rgb['blue']]));
   }
 }
-
 // Agregarle blur
 imagefilter($wrapped_image2, IMG_FILTER_GAUSSIAN_BLUR);
 
+
+//contar cuantos archivos hay en el directorio que no sean empty
+$files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
+//destruir lo archivos con una antiguedad mayor a 2 minutos
+foreach ($files as $file) {
+  $file = $TARGETDIR . $file;
+  if (filemtime($file) < time() - 30) {
+    unlink($file);
+  }
+}
+// conseguir el numero mas pequeño que no este en uso
+$files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
+foreach ($files as $file) {
+  $fileParts = explode('.', $file);
+  $fileNumber = (int)$fileParts[0];
+  $usedNumbers[$fileNumber] = true;
+}
+$fileNumber = 1;
+while (isset($usedNumbers[$fileNumber])) {
+  $fileNumber++;
+}
+$TARGETFILE = $TARGETDIR . $fileNumber . '.jpg';
 // Guardar la imagen
 imagejpeg($wrapped_image2, $TARGETFILE, 100);
+
+
 // Destruir las imágenes
 imagedestroy($image);
 imagedestroy($wrapped_image);
