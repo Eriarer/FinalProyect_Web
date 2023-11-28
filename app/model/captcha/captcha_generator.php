@@ -7,19 +7,21 @@ $files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
 //destruir lo archivos con una antiguedad mayor a 2 minutos
 foreach ($files as $file) {
   $file = $TARGETDIR . $file;
-  if (filemtime($file) < time() - 120) {
+  if (filemtime($file) < time() - 30) {
     unlink($file);
   }
 }
 // conseguir el numero mas pequeño que no este en uso
 $files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
-$fileNumber = 1;
 foreach ($files as $file) {
-  $file = explode('.', $file);
-  $file = $file[0];
-  if ($fileNumber == $file) {
-    $fileNumber++;
-  }
+  $fileParts = explode('.', $file);
+  $fileNumber = (int)$fileParts[0];
+  $usedNumbers[$fileNumber] = true;
+}
+
+$fileNumber = 1;
+while (isset($usedNumbers[$fileNumber])) {
+  $fileNumber++;
 }
 $TARGETFILE = $TARGETDIR . $fileNumber . '.jpg';
 // variables para el captcha
