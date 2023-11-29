@@ -1,7 +1,7 @@
 <?php
-include_once __DIR__ . '/../../model/dataBaseCredentials.php';
+include_once __DIR__ . '/../../model/DB/dataBaseCredentials.php';
 include_once __DIR__ . '/../../model/routes_files.php';
-include_once __DIR__ . '/../../model/controllDB.php';
+include_once __DIR__ . '/../../model/DB/controllDB.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
