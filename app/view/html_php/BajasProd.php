@@ -13,8 +13,6 @@
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <!-- agregando link para darle estilos a la alerta -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <!-- Estilos -->
-  <link rel="stylesheet" href="../css/bajasEstilos.css">
 </head>
 
 <body>
