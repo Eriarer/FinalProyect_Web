@@ -1,37 +1,3 @@
-<?php
-include_once __DIR__ . '/../../model/DB/dataBaseCredentials.php';
-include_once __DIR__ . '/../../model/routes_files.php';
-include_once __DIR__ . '/../../model/DB/controllDB.php';
-
-$db = new dataBase($credentials, $CONFIG);
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $id = $_POST['id'];
-
-  $db = new dataBase($credentials, $CONFIG);
-  $response = $db->bajaProducto($id);
-
-  if ($response) {
-    echo "success";
-  } else {
-    echo "error";
-  }
-}
-
-// Estructura de la tabla productos:
-
-// Field Type Null Key Default Extra
-// prod_id int(6) NO PRI auto_increment
-// categoria varchar(255) YES
-// prod_name varchar(255) NO
-// prod_description text YES
-// prod_imgPath varchar(255) NO
-// prod_stock int(11) NO
-// prod_precio float NO
-// prod_descuento float NO
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
