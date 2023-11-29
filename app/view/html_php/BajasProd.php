@@ -35,35 +35,7 @@
         </tr>
       </thead>
       <tbody>
-        <?php
-        $db = new dataBase($credentials, $CONFIG);
-        // Mostrar el contenido de la tabla productos
-        $result = json_decode($db->getAllProducts(), true);
 
-        if (!empty($result)) {
-          foreach ($result as $row) {
-            echo "<tr class='text-center'>";
-            echo "  <th>" . $row['prod_id'] . "</th>";
-            echo "  <td>" . $row['categoria'] . "</td>";
-            echo "  <td>" . $row['prod_name'] . "</td>";
-            echo "  <td>" . $row['prod_description'] . "</td>";
-            // mostrar imagen
-            $imgName = explode("/", $row['prod_imgPath'])[count(explode("/", $row['prod_imgPath'])) - 1];
-            $img = "<img src='" . $row['prod_imgPath'] . "' alt='" . $imgName . "' width='100px'>";
-            echo "  <td>" . $img . "</td>";
-            echo "  <td>" . $row['prod_stock'] . "</td>";
-            echo "  <td>" . $row['prod_precio'] . "</td>";
-            echo "  <td>" . $row['prod_descuento'] . "</td>";
-            // Añadir botón de eliminación
-            echo "  <td><button class='btn btn-danger' onclick='eliminarProducto(" . $row['prod_id'] . ")'>Eliminar</button></td>";
-            echo "</tr>";
-          }
-        } else {
-          echo "<tr>";
-          echo "  <td colspan='9'>No hay productos registrados</td>";
-          echo "</tr>";
-        }
-        ?>
       </tbody>
     </table>
   </div>
