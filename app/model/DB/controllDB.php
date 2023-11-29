@@ -61,8 +61,6 @@ class dataBase {
     // Obtener el número de filas afectadas por la última consulta
     $affected_rows = $stmt->affected_rows;
 
-    // Cerrar la sentencia
-
 
     return $affected_rows > 0;
   }
@@ -72,10 +70,20 @@ class dataBase {
     if ($id == null) {
       return false;
     }
+    // conseguir la ruta de la imagen
+    $sql = "SELECT prod_imgPath FROM productos WHERE prod_id = ?";
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    // eliminar la imagen del servidor
+    $result = $stmt->get_result();
+    $imgPath = $result->fetch_assoc();
+    $imgPath = $imgPath['prod_imgPath'];
+    unlink($imgPath);
 
     // PREPARAR LA SENTENCIA PARA EVITAR <--INYECCIÓN SQL-->
     //Da de baja al producto con el id recibido
-    $sql = "DELETE FROM productos WHERE id = ?";
+    $sql = "DELETE FROM productos WHERE prod_id = ?";
 
     $stmt = $this->connexion->prepare($sql);
 
@@ -83,12 +91,12 @@ class dataBase {
     $stmt->bind_param("i", $id);
 
     // Ejecutar la sentencia
-    $stmt->execute();
+    $success = $stmt->execute();
 
-    // Devuelve el número de filas afectadas por la última consulta
-    $afected_rows = $stmt->affected_rows;
+    // Cerrar la sentencia
+    $stmt->close();
 
-    return $afected_rows > 0 ? true : false;
+    return $success;
   }
 
   public function modifyProduct($id, $categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento) {
@@ -152,7 +160,8 @@ class dataBase {
     //crear un array asociativo
     $result = $stmt->get_result();
 
-    $json = json_encode($result->fetch_all(MYSQLI_ASSOC));
+    $json = $result->fetch_all(MYSQLI_ASSOC);
+    $json = json_encode($json);
     return $json;
   }
 
@@ -186,17 +195,16 @@ class dataBase {
   }
 
   public function getLastProductId() {
-    //Devuelve el id del último producto creado
-    $sql = "SELECT prod_id FROM productos ORDER BY prod_id DESC";
+    $sql = "SELECT MAX(prod_id) AS last_id FROM productos";
     $result = $this->connexion->query($sql);
-    $last = $result->fetch_assoc();
-    if ($last == null) {
-      return 0;
+
+    if ($result) {
+      $last = $result->fetch_assoc();
+      return $last['last_id'];
     } else {
-      $last = $last['prod_id'];
+      // Manejar el error si la consulta no es exitosa
+      return null;
     }
-    // retornar el id
-    return $last;
   }
 
   /*
