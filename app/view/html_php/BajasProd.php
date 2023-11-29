@@ -60,15 +60,16 @@
         $("table").addClass("table-responsive");
       } else {
         $("table").removeClass("table-responsive");
+
         if ($("table").width() > $(window).width()) {
           $("table").addClass("table-responsive");
         }
       }
     }
 
-    function eliminarProducto(id) {
+    function confirmarEliminar(id) {
       Swal.fire({
-        title: "¿Estas seguro?",
+        title: "¿Estás seguro?",
         text: "El producto con id " + id + " será eliminado permanentemente",
         icon: "warning",
         showCancelButton: true,
@@ -78,6 +79,38 @@
         cancelButtonText: "Cancelar"
       }).then((result) => {
         if (result.isConfirmed) {
+          eliminarProducto(id);
+        }
+      });
+    }
+
+    function eliminarProducto(id) {
+      // Realiza la solicitud AJAX para eliminar el producto
+      $.ajax({
+        type: "POST",
+        url: "../../model/DB/manejoProductos.php",
+        data: {
+          method: "delete",
+          id: id
+        },
+        success: function(response) {
+          if (response == "success") {
+            Swal.fire({
+              title: "Producto eliminado",
+              text: "El artículo ha sido eliminado correctamente",
+              icon: "success"
+            });
+          } else {
+            Swal.fire({
+              title: "Error",
+              text: "Ha ocurrido un error al eliminar el producto",
+              icon: "error"
+            });
+          }
+        }
+      });
+    }
+
     function updateTable() {
       // Uso de la función con un callback
       obtenerTablaProductos(function(productos) {
