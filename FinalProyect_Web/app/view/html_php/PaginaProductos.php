@@ -3,7 +3,7 @@ include_once __DIR__ . '/../../../app/model/routes_files.php';
 $rutaBase = __DIR__ . '/../../media/images/productos/';
 
 $productos = array(
-  'Por ocasiones' => array(
+  'Por Ocasiones' => array(
     array(
       'nombre' => 'Amor Perezoso',
       'descripcion' => 'Este peluche es un encantador perezoso, diseñado para irradiar amor y ternura. Su pelaje es largo y sedoso, invitando a ser acariciado, en tonos de gris suave que recuerdan a la lujosa textura de un abrigo de invierno.',
@@ -175,7 +175,7 @@ $productos = array(
   <!-- CSS -->
   <link rel="stylesheet" href="../css/main.css">
 </head>
-
+  <?php include_once("navbar.php")?>
 <body>
   <div class="container-fluid">
     <?php
@@ -215,6 +215,6 @@ $productos = array(
         $('.myCard').addClass("animate__animated animate__fadeInUp");
       });
     </script>
+    <?php include_once("footer.php")?>
 </body>
-
 </html>
