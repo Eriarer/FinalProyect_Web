@@ -1,15 +1,16 @@
-body{
+body {
     background: #F5F5DC;
     box-sizing: border-box;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    padding: 30px;
+    padding: 0;
     margin: 0;
 }
 
-hr{
+hr {
     border-top: 4px double #8c8b8b;
-	text-align: center;
-    &::after{
+    text-align: center;
+
+    &::after {
         content: '\002665';
         display: inline-block;
         position: relative;
@@ -21,7 +22,7 @@ hr{
     }
 }
 
-.myCard{
+.myCard {
     min-height: 100%;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.757);
     padding: 0px;
@@ -29,16 +30,18 @@ hr{
     border-radius: 0.5em;
     background: #e8f1ff;
     transition: all 1s ease;
-    &:hover{
+
+    &:hover {
         box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 1);
-        transform:scale(1.1);
+        transform: scale(1.1);
     }
 }
 
-.cardHeader{
+.cardHeader {
     position: relative;
     border-radius: 0.5em 0.5em 0px 0px;
-    & > img{
+
+    &>img {
         position: relative;
         margin: 0px;
         display: block;
@@ -46,7 +49,8 @@ hr{
         height: auto;
         border-radius: 0.5em 0.5em 0px 0px;
     }
-    & > .descuento{
+
+    &>.descuento {
         position: absolute;
         top: 0;
         left: 0;
@@ -56,11 +60,12 @@ hr{
         font-weight: 700;
         border-radius: 0.5em 0.5em 0.5em 0px;
     }
-    & > .overlay{
+
+    &>.overlay {
         border-radius: 0.5em 0.5em 0px 0px;
         font-size: 1.4em;
-        position: absolute; 
-        bottom: 0; 
+        position: absolute;
+        bottom: 0;
         width: 100%;
         padding: 0.2em;
         text-align: center;
@@ -69,6 +74,7 @@ hr{
         transform: scaleX(0) translateY(50%);
         transition: all 0.75s ease;
     }
+
     &:hover .overlay {
         opacity: 1;
         background: rgba(0, 0, 0, 0.624);
@@ -76,23 +82,25 @@ hr{
     }
 }
 
-.cardBody{
+.cardBody {
     padding: 0px 10px;
     margin: 0px;
 
-    & > h3{
+    &>h3 {
         font-size: 1.2em;
         font-weight: 700;
         margin: 0px;
         color: #000000;
     }
-    & > p{
+
+    &>p {
         font-size: 0.9em;
         font-weight: 400;
         margin: 10px;
         color: #000000;
     }
-    & > span {
+
+    &>span {
         background-color: skyblue;
         padding: 8px 10px;
         border-radius: 30px;
@@ -101,7 +109,7 @@ hr{
     }
 }
 
-.cardFooter{
+.cardFooter {
     margin-top: 0.2em;
     position: relative;
     bottom: 0;
@@ -110,10 +118,12 @@ hr{
     align-items: center;
     text-align: center;
     padding: 10px 0px;
-    &>*{
+
+    &>* {
         z-index: 2;
     }
-    & > a{
+
+    &>a {
         text-decoration: none;
         color: #ffffff;
         background: #121212;
@@ -125,7 +135,8 @@ hr{
         padding: 10px;
         margin: 0px;
     }
-    & > a:hover{
+
+    &>a:hover {
         transform: scale(1.2);
         color: antiquewhite;
     }

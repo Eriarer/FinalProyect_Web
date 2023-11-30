@@ -175,7 +175,8 @@ $productos = array(
   <!-- CSS -->
   <link rel="stylesheet" href="../css/main.css">
 </head>
-  <?php include_once("navbar.php")?>
+<?php include_once("navbar.php") ?>
+
 <body>
   <div class="container-fluid">
     <?php
@@ -210,11 +211,13 @@ $productos = array(
       echo "</div>";
     }
     ?>
-    <script>
-      $(document).ready(function() {
-        $('.myCard').addClass("animate__animated animate__fadeInUp");
-      });
-    </script>
-    <?php include_once("footer.php")?>
+  </div>
+  <?php include_once("footer.php") ?>
+  <script>
+    $(document).ready(function() {
+      $('.myCard').addClass("animate__animated animate__fadeInUp");
+    });
+  </script>
 </body>
+
 </html>
