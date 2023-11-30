@@ -113,7 +113,6 @@
       // Uso de la función con un callback
       obtenerTablaProductos(function(productos) {
         if (!isEqual(old_productos, productos)) {
-          console.log("Actualizando tabla");
           old_productos = productos;
           rellenarTabla(productos);
         }
@@ -121,11 +120,9 @@
       setTimeout(updateTable, 500); // Actualizar cada 500ms
     }
 
-    function isEqual(a, b) {
-      // Función para comparar dos objetos
-      function isEqual(obj1, obj2) {
-        return JSON.stringify(obj1) === JSON.stringify(obj2);
-      }
+    // Función para comparar dos objetos
+    function isEqual(obj1, obj2) {
+      return JSON.stringify(obj1) === JSON.stringify(obj2);
     }
 
     function obtenerTablaProductos(callback) {

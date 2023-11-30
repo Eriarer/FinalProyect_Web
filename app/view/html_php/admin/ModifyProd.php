@@ -265,12 +265,10 @@
       setTimeout(updateTable, 500); // Actualizar cada 500ms
     }
 
-    function isEqual(a, b) {
-      // Función para comparar dos objetos
-      function isEqual(obj1, obj2) {
-        // verificar que la diferencia no sea solo por que no se pueden encontrar 
-        return JSON.stringify(obj1) === JSON.stringify(obj2);
-      }
+    // Función para comparar dos objetos
+    function isEqual(obj1, obj2) {
+      // verificar que la diferencia no sea solo por que no se pueden encontrar 
+      return JSON.stringify(obj1) === JSON.stringify(obj2);
     }
 
     function obtenerTablaProductos(callback) {
