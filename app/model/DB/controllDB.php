@@ -79,7 +79,10 @@ class dataBase {
     $result = $stmt->get_result();
     $imgPath = $result->fetch_assoc();
     $imgPath = $imgPath['prod_imgPath'];
-    unlink($imgPath);
+    // verificar que la imagen existe
+    if (file_exists($imgPath)) {
+      unlink($imgPath); // eliminar la imagen
+    }
 
     // PREPARAR LA SENTENCIA PARA EVITAR <--INYECCIÓN SQL-->
     //Da de baja al producto con el id recibido
