@@ -1,0 +1,58 @@
+.Tit{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+    font-weight: bold;
+    color: cornflowerblue;
+}
+.Historia {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+  }
+  
+  .Historia img {
+    margin-right: 10px;
+    width: auto; 
+    max-width: 100%; 
+  }
+  
+  .Historia div {
+    text-align: justify;
+    margin-right: 20px; 
+  }
+  
+  .eslogan {
+    padding-left: 270px;
+    font-weight: bold;
+    font-style: italic;
+    color: #98b6ea;
+  }
+
+.card{
+    border: 3px solid #98b6ea;
+    border-radius: 4px;
+    /* padding: 5px;
+    width: 150px; */
+}
+.card:hover{
+    box-shadow: 0 0 2px 4px rgba(0, 140, 186, 0.5);
+}
+
+.cajitas{
+    padding: 25px;
+}
+
+.card img:hover{
+    filter: opacity(.5);
+}
+.card-text{
+    text-align: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.card-title{
+    text-align: center;
+    font-weight: bold;
+    background-color: #F0D5C0;
+}
