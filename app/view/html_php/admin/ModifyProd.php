@@ -198,6 +198,8 @@
               $("#imagenPreview").attr("src", url);
               $("#imagen").val("");
               $("#imagen").removeAttr("required");
+              // ajustar el boton de aceptar para que llame a la funcion de modificar 
+              $(".btn-success").attr("onclick", "modificarProducto(" + id + ")");
               break;
             }
           }
@@ -266,6 +268,7 @@
     function isEqual(a, b) {
       // Función para comparar dos objetos
       function isEqual(obj1, obj2) {
+        // verificar que la diferencia no sea solo por que no se pueden encontrar 
         return JSON.stringify(obj1) === JSON.stringify(obj2);
       }
     }
