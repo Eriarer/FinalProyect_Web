@@ -111,7 +111,7 @@ class dataBase {
     // Verificar si se encontró el producto
     if ($producto) {
       $categoria = $categoria == null ? $producto['categoria'] : $categoria;
-      $prod_name = $prod_name == null ? $producto['pord_name'] : $prod_name;
+      $prod_name = $prod_name == null ? $producto['prod_name'] : $prod_name;
       $prod_description = $prod_description == null ? $producto['prod_description'] : $prod_description;
       $prod_imgPath = $prod_imgPath == null ? $producto['prod_imgPath'] : $prod_imgPath;
       $prod_stock = $prod_stock == null ? $producto['prod_stock'] : $prod_stock;
@@ -123,16 +123,17 @@ class dataBase {
 
     // PREPARAR LA SENTENCIA PARA EVITAR <--INYECCIÓN SQL-->
     //Modifica el producto con los datos recibidos
-    $sql = "UPDATE productos SET categoria = ?, pord_name = ?, prod_description = ?, prod_imgPath = ?, prod_stock = ?, prod_precio = ?, prod_descuento = ? WHERE id = ?";
+    $sql = "UPDATE productos SET categoria = ?, prod_name = ?, prod_description = ?, prod_imgPath = ?, prod_stock = ?, prod_precio = ?, prod_descuento = ? WHERE prod_id = ?";
     $stmt = $this->connexion->prepare($sql);
     // Vincular parámetros a la sentencia preparada como cadenas
-    $stmt->bind_param("sds", $categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento, $id);
+    $stmt->bind_param("ssssiiii", $categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento, $id);
     // Ejecutar la sentencia
-    $stmt->execute();
-    // Devuelve el número de filas afectadas por la última consulta
-    $afected_rows = $stmt->affected_rows;
+    $result = $stmt->execute();
 
-    return $afected_rows > 0 ? true : false;
+    // Cerrar la sentencia
+    $stmt->close();
+
+    return $result;
   }
 
   public function getProduct($id) {
@@ -141,7 +142,7 @@ class dataBase {
       return false;
     }
     //Devuelve el producto con el id recibido
-    $sql = "SELECT * FROM productos WHERE id = ?";
+    $sql = "SELECT * FROM productos WHERE prod_id = ?";
     $stmt = $this->connexion->prepare($sql);
     $stmt->bind_param("i", $id);
     $stmt->execute();
