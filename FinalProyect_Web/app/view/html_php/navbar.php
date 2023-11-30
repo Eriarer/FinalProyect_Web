@@ -31,6 +31,10 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Iniciar Sesion</a>
                         </li>
+                        <li class="nav-item" style="padding-left: 400px;">
+                            <a href="#" id="carrito" ><img src="../../media/images/carrito.png" alt="carrito-compras"></a>
+                        </li>
+
                     </ul>
                     
                 </div>
