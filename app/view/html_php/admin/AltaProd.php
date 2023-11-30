@@ -5,7 +5,7 @@ include_once __DIR__ . '/../../../model/DB/controllDB.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $categoria = $_POST['thisCat'];
+  $categoria = $_POST['categoria'];
   $nombre = $_POST['nombre'];
   $descripcion = $_POST['descripcion'];
   $stock = $_POST['stock'];
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // usar el destructor para cerrar la conexion
   //$db->__destruct();
   // eliminar el metodo POST
-  unset($_POST);
+  $_SERVER["REQUEST_METHOD"] = "";
 }
 
 /*
@@ -57,7 +57,7 @@ prod_descuento	    float	          NO
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alta Productos</title>
+  <title>Alt Productos</title>
   <!-- Boostrap v4.6.% -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -71,18 +71,18 @@ prod_descuento	    float	          NO
   <!-- Tarjeta de Alta de productos -->
   <div class="container mt-5">
     <div class="card-container">
-      <div class="card" id="altProd">
+      <div class="card text-center" id="altProd">
         <div class="card-body">
           <h5 class="card-title">Alta de producto</h5>
           <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method='post' enctype="multipart/form-data">
             <div class="form-group mt-1 row">
-              <div class="form-group mt-3 col-6">
+              <div class="form-group mt-3 col-md-6 text-left">
                 <label for="nombre">Nombre del producto</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" required>
               </div>
-              <div class="form-group mt-2"><br><br>
+              <div class="form-group mt-2 col-md-6 text-left">
                 <label for="categoria">Categoría</label>
-                <select name="thisCat">
+                <select class="form-control" id="categoria" name="categoria" required>
                   <optgroup class="categoria">
                     <option selected="selected">Por ocasiones</option>
                     <option>Ediciones Especiales</option>
@@ -92,31 +92,31 @@ prod_descuento	    float	          NO
             </div>
 
             <div class="form-row">
-              <div class="form-group mt-3 col-3">
+              <div class="form-group mt-3 col-md-4 text-left">
                 <label for="stock">Existencias #</label>
                 <input type="number" class="form-control" id="stock" name="stock" required>
               </div>
-              <div class="form-group mt-3 col-3">
+              <div class="form-group mt-3 col-md-4 text-left">
                 <label for="precio">Precio $</label>
                 <input type="number" class="form-control" id="precio" name="precio" required>
               </div>
-              <div class="form-group mt-3 col-3">
+              <div class="form-group mt-3 col-md-4 text-left">
                 <label for="descuento">Descuento %</label>
                 <input type="number" class="form-control" id="descuento" name="descuento" required>
               </div>
             </div>
             <div class="row">
               <div class="form-col">
-                <div class="form-group col-6"><br>
+                <div class="form-group col-md-6 text-left">
                   <label for="imagen">Imagen del producto</label>
                   <input type="file" class="form-control-file" id="imagen" name="imagen" accept=".jpg, .jpeg, .png, .webp, .svg, .webm" required>
                   <!-- Agrega el elemento img para mostrar la vista previa -->
                   <img id="imagenPreview" src="../../../media/images/imgRelleno.png" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 400px; margin-top: 10px;">
                 </div>
               </div>
-              <div class="form-group mt-3">
+              <div class="form-group mt-3 col-md-6 text-left">
                 <label for="descripcion">Descripción</label><br>
-                <textarea name="descripcion" id="descripcion" cols="30" rows="10" required></textarea>
+                <textarea name="descripcion" id="descripcion" class="form-control" cols="30" rows="10" required></textarea>
               </div>
             </div>
 
@@ -126,6 +126,7 @@ prod_descuento	    float	          NO
       </div>
     </div>
   </div>
+
   <?php require_once '../footer.php'; ?>
   <script>
     $(document).ready(function() {
