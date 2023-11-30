@@ -164,12 +164,14 @@
         tr.append("<td>" + producto.prod_description + "</td>");
         // la ruta de la imagen se guarda en la base de datos va a ser local, por lo que se debe agregar el path de la carpeta
         // cortar la ruta de la imagen '/' y obtener el ultimo elemento
-        console.log(producto.prod_imgPath);
         var prodImg = producto.prod_imgPath.split("/");
         prodImg = prodImg[prodImg.length - 1];
         var url = "../../../media/images/productos/" + prodImg;
-        console.log(url);
-        tr.append("<td><img src='" + url + "' alt='" + prodImg + "' width='100px'></td>");
+        var img = $("<img src='" + url + "' alt='" + prodImg + "' width='100px'>");
+        img.on("error", function() {
+          $(this).attr("src", "../../../media/images/imgRelleno.png");
+        });
+        tr.append("<td></td>").children().last().append(img);
         tr.append("<td>" + producto.prod_stock + "</td>");
         tr.append("<td>" + producto.prod_precio + "</td>");
         tr.append("<td>" + producto.prod_descuento + "</td>");

@@ -312,7 +312,11 @@
         var prodImg = producto.prod_imgPath.split("/");
         prodImg = prodImg[prodImg.length - 1];
         var url = "../../../media/images/productos/" + prodImg;
-        tr.append("<td><img src='" + url + "' alt='" + prodImg + "' width='100px'></td>");
+        var img = $("<img src='" + url + "' alt='" + prodImg + "' width='100px'>");
+        img.on("error", function() {
+          $(this).attr("src", "../../../media/images/imgRelleno.png");
+        });
+        tr.append("<td></td>").children().last().append(img);
         tr.append("<td>" + producto.prod_stock + "</td>");
         tr.append("<td>" + producto.prod_precio + "</td>");
         tr.append("<td>" + producto.prod_descuento + "</td>");
