@@ -48,10 +48,7 @@
     $precio = $_POST['precio'];
     $descuento = $_POST['descuento'];
     $imagen;
-    // si no se subio una imagen, enviar un null
-    if (!isset($_FILES["imagen"]["name"])) {
-      $imagen = null;
-    } else {
+    if (isset($_FILES["imagen"]) && $_FILES["imagen"]["error"] == 0) {
       $imagen = $_FILES["imagen"]["name"];
       // guardar la imagen en el servidor
       $direccion = __DIR__ . '/../../../media/images/productos/';
@@ -59,6 +56,8 @@
       // guardar la imagen en la ruta del servidor
       move_uploaded_file($_FILES["imagen"]["tmp_name"], $Archivo);
       $imagen = $Archivo;
+    } else {
+      $imagen = null;
     }
     $db = new dataBase($credentials, $CONFIG);
 
@@ -115,7 +114,7 @@
           <div class="card" id="altProd">
             <div class="card-body">
               <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" id="form" method='post' enctype="multipart/form-data">
-                <input type="number" class="form-control" id="id" name="id">
+                <input type="number" class="form-control" id="id" name="id" hidden>
                 <div class="form-group mt-1 row">
                   <div class="form-group mt-3 col-md-6">
                     <label for="nombre">Nombre del producto</label>
@@ -150,7 +149,7 @@
                 <div class="form-row">
                   <div class="form-group col-md-6 mt-3">
                     <label for="imagen">Imagen del producto</label>
-                    <input type="file" class="form-control-file" id="imagen" name="imagen" accept=".jpg, .jpeg, .png, .webp, .svg, .webm" required>
+                    <input type="file" class="form-control-file" id="imagen" name="imagen" accept=".jpg, .jpeg, .png, .webp, .svg, .webm">
                     <!-- Agrega el elemento img para mostrar la vista previa -->
                     <img id="imagenPreview" src="../../../media/images/imgRelleno.png" alt="Vista previa de la imagen" class="img-fluid" style="max-width: 200px; margin-top: 10px;">
                   </div>
@@ -252,8 +251,6 @@
           $("#imagenPreview").on("error", function() {
             $(this).attr("src", "../../../media/images/imgRelleno.png");
           });
-          $("#imagen").val("");
-          $("#imagen").removeAttr("required");
         },
         error: function(xhr, status, error) {
           console.error("Error en la solicitud AJAX:", status, error);
