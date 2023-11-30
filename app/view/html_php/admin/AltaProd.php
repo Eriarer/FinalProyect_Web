@@ -1,56 +1,3 @@
-<?php
-include_once __DIR__ . '/../../../model/DB/dataBaseCredentials.php';
-include_once __DIR__ . '/../../../model/routes_files.php';
-include_once __DIR__ . '/../../../model/DB/controllDB.php';
-
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $categoria = $_POST['categoria'];
-  $nombre = $_POST['nombre'];
-  $descripcion = $_POST['descripcion'];
-  $stock = $_POST['stock'];
-  $precio = $_POST['precio'];
-  $descuento = $_POST['descuento'];
-  $imagen = $_FILES["imagen"]["name"];
-  // guardar la imagen en el servidor
-  $direccion = __DIR__ . '/../../../media/images/productos/';
-
-  $db = new dataBase($credentials, $CONFIG);
-  //obtener el ultimo id de la tabla productos
-  $id = $db->getLastProductId() + 1;
-  //              ruta            nombra       extension
-  $Archivo = $direccion . $id . "." . pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
-  // guardar la imagen en la ruta del servidor
-  move_uploaded_file($_FILES["imagen"]["tmp_name"], $Archivo);
-
-  $respose = $db->altaProducto($categoria, $nombre, $descripcion, $Archivo, $stock, $precio, $descuento);
-
-  if ($respose) {
-    echo "<h1>Producto registrado correctamente</h1>";
-  } else {
-    echo "<h1>Producto no registrado</h1>";
-  }
-  // usar el destructor para cerrar la conexion
-  //$db->__destruct();
-  // eliminar el metodo POST
-  /////////////////////////////////////////////////$_SERVER["REQUEST_METHOD"] = "";
-}
-
-/*
-Estructura de la tabla productos:
-
-Field	            Type	         Null	  Key    Default Extra
-prod_id	            int(6)	          NO	  PRI	          auto_increment
-categoria	        varchar(255)	  YES			
-prod_name	        varchar(255)	  NO			
-prod_description    text	          YES			
-prod_imgPath	    varchar(255)	  NO			
-prod_stock	        int(11)           NO			
-prod_precio	        float	          NO			
-prod_descuento	    float	          NO	
-*/
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,9 +11,55 @@ prod_descuento	    float	          NO
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
   <!-- Jquery -->
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <!-- agregando link para darle estilos a la alerta -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
+  <?php
+  include_once __DIR__ . '/../../../model/DB/dataBaseCredentials.php';
+  include_once __DIR__ . '/../../../model/routes_files.php';
+  include_once __DIR__ . '/../../../model/DB/controllDB.php';
+
+
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $categoria = $_POST['categoria'];
+    $nombre = $_POST['nombre'];
+    $descripcion = $_POST['descripcion'];
+    $stock = $_POST['stock'];
+    $precio = $_POST['precio'];
+    $descuento = $_POST['descuento'];
+    $imagen = $_FILES["imagen"]["name"];
+    // guardar la imagen en el servidor
+    $direccion = __DIR__ . '/../../../media/images/productos/';
+
+    $db = new dataBase($credentials, $CONFIG);
+    //obtener el ultimo id de la tabla productos
+    $id = $db->getLastProductId() + 1;
+    //              ruta            nombra       extension
+    $Archivo = $direccion . $id . "." . pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
+    // guardar la imagen en la ruta del servidor
+    move_uploaded_file($_FILES["imagen"]["tmp_name"], $Archivo);
+
+    $respose = $db->altaProducto($categoria, $nombre, $descripcion, $Archivo, $stock, $precio, $descuento);
+
+    if ($respose) {
+      echo "<script>
+      Swal.fire({
+        icon: 'success',
+        title: 'Producto agregado',
+      });
+      </script>";
+    } else {
+      echo "<script>
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al agregar el producto',
+      });
+      </script>";
+    }
+  }
+  ?>
   <?php require_once '../navbar.php'; ?>
   <!-- Tarjeta de Alta de productos -->
   <div class="container mt-5">
