@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // usar el destructor para cerrar la conexion
   //$db->__destruct();
   // eliminar el metodo POST
-  $_SERVER["REQUEST_METHOD"] = "";
+  /////////////////////////////////////////////////$_SERVER["REQUEST_METHOD"] = "";
 }
 
 /*
