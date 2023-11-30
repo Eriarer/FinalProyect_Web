@@ -32,6 +32,52 @@
 </style>
 
 <body>
+  <?php
+  include_once __DIR__ . '/../../../model/DB/dataBaseCredentials.php';
+  include_once __DIR__ . '/../../../model/routes_files.php';
+  include_once __DIR__ . '/../../../model/DB/controllDB.php';
+
+  $db = new dataBase($credentials, $CONFIG);
+
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST['id'];
+    $categoria = $_POST['categoria'];
+    $nombre = $_POST['nombre'];
+    $descripcion = $_POST['descripcion'];
+    $stock = $_POST['stock'];
+    $precio = $_POST['precio'];
+    $descuento = $_POST['descuento'];
+    $imagen;
+    // si no se subio una imagen, enviar un null
+    if (!isset($_FILES["imagen"]["name"])) {
+      $imagen = null;
+    } else {
+      $imagen = $_FILES["imagen"]["name"];
+      // guardar la imagen en el servidor
+      $direccion = __DIR__ . '/../../../media/images/productos/';
+      $Archivo = $direccion . $id . "." . pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
+      // guardar la imagen en la ruta del servidor
+      move_uploaded_file($_FILES["imagen"]["tmp_name"], $Archivo);
+      $imagen = $Archivo;
+    }
+    $db = new dataBase($credentials, $CONFIG);
+
+    $respose = $db->modifyProduct($id, $categoria, $nombre, $descripcion, $imagen, $stock, $precio, $descuento);
+    if ($respose) {
+      echo "<script>Swal.fire({
+      title: 'Producto modificado',
+      text: 'El artículo ha sido modificado correctamente',
+      icon: 'success'
+    });</script>";
+    } else {
+      echo "<script>Swal.fire({
+      title: 'Error',
+      text: 'Ha ocurrido un error al modificar el producto',
+      icon: 'error'
+    });</script>";
+    }
+  }
+  ?>
   <?php require_once '../navbar.php'; ?>
   <div class="container d-flex justify-content-center mt-5">
     <table class="table  table-striped table-hover">
@@ -68,7 +114,8 @@
         <div class="modal-body">
           <div class="card" id="altProd">
             <div class="card-body">
-              <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method='post' enctype="multipart/form-data">
+              <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" id="form" method='post' enctype="multipart/form-data">
+                <input type="number" class="form-control" id="id" name="id">
                 <div class="form-group mt-1 row">
                   <div class="form-group mt-3 col-md-6">
                     <label for="nombre">Nombre del producto</label>
@@ -118,7 +165,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-success" name="submit">Aceptar</button>
+          <button type="submit" class="btn btn-success" name="submit" id="submit">Aceptar</button>
         </div>
       </div>
     </div>
@@ -139,6 +186,12 @@
       $("#imagen").change(function() {
         // Llama a la función para mostrar la vista previa
         mostrarVistaPrevia(this);
+      });
+
+      // si se presiona el boton de aceptar
+      // enviar el formulario
+      $("#submit").click(function() {
+        $("#form").submit();
       });
     });
 
@@ -177,79 +230,33 @@
         type: "POST",
         url: "../../../model/DB/manejoProductos.php",
         data: {
-          method: "getAllProducts"
+          method: "getProduct",
+          id: id
         },
         success: function(response) {
-          var productos = JSON.parse(response);
-          for (var i = 0; i < productos.length; i++) {
-            var producto = productos[i];
-            if (producto.prod_id == id) {
-              $("#nombre").val(producto.prod_name);
-              $("#categoria").val(producto.categoria);
-              $("#stock").val(producto.prod_stock);
-              $("#precio").val(producto.prod_precio);
-              $("#descuento").val(producto.prod_descuento);
-              $("#descripcion").val(producto.prod_description);
-              // la ruta de la imagen se guarda en la base de datos va a ser local, por lo que se debe agregar el path de la carpeta
-              // cortar la ruta de la imagen '/' y obtener el ultimo elemento
-              var prodImg = producto.prod_imgPath.split("/");
-              prodImg = prodImg[prodImg.length - 1];
-              var url = "../../../media/images/productos/" + prodImg;
-              $("#imagenPreview").attr("src", url);
-              $("#imagen").val("");
-              $("#imagen").removeAttr("required");
-              // ajustar el boton de aceptar para que llame a la funcion de modificar 
-              $(".btn-success").attr("onclick", "modificarProducto(" + id + ")");
-              break;
-            }
-          }
+          var producto = JSON.parse(response); //Obteniendo inframción del producto
+
+          $("#id").val(producto.prod_id);
+          $("#nombre").val(producto.prod_name);
+          $("#categoria").val(producto.categoria);
+          $("#stock").val(producto.prod_stock);
+          $("#precio").val(producto.prod_precio);
+          $("#descuento").val(producto.prod_descuento);
+          $("#descripcion").val(producto.prod_description);
+          // la ruta de la imagen se guarda en la base de datos va a ser local, por lo que se debe agregar el path de la carpeta
+          // cortar la ruta de la imagen '/' y obtener el ultimo elemento
+          var prodImg = producto.prod_imgPath.split("/");
+          prodImg = prodImg[prodImg.length - 1];
+          var url = "../../../media/images/productos/" + prodImg;
+          $("#imagenPreview").attr("src", url);
+          $("#imagenPreview").on("error", function() {
+            $(this).attr("src", "../../../media/images/imgRelleno.png");
+          });
+          $("#imagen").val("");
+          $("#imagen").removeAttr("required");
         },
         error: function(xhr, status, error) {
           console.error("Error en la solicitud AJAX:", status, error);
-        }
-      });
-    }
-
-    function modificarProducto(id) {
-      //obtener los datos del producto
-      var nombre = $("#nombre").val();
-      var categoria = $("#categoria").val();
-      var stock = $("#stock").val();
-      var precio = $("#precio").val();
-      var descuento = $("#descuento").val();
-      var descripcion = $("#descripcion").val();
-      var imagen = $("#imagen")[0].files[0];
-      //realizar la solicitud AJAX
-      $.ajax({
-        type: "POST",
-        url: "../../../model/DB/manejoProductos.php",
-        data: {
-          method: "modifyProduct",
-          id: id,
-          categoria: categoria,
-          nombre: nombre,
-          descripcion: descripcion,
-          stock: stock,
-          precio: precio,
-          descuento: descuento,
-          imagen: imagen
-        },
-        processData: false,
-        contentType: false,
-        success: function(response) {
-          if (response == "success") {
-            Swal.fire({
-              title: "Producto modificado",
-              text: "El artículo ha sido modificado correctamente",
-              icon: "success"
-            });
-          } else {
-            Swal.fire({
-              title: "Error",
-              text: "Ha ocurrido un error al modificar el producto",
-              icon: "error"
-            });
-          }
         }
       });
     }
