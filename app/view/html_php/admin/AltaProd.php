@@ -1,7 +1,7 @@
 <?php
-include_once __DIR__ . '/../../model/DB/dataBaseCredentials.php';
-include_once __DIR__ . '/../../model/routes_files.php';
-include_once __DIR__ . '/../../model/DB/controllDB.php';
+include_once __DIR__ . '/../../../model/DB/dataBaseCredentials.php';
+include_once __DIR__ . '/../../../model/routes_files.php';
+include_once __DIR__ . '/../../../model/DB/controllDB.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $descuento = $_POST['descuento'];
   $imagen = $_FILES["imagen"]["name"];
   // guardar la imagen en el servidor
-  $direccion = __DIR__ . '/../../media/images/productos/';
+  $direccion = __DIR__ . '/../../../media/images/productos/';
 
   $db = new dataBase($credentials, $CONFIG);
   //obtener el ultimo id de la tabla productos
@@ -67,7 +67,7 @@ prod_descuento	    float	          NO
 </head>
 
 <body>
-
+  <?php require_once '../navbar.php'; ?>
   <!-- Tarjeta de Alta de productos -->
   <div class="container mt-5">
     <div class="card-container">
@@ -111,7 +111,7 @@ prod_descuento	    float	          NO
                   <label for="imagen">Imagen del producto</label>
                   <input type="file" class="form-control-file" id="imagen" name="imagen" accept=".jpg, .jpeg, .png, .webp, .svg, .webm" required>
                   <!-- Agrega el elemento img para mostrar la vista previa -->
-                  <img id="imagenPreview" src="../../media/images/imgRelleno.png" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 400px; margin-top: 10px;">
+                  <img id="imagenPreview" src="../../../media/images/imgRelleno.png" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 400px; margin-top: 10px;">
                 </div>
               </div>
               <div class="form-group mt-3">
@@ -126,8 +126,7 @@ prod_descuento	    float	          NO
       </div>
     </div>
   </div>
-
-
+  <?php require_once '../footer.php'; ?>
   <script>
     $(document).ready(function() {
       // Llama a la función para mostrar la vista previa de la imagen por defecto

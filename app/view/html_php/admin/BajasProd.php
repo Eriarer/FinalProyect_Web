@@ -16,7 +16,7 @@
 </head>
 
 <body>
-  <?php require_once 'navbar.php'; ?>
+  <?php require_once '../navbar.php'; ?>
   <div class="container d-flex justify-content-center mt-5">
     <table class="table  table-striped table-hover">
       <thead>
@@ -37,7 +37,7 @@
       </tbody>
     </table>
   </div>
-  <?php require_once 'footer.php'; ?>
+  <?php require_once '../footer.php'; ?>
   <script>
     var old_productos = null;
     $(document).ready(function() {
@@ -86,7 +86,7 @@
       // Realiza la solicitud AJAX para eliminar el producto
       $.ajax({
         type: "POST",
-        url: "../../model/DB/manejoProductos.php",
+        url: "../../../model/DB/manejoProductos.php",
         data: {
           method: "delete",
           id: id
@@ -118,7 +118,7 @@
           rellenarTabla(productos);
         }
       });
-      setTimeout(updateTable, 500);
+      setTimeout(updateTable, 500); // Actualizar cada 500ms
     }
 
     function isEqual(a, b) {
@@ -131,7 +131,7 @@
     function obtenerTablaProductos(callback) {
       $.ajax({
         type: "POST",
-        url: "../../model/DB/manejoProductos.php",
+        url: "../../../model/DB/manejoProductos.php",
         data: {
           method: "getAllProducts"
         },
@@ -167,7 +167,7 @@
         console.log(producto.prod_imgPath);
         var prodImg = producto.prod_imgPath.split("/");
         prodImg = prodImg[prodImg.length - 1];
-        var url = "../../media/images/productos/" + prodImg;
+        var url = "../../../media/images/productos/" + prodImg;
         console.log(url);
         tr.append("<td><img src='" + url + "' alt='" + prodImg + "' width='100px'></td>");
         tr.append("<td>" + producto.prod_stock + "</td>");
