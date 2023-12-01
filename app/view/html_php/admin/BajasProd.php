@@ -13,6 +13,8 @@
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <!-- agregando link para darle estilos a la alerta -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../css/main.css" />
 </head>
 
 <body>
@@ -66,21 +68,68 @@
     }
 
     function confirmarEliminar(id) {
-      Swal.fire({
-        title: "¿Estás seguro?",
-        text: "El producto con id " + id + " será eliminado permanentemente",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Borrar",
-        cancelButtonText: "Cancelar"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          eliminarProducto(id);
+      // Realiza la solicitud AJAX para obtener la información del producto
+      $.ajax({
+        type: "POST",
+        url: "../../../model/DB/manejoProductos.php",
+        data: {
+          method: "getProduct",
+          id: id
+        },
+        success: function(response) {
+          var producto = JSON.parse(response); // Obteniendo información del producto
+          var prodImg = producto.prod_imgPath.split("/");
+          prodImg = prodImg[prodImg.length - 1];
+          var url = "../../../media/images/productos/" + prodImg;
+          //crear un elemento temporar tipo img para verificar si la imagen existe
+          var img = $("<img src='" + url + "' alt='" + prodImg + "' width='100px'>");
+          img.on("error", function() {
+            url = "../../../media/images/imgRelleno.png";
+          });
+          // destruir el elemento temporal
+          img.remove();
+          // Construye el contenido del modal con los datos del producto
+          var modalContent = `
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6">
+                  <h5>${producto.prod_name}</h5>
+                  <img src="${url}" alt="${producto.prod_imgPath}" class="img-fluid" style="max-width: 100%;">
+                </div>
+                <div class="col-md-6">
+                  <h5>ID: ${id}</h5>
+                  <p>Categoría: ${producto.categoria}</p>
+                  <p>Descripción: ${producto.prod_description}</p>
+                  <p>Stock: ${producto.prod_stock}</p>
+                  <p>Precio: ${producto.prod_precio}</p>
+                  <p>Descuento: ${producto.prod_descuento}</p>
+                </div>
+              </div>
+            </div>
+          `;
+
+          // Muestra el modal de confirmación
+          Swal.fire({
+            title: "¿Estás seguro?",
+            html: modalContent,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Borrar",
+            cancelButtonText: "Cancelar"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              eliminarProducto(id);
+            }
+          });
+        },
+        error: function(xhr, status, error) {
+          console.error("Error en la solicitud AJAX:", status, error);
         }
       });
     }
+
 
     function eliminarProducto(id) {
       // Realiza la solicitud AJAX para eliminar el producto
