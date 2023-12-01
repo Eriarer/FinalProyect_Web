@@ -1,16 +1,25 @@
-.navbar {
-    height: 90px; /* Establece la altura que prefieras */
-    
-}
-#barramenu{
+#barramenu {
     background: #143877;
 }
 
-.navbar-nav .nav-link {
-   /* color: #0044cc;  Azul fuerte en código hexadecimal */
-    font-weight: bold;
-}
-.nav-item{
-    padding: 18px;
-}
+.nav-item a {
+    color: #fff;
+    font-size: 1.5em;
+    font-weight: 500;
+    padding: 0.3em;
+    transition: all 0.3s ease-in-out;
 
+    &:hover {
+        color: #b3ebff !important;
+        transform: scale(1.05);
+    }
+
+    &:i {
+        color: #fff;
+
+        &:hover {
+            color: #b3ebff !important;
+            transform: scale(1.05);
+        }
+    }
+}
