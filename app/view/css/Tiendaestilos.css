@@ -25,6 +25,7 @@
     align-items: center; /* Alinea horizontalmente en el centro */
     gap: 20px; /* Espacio entre las filas */
     padding: 20px;
+    border-radius: 10px;
   }
   
   .image-row-top {
@@ -85,3 +86,58 @@
 }
 
 /*---------------fin de estilos de categorias-------*/
+
+/*-----------------estilos de destacados-----------*/
+#titulo_des{
+  color: #57D6EA;
+  text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: xx-large;
+}
+.destacados h3{
+  color: rgb(45, 62, 160);
+  text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+  font-size: x-large;
+}
+
+.conteiner_des{
+  display: flex;
+  overflow-x:auto;
+  scrollbar-width:none;
+  padding: 1.5rem;
+
+}
+.card_des{
+  position: relative;
+  flex: 0 0 309px;
+  height: 450px;
+  overflow: hidden;
+  margin-left: 1.5rem;
+  border-radius: 18px;
+  box-shadow: 
+              2px 4px 12px
+              rgb(0, 0, 0, 0.08);
+}
+
+.image{
+  width: 100%;
+}
+.tit_des{
+  font-size: 0.75rem;
+  margin-top: 1rem;
+}
+.texto{
+  font-size: 1.1rem;
+  font-weight: 300;
+  text-align: center;
+}
+
+/*--------------estilos extra-------------------*/
+
+.card-body{
+  border-radius: 3px;
+  border: 4px solid #E1B9F0;
+}
