@@ -65,14 +65,20 @@
     <div class="destacados">    
         <h3>LO MAS DESTACADO:</h3>
         <div class="conteiner_des">
+            <!-- -------card 1------- -->
             <article class="card_des">
-              <img src="" alt="" class="image"> 
+              <img src="../../media/images/productos/Pirata.png" alt="" class="image"> 
               <section class="body_des">
-                <h3 class="tit_des"></h3>
-                <a href=""></a>
+                <h3 class="tit_des">Ake Pirata</h3>
+                 <p class="texto">Compañero de aventuras
+                    <strong>
+                      <u>0 % TAE</u>  
+                    </strong>
+                    <sub>1</sub>
+                 </p>
               </section> 
             </article>
-
+            <!-- --------card 2-------- -->
         </div>
 
 
