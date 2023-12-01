@@ -15,7 +15,7 @@
 
 <body>
   <?php require_once 'navbar.php'; ?>
-  <div class="container mt-5">
+  <div class="container my-5">
     <div class="card-container">
       <!-- Tarjeta de Registro -->
       <div class="card" id="register">
@@ -73,8 +73,11 @@
                   </div>
                 </div>
               </div>
+              <div class="form-group-col-md-12 mt-0 pt-0 mb-3">
+                  <small id="coinciden" class="text-danger text-right"></small> 
+              </div>
             </div>
-            <button type="submit" class="btn btn-primary">Registrarse</button>
+            <button type="submit" id="btnReg" class="btn btn-primary">Registrarse</button>
           </form>
           <p class="mt-3">¿Ya tienes una cuenta? <a href="#" onclick="toggleForm()">Iniciar Sesión</a></p>
         </div>
@@ -136,6 +139,7 @@
         url: '../../model/captcha/captcha_generator.php',
         type: 'GET',
         success: function(data) {
+          console.log(data);
           var data = JSON.parse(data);
           image = data.image;
           text = data.text;
@@ -176,6 +180,17 @@
         verifyCaptcha();
       });
       $('#logIn').hide();
+
+      // al teclear en los campos passwordReg y confirmPasswordReg
+      $('#passwordReg, #confirmPasswordReg').on('input', function() {
+        if ($('#passwordReg').val() === $('#confirmPasswordReg').val()) {
+          $('#coinciden').text('');
+          $('#btnReg').prop('disabled', false);
+        } else {
+          $('#coinciden').text('Las contraseñas no coinciden');
+          $('#btnReg').prop('disabled', true);
+        }
+      });
     });
   </script>
 

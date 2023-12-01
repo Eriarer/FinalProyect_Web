@@ -107,7 +107,7 @@ $captcha = [
 ];
 $captcha = json_encode($captcha);
 echo $captcha;
-
+return $captcha;
 
 
 
