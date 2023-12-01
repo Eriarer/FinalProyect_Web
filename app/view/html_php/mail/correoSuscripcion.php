@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Asunto y mensaje
-$recipientSubject = 'Suscripción a la lista de correo';
+$recipientSubject = mb_encode_mimeheader('Suscripción a la lista de correo', 'UTF-8', 'Q');
 $recipientMessage = '
 <!DOCTYPE html>
 <html lang="es">
