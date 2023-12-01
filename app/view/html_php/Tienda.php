@@ -63,7 +63,18 @@
     </div>
     <!-- Categorias destacadas -->
     <div class="destacados">    
-        
+        <h3>LO MAS DESTACADO:</h3>
+        <div class="conteiner_des">
+            <article class="card_des">
+              <img src="" alt="" class="image"> 
+              <section class="body_des">
+                <h3 class="tit_des"></h3>
+                <a href=""></a>
+              </section> 
+            </article>
+
+        </div>
+
 
     </div>
     
