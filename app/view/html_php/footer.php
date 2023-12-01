@@ -45,7 +45,7 @@
     
     <!-- Section: Form -->
     <section class="">
-      <form action="">
+      <form action="mail/correoSuscripcion.php" method="post">
         <!--Grid row-->
         <div class="row d-flex justify-content-center">
           <!--Grid column-->
@@ -60,7 +60,7 @@
           <div class="col-md-5 col-12">
             <!-- Email input -->
             <div data-mdb-input-init class="form-outline mb-4">
-              <input type="email" id="form5Example24" class="form-control" />
+              <input type="email" id="form5Example24" class="form-control" name="email" />
               <label class="form-label" for="form5Example24">Email address</label>
             </div>
           </div>
@@ -83,7 +83,7 @@
     <!-- Section: Text -->
     <section class="mb-4">
       <p>
-      &copy; 2023 FluffyHugs. Todos los derechos reservados. El contenido de este sitio es para propósitos educativos como parte del proyecto académico en la materia de Programacion de sistemas web en la Universidad Autonoma de Aguascalientes.
+        &copy; 2023 FluffyHugs. Todos los derechos reservados. El contenido de este sitio es para propósitos educativos como parte del proyecto académico en la materia de Programacion de sistemas web en la Universidad Autonoma de Aguascalientes.
       </p>
     </section>
 
@@ -91,7 +91,7 @@
     <section class="">
       <!--Grid row-->
       <div class="row">
-      <!--Grid column-->
+        <!--Grid column-->
         <div class="list-footer col-lg-3 col-md-6 mb-4 mb-md-0">
           <h5 class="text-uppercase">Enlaces Rapidos</h5>
           <ul class="list-unstyled mb-0 ">
@@ -131,7 +131,7 @@
         </div>
         <!--Grid column-->
         <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14806.24246221518!2d-102.33273314458006!3d21.912989300000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8429ef1da1ab338d%3A0x89a0246637c42ddb!2sUniversidad%20Aut%C3%B3noma%20de%20Aguascalientes!5e0!3m2!1ses!2smx!4v1698689117205!5m2!1ses!2smx" width="500" height="270" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14806.24246221518!2d-102.33273314458006!3d21.912989300000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8429ef1da1ab338d%3A0x89a0246637c42ddb!2sUniversidad%20Aut%C3%B3noma%20de%20Aguascalientes!5e0!3m2!1ses!2smx!4v1698689117205!5m2!1ses!2smx" width="500" height="270" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
       <!--Grid row-->
