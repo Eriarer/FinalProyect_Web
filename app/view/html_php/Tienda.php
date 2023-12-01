@@ -32,7 +32,7 @@
                 <img class="d-block w-100" src="../../media/images/Carrusel4.jpeg" alt="Third slide" width="auto" height="500">
             </div>
             <div class="carousel-item">
-                <img class="d-block w-100" src="../../media/images/Carrusel4.jpeg" alt="Third slide" width="auto" height="500">
+                <img class="d-block w-100" src="../../media/images/Carrusel5.png" alt="Third slide" width="auto" height="500">
             </div>
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -47,7 +47,7 @@
     <div class="bienvenida">
         <h3> ¡Bienvenidos a FluffyHugs! <img src="../../media/images/bienvenido.png" height="50"></h3>
         <p>Explora un mundo donde la ternura y la imaginación se encuentran. En FluffyHugs, creemos que cada peluche es más que un juguete; es un compañero de aventuras y un amigo fiel. Nuestra colección de peluches suaves y acogedores está diseñada para llevar alegría a corazones de todas las edades. Desde los clásicos ositos de peluche hasta criaturas fantásticas, cada uno de nuestros peluches tiene su propia personalidad y historia que contar.</p>
-        <p><b>¡Explora nuestra tienda y descubre tu próximo compañero de abrazos!</b></p>
+        <p style="text-align: center;"><b>¡Explora nuestra tienda y descubre tu próximo compañero de abrazos!</b></p>
     </div>
     <h3 class="Categorias">CATEGORIAS</h3>
     <div class="images-row">
@@ -67,37 +67,74 @@
             </div>
         </div>
     </div>
+
     <!-- Categorias destacadas -->
     <div class="destacados">
-        <h3>LO MAS DESTACADO:</h3>
+        <h3 id="titulo_des">LO MAS DESTACADO</h3>
         <div class="conteiner_des">
             <!-- -------card 1------- -->
             <article class="card_des">
-<<<<<<< HEAD
               <img src="../../media/images/productos/Pirata.png" alt="" class="image"> 
               <section class="body_des">
                 <h3 class="tit_des">Ake Pirata</h3>
-                 <p class="texto">Compañero de aventuras
-                    <strong>
-                      <u>0 % TAE</u>  
-                    </strong>
-                    <sub>1</sub>
+                 <p class="texto">Compañero de aventuras <br>
+                    <sub><b>1</b></sub>
                  </p>
               </section> 
-=======
-                <img src="" alt="" class="image">
-                <section class="body_des">
-                    <h3 class="tit_des"></h3>
-                    <a href=""></a>
-                </section>
->>>>>>> 6d23964f6d17e3ffba021f259b979c6ff0b83b10
             </article>
             <!-- --------card 2-------- -->
+            <article class="card_des">
+              <img src="../../media/images/productos/monoNiev.png" alt="" class="image"> 
+              <section class="body_des">
+                <h3 class="tit_des">Copito</h3>
+                 <p class="texto">Perfecto para tus Navidades <br>
+                    <sub><b>2</b></sub>
+                 </p>
+                </section>
+            </article>
+            <!-- -----------card 3------------------ -->
+            <article class="card_des">
+              <img src="../../media/images/productos/florC.png" alt="" class="image"> 
+              <section class="body_des">
+                <h3 class="tit_des">Xochitl</h3>
+                 <p class="texto">Como la flor de cempasúchil, nuestros recuerdos iluminan los caminos del alma <br>
+                    <sub><b>3</b></sub>
+                 </p>
+                </section>
+            </article>
+            <!-- -----------card 4------------------ -->
+            <article class="card_des">
+              <img src="../../media/images/productos/DinoGlobos.png" alt="" class="image"> 
+              <section class="body_des">
+                <h3 class="tit_des">Bob Stegosaurus</h3>
+                 <p class="texto">Tu amigo favorito de la prehistoria <br>
+                    <sub><b>4</b></sub>
+                 </p>
+                </section>
+            </article>
+            <!-- -----------card 5------------------ -->
+            <article class="card_des">
+              <img src="../../media/images/productos/Elefante.png" alt="" class="image"> 
+              <section class="body_des">
+                <h3 class="tit_des">Valentina Elefantina</h3>
+                 <p class="texto">En cada abrazo, un corazón elefante de amor. <br>
+                    <sub><b>5</b></sub>
+                 </p>
+                </section>
+            </article>
+            <!-- -----------card 6------------------ -->
+            <article class="card_des">
+              <img src="../../media/images/productos/pingui.png" alt="" class="image"> 
+              <section class="body_des">
+                <h3 class="tit_des">Pablo Graduado</h3>
+                 <p class="texto">Un regalo inolvidable para esa nueva etapa <br>
+                    <sub><b>6</b></sub>
+                 </p>
+                </section>
+            </article>
         </div>
-
-
     </div>
-
+    <hr><br>
     <!-- Informacion extra -->
     <div class="container mt-5">
         <div class="row text-center">
@@ -146,7 +183,7 @@
             </div>
         </div>
     </div>
-
+    <br><br>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
