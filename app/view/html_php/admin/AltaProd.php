@@ -13,6 +13,8 @@
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <!-- agregando link para darle estilos a la alerta -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../css/main.css" />
 </head>
 
 <body>
@@ -104,7 +106,7 @@
                   <label for="imagen">Imagen del producto</label>
                   <input type="file" class="form-control-file" id="imagen" name="imagen" accept=".jpg, .jpeg, .png, .webp, .svg, .webm" required>
                   <!-- Agrega el elemento img para mostrar la vista previa -->
-                  <img id="imagenPreview" src="../../../media/images/imgRelleno.png" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 400px; margin-top: 10px;">
+                  <img id="imagenPreview" src="../../../media/images/imgRelleno.png" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 200px; margin-top: 10px;">
                 </div>
               </div>
               <div class="form-group mt-3 col-md-6 text-left">
