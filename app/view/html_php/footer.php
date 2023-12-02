@@ -1,5 +1,5 @@
 
-    <link rel="stylesheet" href="../css/headers/footer.css">
+<link rel="stylesheet" href="../css/headers/footer.css">
     <link rel="shortcut icon" href="../../media/imagenes/oso-de-peluche.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
@@ -44,8 +44,8 @@
     <!-- Section: Social media -->
     
     <!-- Section: Form -->
-    <section class="subscription-section">
-      <form id="subscriptionForm" action="" method="post">
+    <section class="">
+      <form action="mail/correoSuscripcion.php" method="post">
         <!--Grid row-->
         <div class="row d-flex justify-content-center">
           <!--Grid column-->
@@ -60,7 +60,7 @@
           <div class="col-md-5 col-12">
             <!-- Email input -->
             <div data-mdb-input-init class="form-outline mb-4">
-              <input type="email" id="form5Example24" class="form-control" name="email" required />
+              <input type="email" id="form5Example24" class="form-control" name="email" required/>
               <label class="form-label" for="form5Example24">Correo Electrónico</label>
             </div>
           </div>
@@ -69,7 +69,7 @@
           <!--Grid column-->
           <div class="col-auto contBtn">
             <!-- Submit button -->
-            <button data-mdb-ripple-init type="button" class="btn btn-outline mb-4 btnSuscribe" onclick="subscribe()">
+            <button data-mdb-ripple-init type="submit" class="btn btn-outline mb-4 btnSuscribe">
               Subscribe
             </button>
           </div>
@@ -77,12 +77,6 @@
         </div>
         <!--Grid row-->
       </form>
-
-      <!-- Message section -->
-      <div id="thankYouMessage" class="hidden">
-        <p>Gracias por suscribirte.</p>
-      </div>
-      <!-- Message section -->
     </section>
     <!-- Section: Form -->
 
