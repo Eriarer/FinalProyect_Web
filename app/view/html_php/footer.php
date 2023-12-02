@@ -100,4 +100,27 @@ include_once __DIR__ . '/../../model/routes_files.php';
     © 2023 FluffyHugs
   </div>
 </footer>
-<!-- Footer -->
+<script>
+  var emailPath = "<?= $CONFIG['P_model'] ?>";
+  $(document).ready(function() {
+    $('#formSuscripcionTienda').submit(function(e) {
+      console.log('entro');
+      var email = $('#form5Example24').val();
+      e.preventDefault();
+      $.ajax({
+        url: emailPath + 'mail/suscripcion/correoSuscripcion.php',
+        type: "POST",
+        data: {
+          email: email
+        },
+        success: function(data) {
+          Swal.fire({
+            icon: 'success',
+            title: '¡Gracias por suscribirte!',
+            text: 'Te enviaremos un correo electrónico con las mejores ofertas',
+          })
+        }
+      });
+    });
+  });
+</script>
