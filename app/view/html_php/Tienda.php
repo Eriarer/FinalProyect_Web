@@ -20,19 +20,16 @@
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img class="d-block w-100" src="../../media/images/Carrusel1.jpeg " alt="First slide" width="auto" height="500">
+                <img class="d-block w-100" src="../../media/images/fondoNavidad.png" alt="First slide" width="auto" height="500">
             </div>
             <div class="carousel-item">
-                <img class="d-block w-100" src="../../media/images/Carrusel2.jpeg" alt="Second slide" width="auto" height="500">
+                <img class="d-block w-100" src="../../media/images/fondoHalloween.png" alt="Second slide" width="auto" height="500">
             </div>
             <div class="carousel-item">
-                <img class="d-block w-100" src="../../media/images/Carrusel3.jpeg" alt="Third slide" width="auto" height="500">
+                <img class="d-block w-100" src="../../media/images/fondoCumple.png" alt="Third slide" width="auto" height="500">
             </div>
             <div class="carousel-item">
-                <img class="d-block w-100" src="../../media/images/Carrusel4.jpeg" alt="Third slide" width="auto" height="500">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100" src="../../media/images/Carrusel5.png" alt="Third slide" width="auto" height="500">
+                <img class="d-block w-100" src="../../media/images/fondoGradua.png" alt="Fourth slide" width="auto" height="500">
             </div>
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -97,7 +94,7 @@
               <img src="../../media/images/productos/florC.png" alt="" class="image"> 
               <section class="body_des">
                 <h3 class="tit_des">Xochitl</h3>
-                 <p class="texto">Como la flor de cempasúchil, nuestros recuerdos iluminan los caminos del alma <br>
+                 <p class="texto">Nuestros recuerdos iluminan los caminos del alma <br>
                     <sub><b>3</b></sub>
                  </p>
                 </section>
@@ -122,21 +119,12 @@
                  </p>
                 </section>
             </article>
-            <!-- -----------card 6------------------ -->
-            <article class="card_des">
-              <img src="../../media/images/productos/pingui.png" alt="" class="image"> 
-              <section class="body_des">
-                <h3 class="tit_des">Pablo Graduado</h3>
-                 <p class="texto">Un regalo inolvidable para esa nueva etapa <br>
-                    <sub><b>6</b></sub>
-                 </p>
-                </section>
-            </article>
+        
         </div>
     </div>
     <hr><br>
     <!-- Informacion extra -->
-    <div class="container mt-5">
+    <div class="container mt-4 cajasInfo">
         <div class="row text-center">
             <!-- Caja de "Sitio mayorista" -->
             <div class="col-md-3 mb-3">
@@ -170,21 +158,50 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Caja de "Paga a tu manera" -->
             <div class="col-md-3 mb-3">
                 <div class="card h-100">
                     <div class="card-body">
-                        <i class="fas fa-credit-card icon-box"></i>
-                        <h5 class="card-title">Paga a tu manera</h5>
-                        <p class="card-text">Con tarjeta, efectivo o transferencia</p>
+                        <i class="fas fa-percent icon-box"></i>
+                        <h5 class="card-title">Descuentos</h5>
+                        <p class="card-text">En productos seleccionados</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <br><br>
-
+<!-- -------------------------metodos de pago--------- -->
+    <h3 class="Pagos">METODOS DE PAGO</h3><br>
+        <div class="metodosdepago">
+          <div class="metodo">
+            <img class="Metodopago" src="../../media/images/tarjetaCD.png" alt="tarjetas">
+            <div class="text_pago">
+              <p>Credito/debito</p>  
+            </div>
+          </div>
+          <div class="metodo">
+            <img class="Metodopago" src="../../media/images/efectivo2.png" alt="efectivo">
+             <div class="text_pago">
+                <p>Efectivo</p>
+             </div>
+          </div>
+          <div>
+            <img class="Metodopago" src="../../media/images/tarjetaRegalo.png" alt="tarjetaRegalo">
+            <div class="text_pago">
+                <p>Tarjeta de regalo</p>
+            </div>
+          </div>
+          <div>
+            <img class="Metodopago" src="../../media/images/oxxo.png" alt="oxxo"> 
+            <div class="text_pago">
+              <p>Tiendas Oxxo</p>
+            </div>
+          </div>
+           
+           
+        </div>
+    
+    <br>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -194,5 +211,4 @@
 
     <?php include_once("footer.php") ?>
 </body>
-
 </html>
