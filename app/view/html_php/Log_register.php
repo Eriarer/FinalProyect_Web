@@ -163,22 +163,39 @@ if (isset($_SESSION['user'])) {
         </div>
       </div>
 
-      <!-- Tarjeta para Recuperar cuenta -->
-      <div class="card" id="recuperar">
-        <!-- formulario que pide primero el email, si no existe, no hace nada y solo pone un mensaje de error 
-        al conseguir el email, nos traemos la pregunta de seguridad y el usuario debe responderla, si la respuesta es correcta, 
-        al responder correctamente se le desbloquea la cuenta
-      -->
-        <div class="form-row">
-          <div class="form-group col-md-12">
-            <label for="emailRecuperar">Email</label>
-            <input type="email" class="form-control" id="emailRecuperar" name="emailRecuperar" required>
-            <small id="emailRecuperarText" class="form-text text-danger"></small>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-12">
-            <button type="button" class="btn btn-primary" id="btnRecuperar">Recuperar Cuenta</button>
+      <div class=" modal fade" id="recuparCuenta" tabindex="-1" onfocusout="detectarPérdidaDeFoco()">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Recuperar Cuenta</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <label for="emailRecuperar">Email</label>
+                    <input type="email" class="form-control" id="emailRecuperar" name="emailRecuperar" required>
+                    <small id="emailRecuperarText" class="form-text text-danger"></small>
+                  </div>
+                </div>
+                <div class="form-row mt-1" id="cuestionarioRecuperar">
+                  <!-- pregunta de Seguridad -->
+                  <label for="preguntaSeguridad">Pregunta de seguridad</label>
+                  <input type="text" class="form-control" id="preguntaSeguridad" name="preguntaSeguridad" readonly>
+                  <small id="preguntaSeguridadText" class="form-text text-danger"></small>
+                  <label for="respuestaSeguridad">Respuesta</label>
+                  <input type="text" class="form-control" id="respuestaSeguridad" name="respuestaSeguridad" required>
+                  <small id="respuestaSeguridadText" class="form-text text-danger"></small>
+                </div>
+              </form>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="btnRecuperar">Recuperar Cuenta</button>
+            </div>
           </div>
         </div>
       </div>
