@@ -1,4 +1,5 @@
 <?php
+include_once __DIR__ . '/../../../routes_files.php';
 // Correo y nombre del destinatario
 $recipientEmail = '';
 $recipientName = '';
@@ -14,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Asunto y mensaje
 $recipientSubject = mb_encode_mimeheader('Suscripción a la lista de correo', 'UTF-8', 'Q');
-$recipientMessage = 'correoSuscripcion.html';
+$recipientMessage = __DIR__ . '/correoSuscripcion.html';
 
 // Incluir el archivo correo.php
-include_once 'correo.php';
+include_once __DIR__ . '/../correo.php';
