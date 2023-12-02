@@ -32,7 +32,7 @@ try {
     // Contenido
     $mail->isHTML(true);                // Establece el formato del correo electrónico en HTML
     $mail->Subject = $recipientSubject; // Asunto del correo    
-    $mail->Body = $recipientMessage;    // Cuerpo del mensaje en HTML
+    $mail->msgHTML(file_get_contents($recipientMessage), __DIR__); // Contenido del correo
 
     $mail->send();
     
