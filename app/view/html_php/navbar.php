@@ -11,7 +11,7 @@ include_once __DIR__ . '/../../model/DB/controllDB.php';
 // si las coockies estan seteadas verificarlas en la base de datos si es que el usuario existe
 // de ser así setear la variable de sesion 
 $db = new dataBase($credentials, $CONFIG);
-if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
+if (isset($_COOKIE['email']) && isset($_COOKIE['password']) && isset($_COOKIE['name'])) {
     $email = $_COOKIE['email'];
     $password = $_COOKIE['password'];
     $response = $db->login($email, $password);
@@ -27,6 +27,10 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
         $_SESSION['email'] = $email;
         $_SESSION['name'] = $user['usr_account'];
     }
+} else {
+    setcookie("name", '', time() - 3600, "/");
+    setcookie('email', '', time() - 3600, '/');
+    setcookie('password', '', time() - 3600, '/');
 }
 
 $image = $CONFIG['P_images'] . 'LogoSF.png';
