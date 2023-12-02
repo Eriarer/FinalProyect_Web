@@ -216,21 +216,21 @@ class dataBase {
   █▄█ ▄█ █▄█ █▀█ █▀▄ ▄█▄ █▄█ ▄█
   */
 
-  public function altaUsuarios($usr_email, $usr_name, $usr_pwd, $usr_admin, $pregunta, $respuesta) {
+  public function altaUsuario($usr_email, $usr_name, $usr_account, $usr_pwd, $usr_admin, $pregunta, $respuesta) {
     // Verificar que existen parámetros
     $usr_admin = 0;
-    if ($usr_email == null || $usr_name == null || $usr_pwd == null || $usr_admin === null || $pregunta == null || $respuesta == null) {
+    if ($usr_email == null || $usr_name == null || $usr_account == null || $usr_pwd == null || $usr_admin === null || $pregunta == null || $respuesta == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
 
     // Preparar la sentencia para evitar la <--inyección SQL-->
-    $sql = "INSERT INTO usuarios (usr_email, usr_name, usr_pwd, usr_admin) 
-              VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO usuarios (usr_email, usr_name, usr_account, usr_pwd, usr_admin) 
+              VALUES (?, ?, ?, ?, ?)";
     // Preparar la sentencia
     $stmt = $this->connexion->prepare($sql);
 
     // Vincular parámetros a la sentencia preparada como cadenas
-    $stmt->bind_param("sssi", $usr_email, $usr_name, $usr_pwd, $usr_admin);
+    $stmt->bind_param("ssssi", $usr_email, $usr_name, $usr_account, $usr_pwd, $usr_admin);
 
     // Ejecutar la sentencia
     $stmt->execute();
@@ -303,5 +303,61 @@ class dataBase {
     $result = $stmt->get_result();
 
     return $result->num_rows > 0;
+  }
+
+  public function getUserByEmail($email){
+    // Verificar que existen parámetros
+    if ($email == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    // Preparar la sentencia para evitar la <--inyección SQL-->
+    $sql = "SELECT * FROM usuarios WHERE usr_email = ?";
+    // Preparar la sentencia
+    $stmt = $this->connexion->prepare($sql);
+
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("s", $email);
+
+    // Ejecutar la sentencia
+    $stmt->execute();
+
+    // Obtener el número de filas afectadas por la última consulta
+    $result = $stmt->get_result();
+
+    return $result->fetch_assoc();
+  }
+
+  public function login($email, $password){
+    // Verificar que existen parámetros
+    if ($email == null || $password == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    //obtener el usuario con el email recibido
+    $user = $this->getUserByEmail($email);
+    if($user == null){
+      return false;
+    }
+
+    //comparar que la contraseña encriptada por BCRYPT sea igual a la contraseña recibida
+    if(password_verify($password, $user['usr_pwd'])){
+      //verificar que el usuario tenga menos de 3 intentos fallidos
+      if($user['usr_attempt'] < 3){
+        //resetear el contador de intentos fallidos
+        $sql = "UPDATE usuarios SET usr_attempt = 0 WHERE usr_id = ?";
+        $stmt = $this->connexion->prepare($sql);
+        $stmt->bind_param("i", $user['usr_id']);
+        return 0; // login exitoso
+      }else{
+        return 1; // usuario bloqueado
+      }
+    }else{
+      //incrementar el contador de intentos fallidos
+      $sql = "UPDATE usuarios SET usr_attempt = usr_attempt + 1 WHERE usr_id = ?";
+      $stmt = $this->connexion->prepare($sql);
+      $stmt->bind_param("i", $user['usr_id']);
+      return 2; // contraseña incorrecta
+    }
   }
 }
