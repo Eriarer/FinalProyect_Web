@@ -20,38 +20,40 @@ $php = $CONFIG['P_php'];
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $base . 'index.php'?>">Inicio</a>
+            <li class="nav-item" tootlip="Inicio">
+                <a class="nav-link" href="<?= $base . 'index.php'?>"><i class="nf nf-md-home"></i></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $php . 'PaginaProductos.php'?>">Tienda</a>
+            <li class="nav-item" tootlip="Tienda">
+                <a class="nav-link" href="<?= $php . 'PaginaProductos.php'?>"><i class="nf nf-md-shopping"></i></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $php . 'acercaDe.php'?>">Acerca de Nosotros</a>
+            <li class="nav-item" tootlip="Acerca de">
+                <a class="nav-link" href="<?= $php . 'acercaDe.php'?>"><i class="nf nf-fa-info_circle"></i></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Contacto</a>
+            <li class="nav-item" tootlip="Contacto">
+                <a class="nav-link" href="#"><i class="nf nf-fa-phone_square"></i></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $php . 'FAQs.php'?>">FAQS</a>
+            <li class="nav-item" tootlip="Preguntas frecuentes">
+                <a class="nav-link" href="<?= $php . 'FAQs.php'?>"><i class="nf nf-fa-question_circle"></i></a>
             </li>
         </ul>
-        <div class="navbar-nav ml-auto">
+        <div class="navbar-nav ml-auto mr-3">
             <?php
             $nombre = isset($_SESSION['name']) ? $_SESSION['name'] : (isset($_COOKIE['name']) ? $_COOKIE['name'] : '');
             if ($nombre != '') :
             ?>
-            <li class="nav-item">
+            <li class="nav-item" tootlip="Perfil">
                 <a class="nav-link" href="#"><?= $_SESSION['name']?></a>
-                <a class="nav-link" href="#" id="logOutNav"><i class="nf nf-md-logout"></i></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" tootlip="Cerrar sesión">
+                <a class="nav-link" id="logOutNav"><i class="nf nf-md-logout"></i></a>
+            </li>
+            <li class="nav-item" tootlip="Carrito">
                 <a class="nav-link" href="#"><i class="nf nf-md-cart_variant"></i></a>
             </li>
             <?php
             else :
             ?>
-            <li class="nav-item">
+            <li class="nav-item" tootlip="Iniciar sesión">
                 <a class="nav-link" id="logInNav"><i class="nf nf-md-login"></i></a>
             </li>
             <?php
