@@ -8,6 +8,8 @@
 <?php
 require_once __DIR__ . '/../../model/routes_files.php';
 $image = $CONFIG['P_images'] . 'LogoSF.png';
+$base = $CONFIG['base_url'];
+$php = $CONFIG['P_php'];
 ?>
 <nav class="navbar navbar-expand-sm navbar-dark" id="barramenu">
     <a class="navbar-brand" href="#">
@@ -19,28 +21,63 @@ $image = $CONFIG['P_images'] . 'LogoSF.png';
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#">Inicio</a>
+                <a class="nav-link" href="<?= $base . 'index.php'?>">Inicio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Tienda</a>
+                <a class="nav-link" href="<?= $php . 'PaginaProductos.php'?>">Tienda</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Acerca de Nosotros</a>
+                <a class="nav-link" href="<?= $php . 'acercaDe.php'?>">Acerca de Nosotros</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Contacto</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">FAQS</a>
+                <a class="nav-link" href="<?= $php . 'FAQs.php'?>">FAQS</a>
             </li>
         </ul>
         <div class="navbar-nav ml-auto">
+            <?php
+            $nombre = isset($_SESSION['name']) ? $_SESSION['name'] : (isset($_COOKIE['name']) ? $_COOKIE['name'] : '');
+            if ($nombre != '') :
+            ?>
             <li class="nav-item">
-                <a class="nav-link" href="#">Iniciar Sesión</a>
+                <a class="nav-link" href="#"><?= $_SESSION['name']?></a>
+                <a class="nav-link" href="#" id="logOutNav"><i class="nf nf-md-logout"></i></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#"><i class="nf nf-md-cart_variant"></i></a>
             </li>
+            <?php
+            else :
+            ?>
+            <li class="nav-item">
+                <a class="nav-link" id="logInNav"><i class="nf nf-md-login"></i></a>
+            </li>
+            <?php
+            endif;
+            ?>
         </div>
     </div>
 </nav>
+
+<script>
+    var pathModel = '<?= $CONFIG['P_model'] ?>';
+    var pathHTML = '<?= $CONFIG['P_php'] ?>';
+    var base = '<?= $CONFIG['base_url'] ?>';
+    $(document).ready(function() {
+        $('#logOutNav').click(function() {
+            $.ajax({
+                url: pathModel + 'logout.php',
+                type: 'POST',
+                success: function() {
+                    window.location.href = base + 'index.php';
+                }
+            });
+        });
+
+        $('#logInNav').click(function() {
+            window.location.href = pathHTML + 'Log_register.php';
+        });
+    });
+</script>
