@@ -147,3 +147,14 @@
   <!-- Copyright -->
 </footer>
 <!-- Footer -->
+
+<!-- Script -->
+<script>
+  function subscribe() {
+    // Ocultar el formulario
+    document.getElementById('subscriptionForm').style.display = 'none';
+
+    // Mostrar el mensaje de agradecimiento
+    document.getElementById('thankYouMessage').style.display = 'block';
+  }
+</script>
