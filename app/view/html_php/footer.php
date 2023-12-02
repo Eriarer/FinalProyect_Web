@@ -44,8 +44,8 @@
     <!-- Section: Social media -->
     
     <!-- Section: Form -->
-    <section class="">
-      <form action="mail/correoSuscripcion.php" method="post">
+    <section class="subscription-section">
+      <form id="subscriptionForm" action="" method="post">
         <!--Grid row-->
         <div class="row d-flex justify-content-center">
           <!--Grid column-->
@@ -60,7 +60,7 @@
           <div class="col-md-5 col-12">
             <!-- Email input -->
             <div data-mdb-input-init class="form-outline mb-4">
-              <input type="email" id="form5Example24" class="form-control" name="email" required/>
+              <input type="email" id="form5Example24" class="form-control" name="email" required />
               <label class="form-label" for="form5Example24">Correo Electrónico</label>
             </div>
           </div>
@@ -69,7 +69,7 @@
           <!--Grid column-->
           <div class="col-auto contBtn">
             <!-- Submit button -->
-            <button data-mdb-ripple-init type="submit" class="btn btn-outline mb-4 btnSuscribe">
+            <button data-mdb-ripple-init type="button" class="btn btn-outline mb-4 btnSuscribe" onclick="subscribe()">
               Subscribe
             </button>
           </div>
@@ -77,6 +77,12 @@
         </div>
         <!--Grid row-->
       </form>
+
+      <!-- Message section -->
+      <div id="thankYouMessage" class="hidden">
+        <p>Gracias por suscribirte.</p>
+      </div>
+      <!-- Message section -->
     </section>
     <!-- Section: Form -->
 
