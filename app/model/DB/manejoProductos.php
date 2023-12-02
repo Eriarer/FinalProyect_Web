@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo $json;
     return $json;
   } else if ($method === "emailExist") {
-    $email = $_POST[' '];
+    $email = $_POST['email'];
     $response = $db->emailExist($email);
     echo $response ? "success" : "error";
     return $response ? "success" : "error";
@@ -74,6 +74,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     setcookie("password", $passwordCrypt, $time, "/");
     echo "success";
     return "success";
+  } else if ($method === "getSecurityQuestion") {
+    $email = $_POST['email'];
+    $response = $db->getSecurityQuestion($email);
+    echo $response;
+    return $response;
+  } else if ($method === "verifySecurityAnswer") {
+    $email = $_POST['email'];
+    $respuesta = $_POST['respuesta'];
+    $response = $db->verifySecurityAnswer($email, $respuesta);
+    echo $response ? "success" : "error";
+    return $response ? "success" : "error";
+  } else if ($method === "unblock") {
+    $email = $_POST['email'];
+    $response = $db->unblock($email);
+    echo $response ? "success" : "error";
+    return $response ? "success" : "error";
   }
   echo "error";
   return "error";

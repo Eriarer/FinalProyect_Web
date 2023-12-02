@@ -1,12 +1,20 @@
 var IMAGE;
 var TEXT;
+var PREGUNTA_SEGUIRDA = {
+  "1": "¿Cuál es el nombre de tu primera mascota?",
+  "2": "¿En qué ciudad naciste?",
+  "3": "¿Cuál es tu película favorita?"
+};
 
 $(document).ready(function () {
   refreshCaptcha();
   initView();
+  $("#cuestionarioRecuperar").hide();
 });
 
 function initView() {
+  initCaptcha();
+
   $('#register').hide();
   $('#recuperar').hide();
 
@@ -41,17 +49,12 @@ function initView() {
     }
   });
 
-
+  recuperarCuenta();
 }
 
 // CAPTCHA
 function initCaptcha() {
-  $('#changeCaptcha').click(function (e) {
-    e.preventDefault();
-    refreshCaptcha();
-  });
 
-  // agregarle la animacion rotate-left al boton de refrescar captcha al hacer click
   $('#changeCaptcha').click(function () {
     $('#changeCaptcha').addClass('rotate-left');
     $('#changeCaptcha').prop('disabled', true);
@@ -59,6 +62,9 @@ function initCaptcha() {
       $('#changeCaptcha').removeClass('rotate-left');
       $('#changeCaptcha').prop('disabled', false);
     }, 300);
+    setTimeout(function () {
+      refreshCaptcha();
+    }, 150);
   });
 }
 
@@ -155,21 +161,10 @@ function verifyLoginForm(e) {
           }
           break;
         case '1':
-          //crear un boton para reactivar la cuenta
-          var html = '<button type="button" class="btn btn-primary" id="reactivarCuenta">Reactivar Cuenta</button>';
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Tu cuenta ha sido deshabilitada',
-            footer: html
-          });
+          lanzarSweetAlert('error', 'Oops...', 'Tu cuenta esta deshabilitada');
           break;
         case '2':
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Los datos ingresados son erroneos',
-          });
+          lanzarSweetAlert('error', 'Oops...', 'Los datos ingresados son erroneos');
           break;
       }
     }
@@ -214,6 +209,89 @@ function verifyRegisterForm(e) {
     }
   });
   e.preventDefault();
+}
+
+// recuperar cuenta
+function recuperarCuenta() {
+  $('#btnRecuperar').click(function () {
+    console.log('recuperarCuenta');
+    var regex = /\S+@\S+\.\S+/;
+    if (!$('#cuestionarioRecuperar').is(':visible') && $('#emailRecuperar').val() != '' && regex.test($('#emailRecuperar').val())) {
+      // verificar que el email exista en la base de datos
+      $.ajax({
+        url: '../../model/DB/manejoProductos.php',
+        type: 'POST',
+        data: {
+          'method': 'emailExist',
+          'email': $('#emailRecuperar').val()
+        },
+        success: function (data) {
+          if (data == 'success') {
+            //recuperar la pregunta de seguridad
+            $.ajax({
+              url: '../../model/DB/manejoProductos.php',
+              type: 'POST',
+              data: {
+                'method': 'getSecurityQuestion',
+                'email': $('#emailRecuperar').val()
+              },
+              success: function (data) {
+                console.log(data);
+                data = JSON.parse(data);
+                console.log(data);
+                console.log(PREGUNTA_SEGUIRDA[data['pregunta']]);
+                if (data != 'error') {
+                  $('#emailRecuperar').attr('readonly', true);
+                  $('#preguntaSeguridad').val(PREGUNTA_SEGUIRDA[data['pregunta']]);
+                  $('#btnRecuperar').text('Enviar');
+                  $('#cuestionarioRecuperar').show('slow');
+                }
+              }
+            });
+          } else {
+            lanzarSweetAlert('error', 'Oops...', 'El email ingresado no existe');
+          }
+        }
+      });
+    } else {
+      if ($('#respuestaSeguridad').val() != '') {
+        $.ajax({
+          url: '../../model/DB/manejoProductos.php',
+          type: 'POST',
+          data: {
+            'method': 'verifySecurityAnswer',
+            'email': $('#emailRecuperar').val(),
+            'respuesta': $('#respuestaSeguridad').val()
+          },
+          success: function (data) {
+            console.log(data);
+            if (data == 'success') {
+              $.ajax({
+                url: '../../model/DB/manejoProductos.php',
+                type: 'POST',
+                data: {
+                  'method': 'unblock',
+                  'email': $('#emailRecuperar').val(),
+                },
+                success: function (data) {
+                  if (data == 'success') {
+                    lanzarSweetAlert('success', 'Éxito', 'Tu cuenta ha sido desbloqueada');
+                    $('#cuestionarioRecuperar').hide('slow');
+                    $('#emailRecuperar').attr('readonly', false);
+                    $('#btnRecuperar').text('Recuperar');
+                    $('#emailRecuperar').val('');
+                    $('#respuestaSeguridad').val('');
+                  } else {
+                    lanzarSweetAlert('error', 'Oops...', 'Ha ocurrido un error<br>Intentalo más tarde.');
+                  }
+                }
+              });
+            }
+          }
+        });
+      }
+    }
+  });
 }
 
 //Lanzar SweetAlert

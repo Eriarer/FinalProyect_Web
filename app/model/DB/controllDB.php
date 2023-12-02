@@ -379,4 +379,46 @@ class dataBase {
     $result = $stmt->execute();
     return $result;
   }
+
+  public function getSecurityQuestion($email) {
+    if ($email == null) {
+      return false;
+    }
+    $result = $this->getUserByEmail($email);
+    if ($result == null) {
+      return "error";
+    }
+    $user_id = $result['usr_id'];
+    //Obtener la pregunta de seguridad de la tabla de preguntas_seguridad
+    $sql = "SELECT pregunta FROM preguntas_seguridad WHERE usr_id = ?";
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $json = json_encode($result->fetch_assoc());
+    return $json;
+  }
+
+  public function verifySecurityAnswer($email, $respuesta) {
+    if ($email == null || $respuesta == null) {
+      return false;
+    }
+    $result = $this->getUserByEmail($email);
+    if ($result == null) {
+      return false;
+    }
+    $user_id = $result['usr_id'];
+    //Obtener la respuesta de seguridad de la tabla de preguntas_seguridad
+    $sql = "SELECT respuesta FROM preguntas_seguridad WHERE usr_id = ?";
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $result = $result->fetch_assoc();
+    if ($result['respuesta'] == $respuesta) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
