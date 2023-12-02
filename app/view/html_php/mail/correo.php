@@ -43,4 +43,6 @@ try {
 
 } catch (Exception $e) {
     echo "No se pudo enviar el mensaje. Error de envío: {$mail->ErrorInfo}";
+    echo '<br>Redireccionando al footer en 5 segundos...';
+    header("refresh:5; url=../footer.php");
 }
