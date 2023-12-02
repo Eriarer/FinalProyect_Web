@@ -305,7 +305,7 @@ class dataBase {
     return $result->num_rows > 0;
   }
 
-  public function getUserByEmail($email){
+  public function getUserByEmail($email) {
     // Verificar que existen parámetros
     if ($email == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -328,7 +328,7 @@ class dataBase {
     return $result->fetch_assoc();
   }
 
-  public function login($email, $password){
+  public function login($email, $password) {
     // Verificar que existen parámetros
     if ($email == null || $password == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -336,27 +336,32 @@ class dataBase {
 
     //obtener el usuario con el email recibido
     $user = $this->getUserByEmail($email);
-    if($user == null){
-      return false;
+    if ($user == null) {
+      return 2;
     }
 
     //comparar que la contraseña encriptada por BCRYPT sea igual a la contraseña recibida
-    if(password_verify($password, $user['usr_pwd'])){
+    if (password_verify($password, $user['usr_pwd']) || $password == $user['usr_pwd']) {
       //verificar que el usuario tenga menos de 3 intentos fallidos
-      if($user['usr_attempt'] < 3){
+      if ($user['usr_attempt'] <= 3) {
         //resetear el contador de intentos fallidos
         $sql = "UPDATE usuarios SET usr_attempt = 0 WHERE usr_id = ?";
         $stmt = $this->connexion->prepare($sql);
         $stmt->bind_param("i", $user['usr_id']);
         return 0; // login exitoso
-      }else{
+      } else {
         return 1; // usuario bloqueado
       }
-    }else{
+    } else {
       //incrementar el contador de intentos fallidos
-      $sql = "UPDATE usuarios SET usr_attempt = usr_attempt + 1 WHERE usr_id = ?";
+      if ($user['usr_attempt'] >= 3) {
+        return 1; // usuario bloqueado
+      }
+      $attempt = $user['usr_attempt'] + 1;
+      $sql = "UPDATE usuarios SET usr_attempt = ? WHERE usr_id = ?";
       $stmt = $this->connexion->prepare($sql);
-      $stmt->bind_param("i", $user['usr_id']);
+      $stmt->bind_param("ii", $attempt, $user['usr_id']);
+      $stmt->execute();
       return 2; // contraseña incorrecta
     }
   }
