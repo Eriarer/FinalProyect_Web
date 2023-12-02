@@ -6,6 +6,29 @@
 
 <?php
 require_once __DIR__ . '/../../model/routes_files.php';
+include_once __DIR__ . '/../../model/DB/dataBaseCredentials.php';
+include_once __DIR__ . '/../../model/DB/controllDB.php';
+// si las coockies estan seteadas verificarlas en la base de datos si es que el usuario existe
+// de ser así setear la variable de sesion 
+$db = new dataBase($credentials, $CONFIG);
+if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
+    $email = $_COOKIE['email'];
+    $password = $_COOKIE['password'];
+    $response = $db->login($email, $password);
+    // si la respuesta es diferente de 0 es porque el usuario no existe o esta bloqueado
+    // borramos las cookies
+    if ($response != 0) {
+        setcookie("name", '', time() - 3600, "/");
+        setcookie('email', '', time() - 3600, '/');
+        setcookie('password', '', time() - 3600, '/');
+    } else {
+        $user = $db->getUserByEmail($email);
+        //escribir la variable de sesion
+        $_SESSION['email'] = $email;
+        $_SESSION['name'] = $user['usr_account'];
+    }
+}
+
 $image = $CONFIG['P_images'] . 'LogoSF.png';
 $base = $CONFIG['base_url'];
 $php = $CONFIG['P_php'];
@@ -41,7 +64,7 @@ $navbarCSS = $css . 'headers/navbar.css';
         </ul>
         <div class="navbar-nav ml-auto mr-3">
             <?php
-            $nombre = isset($_SESSION['name']) ? $_SESSION['name'] : (isset($_COOKIE['name']) ? $_COOKIE['name'] : '');
+            $nombre = isset($_SESSION['name']) ? $_SESSION['name'] : '';
             if ($nombre != '') :
             ?>
                 <li class="nav-item" tootlip="Perfil">
@@ -73,10 +96,14 @@ $navbarCSS = $css . 'headers/navbar.css';
     $(document).ready(function() {
         $('#logOutNav').click(function() {
             $.ajax({
-                url: pathModel + 'logout.php',
+                url: pathModel + 'DB/manejoProductos.php',
                 type: 'POST',
+                data: {
+                    method: 'logout'
+                },
                 success: function() {
-                    window.location.href = base + 'index.php';
+                    // refresh the page
+                    window.location.href = window.location.href;
                 }
             });
         });
