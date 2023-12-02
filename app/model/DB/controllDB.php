@@ -365,4 +365,18 @@ class dataBase {
       return 2; // contraseña incorrecta
     }
   }
+
+  public function unblock($email) {
+    // Verificar que existen parámetros
+    if ($email == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    //resetear el contador de intentos fallidos
+    $sql = "UPDATE usuarios SET usr_attempt = 0 WHERE usr_email = ?";
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $result = $stmt->execute();
+    return $result;
+  }
 }
