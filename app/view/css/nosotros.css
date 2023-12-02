@@ -1,61 +1,71 @@
-.Tit{
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    text-align: center;
-    font-weight: bold;
-    color: cornflowerblue;
+.Tit {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  text-align: center;
+  color: cornflowerblue;
 }
-.Historia {
-    display: flex;
-    align-items: flex-start;
-    padding: 20px; 
-    max-width: 1200px; 
-    margin: 0 auto; 
-   
-  }
-  
-  .Historia img {
-    margin-right: 10px;
-    width: auto; 
-    max-width: 100%; 
-  }
-  
-  .Historia div {
-    text-align: justify;
-    margin-right: 20px; 
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  }
-  
-  .eslogan {
-    padding-left: 270px;
-    font-weight: bold;
-    font-style: italic;
-    color: #98b6ea;
-  }
 
-.card{
-    border: 3px solid #98b6ea;
-    border-radius: 4px;
-    /* padding: 5px;
+.Historia {
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.Historia img {
+  height: 20vw;
+  margin-right: 10px;
+  width: 20vw;
+  max-width: 100%;
+}
+
+.Historia div {
+  text-align: justify;
+  margin-right: 20px;
+}
+
+.eslogan {
+  text-align: center;
+  font-weight: bold;
+  font-style: italic;
+  color: #98b6ea;
+}
+
+.card {
+  border: 3px solid #98b6ea;
+  border-radius: 4px;
+  /* padding: 5px;
     width: 150px; */
 }
-.card:hover{
-    box-shadow: 0 0 2px 4px rgba(0, 140, 186, 0.5);
+
+.card:hover {
+  box-shadow: 0 0 2px 4px rgba(0, 140, 186, 0.5);
 }
 
-.cajitas{
-    padding: 40px;
+.cajitas {
+  padding: 40px;
 }
 
-.card img:hover{
-    filter: opacity(.5);
+.card img:hover {
+  filter: opacity(.5);
 }
-.card-text{
-    text-align: center;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+.card-text {
+  text-align: center;
+
 }
-.card-title{
-    text-align: center;
-    font-weight: bold;
-    background-color: #F0D5C0;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+.card-title {
+  text-align: center;
+  font-weight: bold;
+  background-color: #F0D5C0;
+}
+
+.logoSlogan {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* alinear en una sola columna */
+  flex-direction: column;
+
 }
