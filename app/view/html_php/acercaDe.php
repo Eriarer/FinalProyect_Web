@@ -35,7 +35,7 @@
 
     <div class="cajitas">
     <div class="card-group">
-  <div class="card">
+     <div class="card">
     <img class="card-img-top" src="../../media/images/vision.jpeg" alt="Card image cap" width="auto" height="auto">
     <div class="card-body">
       <h5 class="card-title">Visión:</h5>
