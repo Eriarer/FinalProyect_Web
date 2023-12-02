@@ -20,6 +20,7 @@
     <p>¡Hola a todos los amantes de los peluches y bienvenidos a nuestra sección de Preguntas Frecuentes! Aquí en FluffyHugs, sabemos que los peluches son más que simples juguetes; son compañeros de aventuras, recuerdos de momentos especiales, y a menudo, amigos para toda la vida. Ya seas un coleccionista apasionado, un padre buscando el peluche perfecto para su hijo, o alguien que desea saber más sobre el cuidado y mantenimiento de estos adorables compañeros, estás en el lugar correcto.</p>
 </div>
 
+<div class="preguntas">
 <div class="accordion accordion-flush" id="accordionFlushExample1">
   <div class="accordion-item">
     <h1 class="accordion-header" id="flush-headingOne">
@@ -34,7 +35,6 @@
   <!-- Otros acordeones del primer grupo -->
 
 </div>
-
 <div class="accordion accordion-flush" id="accordionFlushExample2">
   <div class="accordion-item">
     <h1 class="accordion-header" id="flush-headingTwo">
@@ -165,6 +165,10 @@
     </div>
   </div>
 </div>
+
+
+</div>
+
 
   <br><br><br>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
