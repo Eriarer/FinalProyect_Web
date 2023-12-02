@@ -4,18 +4,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #fff;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        img {
+            width: 8rem;
+            height: 8rem;
+            padding-top: 2rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+        }
+
+        .left {
+            width: 15%;
+            background-color: #143877;
+        }
+
+        .center {
+            width: 70%;
+            background-color: #143877;
+            text-align: center;
+        }
+
+        .right {
+            width: 15%;
+            background-color: #143877;
+        }
+    </style>
 </head>
 
 <body>
-    <div>
-        <h1>Gracias por suscribirte a FluffyHugs</h1>
-        <p>Nos emociona tenerte a bordo, pronto recibirás las últimas actualizaciones directamente en tu bandeja de
-            entrada. Queremos asegurarnos de que siempre estés al tanto de los nuevos peluches, promociones
-            exclusivas y eventos emocionantes.</p>
-        <p>No dudes en ponerte en contacto con nosotros si tienes alguna pregunta o sugerencia. </p>
-        <p>Con cariño,</p>
-        <p>El equipo de FluffyHugs.</p>
-    </div>
+    <table>
+        <tr>
+            <td class="left"></td>
+            <td class="center">
+                <img src="suscripcion/LogoSF.png" alt="Logo">
+            </td>
+            <td class="right"></td>
+        <tr>
+            <td class="left"></td>
+            <td class="center">
+                <h1>Gracias por suscribirte a FluffyHugs</h1>
+            </td>
+            <td class="right"></td>
+        </tr>
+        <tr>
+            <td class="left"></td>
+            <td class="center">
+                <p>Nos emociona tenerte a bordo, pronto recibirás las últimas actualizaciones directamente en tu bandeja
+                    de entrada. Queremos asegurarnos de que siempre estés al tanto de los nuevos peluches, promociones
+                    exclusivas y eventos emocionantes.</p>
+            </td>
+            <td class="right"></td>
+        </tr>
+        <tr>
+            <td class="left"></td>
+            <td class="center">
+                <p>Como agradecimiento por suscribirte, te regalamos un cupón de descuento del 10% para tu próxima
+                    compra.</p>
+                <p>Código: <strong>{{$cupon}}</strong></p>
+            <td class="right"></td>
+        </tr>
+        <tr>
+            <td class="left"></td>
+            <td class="center">
+                <p>No dudes en ponerte en contacto con nosotros si tienes alguna pregunta o sugerencia. </p>
+            </td>
+            <td class="right"></td>
+        </tr>
+        <tr>
+            <td class="left"></td>
+            <td class="center">
+                <p>Con cariño, el equipo de FluffyHugs.</p>
+            </td>
+            <td class="right"></td>
+        </tr>
+        <tr>
+            <td class="left"></td>
+            <td class="center">
+                <p></p>
+            </td>
+            <td class="right"></td>
+        </tr>
+
+        </tr>
+    </table>
 </body>
 
 </html>
