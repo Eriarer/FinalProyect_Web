@@ -4,40 +4,39 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 
 <nav class="navbar navbar-expand-sm navbar-dark" id="barramenu">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <img src="../../media/images/LogoSF.webp" width="200px" height="auto" >
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="mynavbar">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Tienda</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Acerca de Nosotros</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contacto</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">FAQS</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Iniciar Sesion</a>
-                        </li>
-                        <li class="nav-item" style="padding-left: 400px;">
-                            <a href="#" id="carrito" ><img src="../../media/images/carrito.png" alt="carrito-compras"></a>
-                        </li>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="../../media/images/LogoSF.png" width="200px" height="auto">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mynavbar">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Tienda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Acerca de Nosotros</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contacto</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">FAQS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Iniciar Sesion</a>
+                </li>
+                <li class="nav-item" style="padding-left: 400px;">
+                    <a href="#" id="carrito"><img src="../../media/images/carrito.png" alt="carrito-compras"></a>
+                </li>
 
-                    </ul>
-                    
-                </div>
-            </div>
-        </nav>     
+            </ul>
 
+        </div>
+    </div>
+</nav>
