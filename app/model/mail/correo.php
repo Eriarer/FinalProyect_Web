@@ -5,15 +5,15 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 // Bibliotecas de PHPMailer
-require '../../lib/PHPMailer/src/Exception.php';
-require '../../lib/PHPMailer/src/PHPMailer.php';
-require '../../lib/PHPMailer/src/SMTP.php';
+require __DIR__ . '/../../view/lib/PHPMailer/src/Exception.php';
+require __DIR__ . '/../../view/lib/PHPMailer/src/PHPMailer.php';
+require __DIR__ . '/../../view/lib/PHPMailer/src/SMTP.php';
 
 // Instancia de PHPMailer
 $mail = new PHPMailer(true);
 
 // Credenciales de la cuenta de correo utilizada para enviar correos
-$config = require 'PHPMailerCredentials.php';
+$config = require __DIR__ . '/PHPMailerCredentials.php';
 
 try {
     $mail->isSMTP();                                    // Configuración para usar SMTP para el envío del correo
@@ -35,14 +35,9 @@ try {
     $mail->msgHTML(file_get_contents($recipientMessage), __DIR__); // Contenido del correo
 
     $mail->send();
-    
+
     // Redireccionar al footer despues de 5 segundos
     echo 'Mensaje enviado correctamente';
-    echo '<br>Redireccionando al footer en 5 segundos...';
-    header("refresh:5; url=../footer.php");
-
 } catch (Exception $e) {
     echo "No se pudo enviar el mensaje. Error de envío: {$mail->ErrorInfo}";
-    echo '<br>Redireccionando al footer en 5 segundos...';
-    header("refresh:5; url=../footer.php");
 }
