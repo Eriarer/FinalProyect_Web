@@ -11,7 +11,7 @@ $footerCSS = $css . 'headers/footer.css';
 <!-- Footer -->
 <footer class="bg-body-tertiary text-center" id="piePag">
   <!-- Grid container -->
-  <div class="container p-4">
+  <div class="container ">
     <!-- Section: Social media -->
     <section class="mb-4">
       <!-- Facebook -->
@@ -82,9 +82,9 @@ $footerCSS = $css . 'headers/footer.css';
     <!-- Section: Links -->
     <section class="">
       <!--Grid row-->
-      <div class="row">
+      <div class="row row-cols-1 row-cols-md-3 mb-4 ">
         <!--Grid column-->
-        <div class="list-footer col-lg-3 col-md-6 mb-4 mb-md-0">
+        <div class="list-footer col mb-4 mb-md-0">
           <h5 class="text-uppercase">Enlaces Rapidos</h5>
           <ul class="list-unstyled mb-0 ">
             <li>
@@ -107,7 +107,7 @@ $footerCSS = $css . 'headers/footer.css';
         <!--Grid column-->
 
         <!--Grid column-->
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+        <div class="col mb-4 mb-md-0">
           <h5 class="text-uppercase">Atención al cliente</h5>
           <ul class="list-unstyled mb-0">
             <li>
@@ -122,8 +122,11 @@ $footerCSS = $css . 'headers/footer.css';
           </ul>
         </div>
         <!--Grid column-->
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14806.24246221518!2d-102.33273314458006!3d21.912989300000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8429ef1da1ab338d%3A0x89a0246637c42ddb!2sUniversidad%20Aut%C3%B3noma%20de%20Aguascalientes!5e0!3m2!1ses!2smx!4v1698689117205!5m2!1ses!2smx" width="500" height="270" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="col mb-4 mb-md-0">
+          <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14806.24246221518!2d-102.33273314458006!3d21.912989300000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8429ef1da1ab338d%3A0x89a0246637c42ddb!2sUniversidad%20Aut%C3%B3noma%20de%20Aguascalientes!5e0!3m2!1ses!2smx!4v1698689117205!5m2!1ses!2smx" width="100%" height="100%" style="border: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%;" allowfullscreen="true" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
         </div>
       </div>
       <!--Grid row-->
