@@ -12,6 +12,53 @@
   <!-- Jquery -->
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
+<?php
+session_start();
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+  $conexion = mysqli_connect($credntials['host'], $credntials['user'], $credntials['pass'], $credntials['db']);
+  if (!$conexion) {
+      die('Error de Conexión (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
+  }
+  if(isset($_POST['captchaInput']))
+    $captchaInput = $_POST['captchaInput'];
+    $password = $_POST['passwordLogin'];
+    $email = $_POST['emailLogin'];
+    $rememberMe = $_POST['rememberMe'];
+    
+  }
+    
+
+  if(isset($_POST['passwordReg']) && isset($_POST['confirmPasswordReg']))
+    $passwordReg = $_POST['passwordReg'];
+    $confirmPasswordReg = $_POST['confirmPasswordReg'];
+    $emailReg = $_POST['emailReg'];
+    $username = $_POST['username'];
+    $accountName = $_POST['accountName'];
+    $securityQuestion = $_POST['securityQuestion'];
+    $securityAnswer = $_POST['securityAnswer'];
+  // Validar que el usuario no exista
+  $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+  //crear objeto DB
+  $db = new dataBase($credntials, $CONFIG);
+  $result = $db->emailExist($email);
+  if($result){
+    echo "<script>alert('El correo ya existe');</script>";
+    // eliminar la peticion POST
+    $_SERVER["REQUEST_METHOD"] = "";
+  }else{
+    $result = $db->altaUsuarios($email, $hashedPassword, $username, $accountName, $securityQuestion, $securityAnswer);
+    if($result){
+      echo "<script>alert('Usuario registrado');</script>";
+      // eliminar la peticion POST
+      $_SERVER["REQUEST_METHOD"] = "";
+    }else{
+      echo "<script>alert('Error al registrar usuario');</script>";
+      // eliminar la peticion POST
+      $_SERVER["REQUEST_METHOD"] = "";
+      }
+    }
+?>
 
 <body>
   <?php require_once 'navbar.php'; ?>
@@ -21,7 +68,7 @@
       <div class="card" id="register">
         <div class="card-body show-card">
           <h5 class="card-title">Formulario de Registro</h5>
-          <form>
+          <form method="post" action="<?php echo $_SERVER["PHP_SELF"];?>">
             <div class="form-group">
               <label for="emailReg">Email (único)</label>
               <input type="email" class="form-control" id="emailReg" name="emailReg" required>

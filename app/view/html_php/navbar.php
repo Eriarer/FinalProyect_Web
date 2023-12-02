@@ -4,7 +4,9 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 <!-- CSS -->
 <link rel="stylesheet" href="../css/main.css">
-
+<?php
+session_start();
+?>
 <nav class="navbar navbar-expand-sm navbar-dark" id="barramenu">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -30,9 +32,19 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">FAQS</a>
                 </li>
+                <?php
+                if (isset($_SESSION['user'])) {
+                    echo    '<li li class="nav-item">
+                            Bienvenido ' . $_SESSION['user'] . '
+                            </li>';
+                }else{
+                ?>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Iniciar Sesion</a>
                 </li>
+                <?php
+                }
+                ?>
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="nf nf-md-cart_variant"></i></a>
                 </li>
