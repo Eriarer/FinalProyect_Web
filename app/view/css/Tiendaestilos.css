@@ -1,42 +1,62 @@
-.Categorias{
-    color: #57D6EA;
-    text-align: center;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-weight: bold;
-    font-size: xx-large;
-}
-.bienvenida{
-    text-align: justify;
-    padding: 25px;
-    font-size: large;
+.incarrusel {
+  background-color: #b7e8f0;
+  justify-content: center;
+  align-items: center;
 }
 
-.bienvenida h3{
-    color: #57D6EA;
-    text-align: center;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-weight: bold;
-    font-size: xx-large;
+.backCarr {
+  opacity: 0.8;
+  position: absolute;
+  top: 20%;
+  left: 40%;
+  filter: drop-shadow(10px 10px 5px rgba(0, 0, 0, 0.75));
+
+}
+
+/* --------------fin de carrusel------------ */
+.Categorias {
+  color: #57D6EA;
+  text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: xx-large;
+}
+
+.bienvenida {
+  text-align: justify;
+  padding: 25px;
+  font-size: large;
+}
+
+.bienvenida h3 {
+  color: #57D6EA;
+  text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: xx-large;
 }
 
 /*Estilos de la categorigas*/
 .images-row {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Alinea horizontalmente en el centro */
-    gap: 20px; /* Espacio entre las filas */
-    padding: 20px;
-    border-radius: 10px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Alinea horizontalmente en el centro */
+  gap: 20px;
+  /* Espacio entre las filas */
+  padding: 20px;
+  border-radius: 10px;
+}
 
-  .image-row-top {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px; /* Agrega un espacio entre las filas */
-  }
+.image-row-top {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  /* Agrega un espacio entre las filas */
+}
 
 .images-row .overlay1,
-.images-row .overlay2{
+.images-row .overlay2 {
   position: absolute;
   bottom: 100%;
   left: 0;
@@ -49,15 +69,18 @@
 }
 
 .images-row .container1:hover .overlay1,
-.images-row .container2:hover .overlay2{
+.images-row .container2:hover .overlay2 {
   bottom: 0;
 }
+
 .container1,
 .container2 {
-  width: 30%; /* Ajusta el ancho según tus necesidades */
+  width: 30%;
+  /* Ajusta el ancho según tus necesidades */
   position: relative;
   overflow: hidden;
-  margin: 0 5px; /* Agrega un espacio entre las imágenes */
+  margin: 0 5px;
+  /* Agrega un espacio entre las imágenes */
 }
 
 .images-row img {
@@ -67,7 +90,7 @@
 }
 
 .images-row .text1,
-.images-row .text2{
+.images-row .text2 {
   color: rgb(138, 134, 134);
   font-size: 30px;
   font-weight: bold;
@@ -84,21 +107,22 @@
 }
 
 .images-row .container1:hover .overlay1 .text1,
-.images-row .container2:hover .overlay2 .text2{
+.images-row .container2:hover .overlay2 .text2 {
   opacity: 1;
 }
 
 /*---------------fin de estilos de categorias-------*/
 
 /*-----------------estilos de destacados-----------*/
-#titulo_des{
+#titulo_des {
   color: #57D6EA;
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
   font-size: xx-large;
 }
-.destacados h3{
+
+.destacados h3 {
   color: rgb(45, 62, 160);
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -108,18 +132,33 @@
 
 /* Para agregar animación */
 @keyframes desplazar {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-100%)); } /* -10px es para compensar el margen derecho de la última tarjeta */
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-109.55%));
+  }
+
+  /* -10px es para compensar el margen derecho de la última tarjeta */
 }
+
+.destacados {
+  overflow-x: hidden;
+}
+
 /* contenedor de tarjetas de productos con descuento*/
 .conteiner_des {
   display: flex;
-  overflow-x: none;
   scrollbar-width: none;
   padding: 1.5rem 0;
-  scroll-snap-type: x mandatory; /* Habilita el desplazamiento suave */
-  /* flex-wrap: nowrap; */
+  scroll-snap-type: x mandatory;
+  /* Habilita el desplazamiento suave */
+  flex-wrap: nowrap;
+  animation: desplazar 30s linear infinite;
+
 }
+
 /* tarjetitas */
 .card_des {
   position: relative;
@@ -128,35 +167,39 @@
   overflow: hidden;
   margin-left: 1.5em;
   border-radius: 18px;
-  box-shadow: 2px 4px 12px rgba(0,0,0, 0.08);
-  scroll-snap-align: end; /* Alinea al final de cada tarjeta */
-  animation: desplazar 10s linear infinite; /* Ajusta el tiempo de la animación según lo que necesites */
-  text-align:end;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.08);
+  scroll-snap-align: initial;
+  /* Alinea al final de cada tarjeta */
+  /* Ajusta el tiempo de la animación según lo que necesites */
+  text-align: end;
   flex-shrink: 0;
-  width: 250px; /* Asegúrate de que este sea el ancho real de tus tarjetas */
+  width: 250px;
+  /* Asegúrate de que este sea el ancho real de tus tarjetas */
   /* margin-right: 1.5rem; Mantén esto si quieres espacio entre las tarjetas */
 
   /* Desplegando body_des en la parte de abajo de la carta */
 
 }
 
-.body_des{
+.body_des {
   position: absolute;
   margin-top: 275px;
-  top:0;
+  top: 0;
   padding: 28px;
   font-family: "San Francisco";
   font-weight: 600;
 }
 
-.image{
+.image {
   width: 100%;
 }
-.tit_des{
+
+.tit_des {
   font-size: 0.75rem;
   margin-top: 1rem;
 }
-.texto{
+
+.texto {
   font-size: 1.1rem;
   font-weight: 300;
   text-align: center;
@@ -165,12 +208,12 @@
 
 /*--------------estilos extra-------------------*/
 
-.card-body{
+.card-body {
   border-radius: 3px;
   border: 4px solid #E1B9F0;
 }
 
-.cajasInfo{
+.cajasInfo {
   display: flex;
   justify-content: center;
   text-align: center;
@@ -178,11 +221,12 @@
 
 
 /*--------------Estilos de metodos de pago----------*/
-.metodosdepago{
+.metodosdepago {
   display: flex;
   padding-left: 300px;
   margin-bottom: 20px;
 }
+
 .Metodopago {
   vertical-align: middle;
   width: 220px;
@@ -190,7 +234,7 @@
   border-radius: 50%;
 }
 
-.Pagos{
+.Pagos {
   color: #57D6EA;
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -198,7 +242,7 @@
   font-size: xx-large;
 }
 
-.text_pago{
+.text_pago {
   text-align: center;
   font-size: medium;
   font-weight: bold;
