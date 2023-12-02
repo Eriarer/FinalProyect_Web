@@ -8,6 +8,7 @@
 .bienvenida{
     text-align: justify;
     padding: 25px;
+    font-size: large;
 }
 
 .bienvenida h3{
@@ -27,7 +28,7 @@
     padding: 20px;
     border-radius: 10px;
   }
-  
+
   .image-row-top {
     display: flex;
     justify-content: space-around;
@@ -70,6 +71,7 @@
   color: rgb(138, 134, 134);
   font-size: 30px;
   font-weight: bold;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -78,6 +80,7 @@
   width: 90%;
   opacity: 0;
   transition: 0.5s ease;
+
 }
 
 .images-row .container1:hover .overlay1 .text1,
@@ -98,28 +101,52 @@
 .destacados h3{
   color: rgb(45, 62, 160);
   text-align: center;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
   font-size: x-large;
 }
 
-.conteiner_des{
-  display: flex;
-  overflow-x:auto;
-  scrollbar-width:none;
-  padding: 1.5rem;
-
+/* Para agregar animación */
+@keyframes desplazar {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-100%)); } /* -10px es para compensar el margen derecho de la última tarjeta */
 }
-.card_des{
+/* contenedor de tarjetas de productos con descuento*/
+.conteiner_des {
+  display: flex;
+  overflow-x: none;
+  scrollbar-width: none;
+  padding: 1.5rem 0;
+  scroll-snap-type: x mandatory; /* Habilita el desplazamiento suave */
+  /* flex-wrap: nowrap; */
+}
+/* tarjetitas */
+.card_des {
   position: relative;
   flex: 0 0 309px;
   height: 450px;
   overflow: hidden;
-  margin-left: 1.5rem;
+  margin-left: 1.5em;
   border-radius: 18px;
-  box-shadow: 
-              2px 4px 12px
-              rgb(0, 0, 0, 0.08);
+  box-shadow: 2px 4px 12px rgba(0,0,0, 0.08);
+  scroll-snap-align: end; /* Alinea al final de cada tarjeta */
+  animation: desplazar 10s linear infinite; /* Ajusta el tiempo de la animación según lo que necesites */
+  text-align:end;
+  flex-shrink: 0;
+  width: 250px; /* Asegúrate de que este sea el ancho real de tus tarjetas */
+  /* margin-right: 1.5rem; Mantén esto si quieres espacio entre las tarjetas */
+
+  /* Desplegando body_des en la parte de abajo de la carta */
+
+}
+
+.body_des{
+  position: absolute;
+  margin-top: 275px;
+  top:0;
+  padding: 28px;
+  font-family: "San Francisco";
+  font-weight: 600;
 }
 
 .image{
@@ -133,6 +160,7 @@
   font-size: 1.1rem;
   font-weight: 300;
   text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 /*--------------estilos extra-------------------*/
@@ -140,4 +168,39 @@
 .card-body{
   border-radius: 3px;
   border: 4px solid #E1B9F0;
+}
+
+.cajasInfo{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+
+/*--------------Estilos de metodos de pago----------*/
+.metodosdepago{
+  display: flex;
+  padding-left: 300px;
+  margin-bottom: 20px;
+}
+.Metodopago {
+  vertical-align: middle;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+}
+
+.Pagos{
+  color: #57D6EA;
+  text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: xx-large;
+}
+
+.text_pago{
+  text-align: center;
+  font-size: medium;
+  font-weight: bold;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
