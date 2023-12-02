@@ -25,7 +25,6 @@ hr {
 .myCard {
     min-height: 100%;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.757);
-    padding: 0px;
     margin: 0px;
     border-radius: 0.5em;
     background: #e8f1ff;
@@ -40,6 +39,7 @@ hr {
 .cardHeader {
     position: relative;
     border-radius: 0.5em 0.5em 0px 0px;
+    min-height: 100px;
 
     &>img {
         position: relative;
@@ -83,7 +83,7 @@ hr {
 }
 
 .cardBody {
-    padding: 0px 10px;
+    padding: 0.3em;
     margin: 0px;
 
     &>h3 {

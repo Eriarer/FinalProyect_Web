@@ -4,51 +4,43 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 <!-- CSS -->
 <link rel="stylesheet" href="../css/main.css">
+
 <?php
-session_start();
+require_once __DIR__ . '/../../model/routes_files.php';
+$image = $CONFIG['P_images'] . 'LogoSF.png';
 ?>
 <nav class="navbar navbar-expand-sm navbar-dark" id="barramenu">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="../../media/images/LogoSF.webp" width="200px" height="auto">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="mynavbar">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Tienda</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Acerca de Nosotros</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contacto</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">FAQS</a>
-                </li>
-                <?php
-                if (isset($_SESSION['user'])) {
-                    echo    '<li li class="nav-item">
-                            Bienvenido ' . $_SESSION['user'] . '
-                            </li>';
-                }else{
-                ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Iniciar Sesion</a>
-                </li>
-                <?php
-                }
-                ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="nf nf-md-cart_variant"></i></a>
-                </li>
-            </ul>
+    <a class="navbar-brand" href="#">
+        <img src="<?= $image ?>" width="100" height="auto">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Tienda</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Acerca de Nosotros</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Contacto</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">FAQS</a>
+            </li>
+        </ul>
+        <div class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Iniciar Sesión</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="nf nf-md-cart_variant"></i></a>
+            </li>
         </div>
     </div>
 </nav>
