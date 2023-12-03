@@ -90,6 +90,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else if ($method === "unblock") {
     $email = $_POST['email'];
     $response = $db->unblock($email);
+    if (!$response) {
+      echo "error";
+      return "error";
+    }
+    $password = $_POST['password'];
+    $password = password_hash($password, PASSWORD_BCRYPT);
+    $response = $db->updatePassword($email, $password);
     echo $response ? "success" : "error";
     return $response ? "success" : "error";
   }

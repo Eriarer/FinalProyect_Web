@@ -428,4 +428,16 @@ class dataBase {
       return false;
     }
   }
+
+  public function updatePassword($email, $password) {
+    if ($email == null || $password == null) {
+      return false;
+    }
+    //Actualizar la contraseña del usuario
+    $sql = "UPDATE usuarios SET usr_pwd = ? WHERE usr_email = ?";
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("ss", $password, $email);
+    $result = $stmt->execute();
+    return $result;
+  }
 }

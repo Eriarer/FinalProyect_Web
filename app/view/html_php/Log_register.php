@@ -159,7 +159,7 @@ if (isset($_SESSION['name'])) {
         </div>
         <div class="mt-3 mx-auto h6 d-flex flex-column justify-content-center align-items-center">
           <p>¿No tienes una cuenta? <a href="#" onclick="toggleForm()">Registrarse</a></p>
-          <p class="mt-2">¿Tu cuenta está bloqueada? <a href="#" data-target="#recuparCuenta" data-toggle="modal" onclick="limpiarRecuperar()">Recuperar Cuenta</a></p>
+          <p class="mt-2">¿Tu cuenta está bloqueada? <a href="#" data-target="#recuparCuenta" data-toggle="modal" onclick="recuperarCuenta()">Recuperar Cuenta</a></p>
         </div>
       </div>
 
@@ -181,14 +181,23 @@ if (isset($_SESSION['name'])) {
                     <small id="emailRecuperarText" class="form-text text-danger"></small>
                   </div>
                 </div>
+                <!-- pregunta de Seguridad -->
                 <div class="form-row mt-1" id="cuestionarioRecuperar">
-                  <!-- pregunta de Seguridad -->
                   <label for="preguntaSeguridad">Pregunta de seguridad</label>
                   <input type="text" class="form-control" id="preguntaSeguridad" name="preguntaSeguridad" readonly>
                   <small id="preguntaSeguridadText" class="form-text text-danger"></small>
                   <label for="respuestaSeguridad">Respuesta</label>
                   <input type="text" class="form-control" id="respuestaSeguridad" name="respuestaSeguridad" required>
                   <small id="respuestaSeguridadText" class="form-text text-danger"></small>
+                </div>
+                <div class="form-row mt-1" id="cambiarPassword">
+                  <label for="passwordRecuperar">Nueva Contraseña</label>
+                  <input type="password" class="form-control" id="passwordRecuperar" name="passwordRecuperar" required>
+                  <label for="confirmPasswordRecuperar">Repetir Contraseña</label>
+                  <input type="password" class="form-control" id="confirmPasswordRecuperar" name="confirmPasswordRecuperar" required>
+                </div>
+                <div class="form-row mt-1">
+                  <small id="passwordRecuperarText" class="form-text text-danger"></small>
                 </div>
               </form>
             </div>

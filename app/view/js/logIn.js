@@ -19,6 +19,7 @@ function initView() {
 
   $('#register').hide();
   $('#recuperar').hide();
+  $('#cambiarPassword').hide();
 
   // al momento que se envia el formulario, se verifica que los campos no esten vacios
   $('#loginForm').submit(function (e) {
@@ -75,7 +76,6 @@ function refreshCaptcha() {
     url: '../../model/captcha/captcha_generator.php',
     type: 'GET',
     success: function (data) {
-      console.log(data);
       var data = JSON.parse(data);
       IMAGE = data.image;
       TEXT = data.text;
@@ -141,7 +141,6 @@ function verifyLoginForm(e) {
       'password': $('#passwordLogin').val()
     },
     success: function (data) {
-      console.log(data);
       // quedarse con el ultimo caracter
       data = data.slice(-1);
       // 0 = login correcto | 1 = cuenta deshabilitada | 2 = datos incorrectos
@@ -157,7 +156,6 @@ function verifyLoginForm(e) {
                 'email': $('#emailLogin').val(),
               },
               success: function () {
-                console.log('redireccionando');
                 window.location.href = '../../../index.php';
               }
             });
@@ -178,8 +176,6 @@ function verifyLoginForm(e) {
 }
 
 function verifyRegisterForm(e) {
-  console.log('verifyRegisterForm');
-
   $.ajax({
     url: '../../model/DB/manejoProductos.php',
     type: 'POST',
@@ -219,15 +215,16 @@ function verifyRegisterForm(e) {
 
 // recuperar cuenta
 function recuperarCuenta() {
+  limpiarRecuperar();
+  console.log('recuperarCuenta');
   $('#btnRecuperar').click(function () {
-    console.log($('#recuperarCuenta').attr('tabindex'));
     // imprimir todos los atributos del modal
-    console.log('recuperarCuenta');
     var regex = /\S+@\S+\.\S+/;
-    if (!$('#cuestionarioRecuperar').is(':visible') && $('#emailRecuperar').val() != '' && regex.test($('#emailRecuperar').val())) {
+    // verificamos
+    // el cuestionario no este visible, el email sea valido y el campo no sea readonly
+    console.log('VerificandoEmail');
+    if (!$('#cuestionarioRecuperar').is(':visible') && $('#emailRecuperar').val() != '' && regex.test($('#emailRecuperar').val()) && !$('#emailRecuperar').is('[readonly]')) {
       verificarEmailRecuperacion();
-    } else {
-      obtenerPreguntaSeguridad();
     }
   });
 
@@ -260,10 +257,7 @@ function verificarEmailRecuperacion() {
             'email': $('#emailRecuperar').val()
           },
           success: function (data) {
-            console.log(data);
             data = JSON.parse(data);
-            console.log(data);
-            console.log(PREGUNTA_SEGUIRDA[data['pregunta']]);
             if (data != 'error') {
               $('#emailRecuperar').attr('readonly', true);
               $('#preguntaSeguridad').val(PREGUNTA_SEGUIRDA[data['pregunta']]);
@@ -271,6 +265,14 @@ function verificarEmailRecuperacion() {
               $('#cuestionarioRecuperar').show('slow');
             }
           }
+        });
+        // mostrar el campo de respuesta
+        console.log('mostrar el campo de respuesta');
+        $('#btnRecuperar').text('Enviar');
+        //elimimar el listener del boton
+        $('#btnRecuperar').off('click');
+        $('#btnRecuperar').click(function () {
+          obtenerPreguntaSeguridad();
         });
       } else {
         lanzarSweetAlert('error', 'Oops...', 'El email ingresado no existe');
@@ -290,40 +292,85 @@ function obtenerPreguntaSeguridad() {
         'respuesta': $('#respuestaSeguridad').val()
       },
       success: function (data) {
-        console.log(data);
         if (data == 'success') {
-          $.ajax({
-            url: '../../model/DB/manejoProductos.php',
-            type: 'POST',
-            data: {
-              'method': 'unblock',
-              'email': $('#emailRecuperar').val(),
-            },
-            success: function (data) {
-              if (data == 'success') {
-                limpiarRecuperar();
-                lanzarSweetAlert('success', 'Éxito', 'Tu cuenta ha sido desbloqueada');
-              } else {
-                lanzarSweetAlert('error', 'Oops...', 'Ha ocurrido un error<br>Intentalo más tarde.');
-              }
-            }
+          // ocultar el cuestionario
+          $('#cuestionarioRecuperar').hide('slow');
+          // mostrar el campo de contraseña
+          $('#cambiarPassword').show('slow');
+
+          console.log('mostrar el campo de contraseña');
+          //elimimar el listener del boton
+          $('#btnRecuperar').prop('disabled', true);
+          $('#btnRecuperar').text('Cambiar contraseña');
+          $('#btnRecuperar').off('click');
+          $('#btnRecuperar').click(function () {
+            cambiarContrasena();
+          });
+          $('#passwordRecuperar').on('input', function () {
+            newPaswordVerify();
+          });
+          $('#confirmPasswordRecuperar').on('input', function () {
+            newPaswordVerify();
           });
         } else {
           //limpiar el campo de respuesta pregunta y email de recuperacion
           limpiarRecuperar();
-          lanzarSweetAlert('error', 'Oops...', 'La respuesta de seguridad es incorrecta');
+          recuperarCuenta();
+          lanzarSweetAlert('error', 'Ay', 'La respuesta de seguridad es incorrecta');
         }
       }
     });
   }
 }
 
+function cambiarContrasena() {
+  $.ajax({
+    url: '../../model/DB/manejoProductos.php',
+    type: 'POST',
+    data: {
+      'method': 'unblock',
+      'email': $('#emailRecuperar').val(),
+      'password': $('#passwordRecuperar').val()
+    },
+    success: function (data) {
+      if (data == 'success') {
+        limpiarRecuperar();
+        lanzarSweetAlert('success', ':)', 'Tu contraseña ha sido cambiada con exito\nYa puedes iniciar sesion');
+      } else {
+        lanzarSweetAlert('error', 'D:', 'Ha ocurrido un errorIntentalo más tarde.');
+        limpiarRecuperar();
+        recuperarCuenta();
+      }
+    }
+  });
+}
+
+
+
+function newPaswordVerify() {
+  console.log('newPaswordVerify');
+  if ($('#passwordRecuperar').val() == $('#confirmPasswordRecuperar').val()) {
+    $('#passwordRecuperarText').text('');
+    $('#btnRecuperar').prop('disabled', false);
+  } else {
+    $('#passwordRecuperarText').text('Las contraseñas no coinciden');
+    $('#btnRecuperar').prop('disabled', true);
+  }
+}
+
 function limpiarRecuperar() {
   $('#cuestionarioRecuperar').hide('slow');
+  $('#cambiarPassword').hide('slow');
   $('#emailRecuperar').attr('readonly', false);
   $('#emailRecuperar').val('');
   $('#respuestaSeguridad').val('');
   $('#preguntaSeguridad').val('');
+  $('#passwordRecuperar').val('');
+  $('#confirmPasswordRecuperar').val('');
+  $('#btnRecuperar').text('Verificar Email');
+  $('#btnRecuperar').prop('disabled', false);
+  $('#btnRecuperar').off('click');
+  $('#passwordRecuperarText').text('');
 }
 
 //Lanzar SweetAlert
