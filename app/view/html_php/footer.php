@@ -7,6 +7,8 @@ $footerCSS = $css . 'headers/footer.css';
 <link rel="shortcut icon" href="../../media/imagenes/oso-de-peluche.png" type="image/x-icon">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- sweet alert -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- leyenda de derechos y fecha - mensaje de que es un proyecto academico -->
 <?php
 include_once __DIR__ . '/../../model/routes_files.php';
