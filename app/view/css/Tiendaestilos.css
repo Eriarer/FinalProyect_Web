@@ -14,8 +14,8 @@
 }
 
 /* --------------fin de carrusel------------ */
-.Categorias {
-  color: #57D6EA;
+.subTitulo {
+  color: #3978c0;
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
@@ -29,11 +29,11 @@
 }
 
 .bienvenida h3 {
-  color: #57D6EA;
+  color: #3978c0;
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
-  font-size: xx-large;
+  font-size: 2em;
 }
 
 /*Estilos de la categorigas*/
@@ -114,21 +114,21 @@
 /*---------------fin de estilos de categorias-------*/
 
 /*-----------------estilos de destacados-----------*/
-#titulo_des {
-  color: #57D6EA;
+/* #titulo_des {
+  color: #3978c0;
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
   font-size: xx-large;
-}
+} */
 
-.destacados h3 {
+/* .destacados h3 {
   color: rgb(45, 62, 160);
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
   font-size: x-large;
-}
+} */
 
 /* Para agregar animación */
 @keyframes desplazar {
@@ -169,15 +169,10 @@
   border-radius: 18px;
   box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.08);
   scroll-snap-align: initial;
-  /* Alinea al final de cada tarjeta */
-  /* Ajusta el tiempo de la animación según lo que necesites */
   text-align: end;
   flex-shrink: 0;
   width: 250px;
-  /* Asegúrate de que este sea el ancho real de tus tarjetas */
-  /* margin-right: 1.5rem; Mantén esto si quieres espacio entre las tarjetas */
 
-  /* Desplegando body_des en la parte de abajo de la carta */
 
 }
 
@@ -244,7 +239,7 @@
 
 .text_pago {
   text-align: center;
-  font-size: medium;
+  font-size: 1.25em;
   font-weight: bold;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }

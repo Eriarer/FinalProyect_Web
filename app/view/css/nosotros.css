@@ -1,7 +1,9 @@
 .Tit {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #3978c0;
   text-align: center;
-  color: cornflowerblue;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: xx-large;
 }
 
 .Historia {
@@ -28,14 +30,21 @@
   text-align: center;
   font-weight: bold;
   font-style: italic;
-  color: #98b6ea;
+  color: saddlebrown;
+  font-size: 1.5vw;
 }
 
+/* -----------------estilos de las cajistas------------- */
 .card {
   border: 3px solid #98b6ea;
   border-radius: 4px;
-  /* padding: 5px;
-    width: 150px; */
+  align-items: center;
+}
+
+.card img {
+  width: 65%;
+  height: auto;
+
 }
 
 .card:hover {
@@ -52,7 +61,6 @@
 
 .card-text {
   text-align: center;
-
 }
 
 .card-title {

@@ -48,7 +48,7 @@
         <p>Explora un mundo donde la ternura y la imaginación se encuentran. En FluffyHugs, creemos que cada peluche es más que un juguete; es un compañero de aventuras y un amigo fiel. Nuestra colección de peluches suaves y acogedores está diseñada para llevar alegría a corazones de todas las edades. Desde los clásicos ositos de peluche hasta criaturas fantásticas, cada uno de nuestros peluches tiene su propia personalidad y historia que contar.</p>
         <p style="text-align: center;"><b>¡Explora nuestra tienda y descubre tu próximo compañero de abrazos!</b></p>
     </div>
-    <h3 class="Categorias">CATEGORIAS</h3>
+    <h3 class="Categorias subTitulo">CATEGORIAS</h3>
     <div class="images-row">
         <div class="image-row-top">
             <div class="container1">
@@ -69,7 +69,7 @@
 
     <!-- Categorias destacadas -->
     <div class="destacados">
-        <h3 id="titulo_des">LO MAS DESTACADO</h3>
+        <h3 class="subTitulo">LO MAS DESTACADO</h3>
         <div class="conteiner_des">
             <!-- -------card 1------- -->
             <article class="card_des">
@@ -224,7 +224,7 @@
 
         <!-- -------------------------metodos de pago--------- -->
         <div class="container">
-            <h3 class="Pagos">METODOS DE PAGO</h3><br>
+            <h3 class="subTitulo">METODOS DE PAGO</h3><br>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
                 <div class="col">
                     <div class="metodo">
