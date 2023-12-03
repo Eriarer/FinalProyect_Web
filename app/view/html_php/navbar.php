@@ -66,11 +66,31 @@ $navbarCSS = $css . 'headers/navbar.css';
                 <a class="nav-link" href="<?= $php . 'FAQs.php' ?>"><i class="nf nf-fa-question_circle"></i></a>
             </li>
         </ul>
-        <div class="navbar-nav ml-auto mr-3">
-            <?php
-            $nombre = isset($_SESSION['name']) ? $_SESSION['name'] : '';
-            if ($nombre != '') :
-            ?>
+        <?php
+        $nombre = isset($_SESSION['name']) ? $_SESSION['name'] : '';
+        $correo = isset($_SESSION['email']) ? $_SESSION['email'] : '';
+        if ($nombre != '' && $correo != '') {
+            $admin = $db->validAdmin($correo);
+            if ($admin == true) {
+        ?>
+                <div class="navbar-nav ml-auto mr-3">
+                    <li class="nav-item nav-item-admin">
+                        <div class="menu">
+                            <a class="nav-link" href=""><i class="nf nf-fa-gear"></i></a>
+                            <div class="menu_desple">
+                                <a href="<?= $php . 'admin/AltaProd.php' ?>" class="opcion">Alta-productos</a>
+                                <a href="<?= $php . 'admin/BajasProd.php' ?>" class="opcion">Baja-productos</a>
+                                <a href="<?= $php . 'admin/ModifyProd.php' ?>" class="opcion">Edición-productos</a>
+                            </div>
+                        </div>
+                    </li>
+                <?php
+            }
+        }
+        $nombre = isset($_SESSION['name']) ? $_SESSION['name'] : '';
+        if ($nombre != '') :
+                ?>
+
                 <li class="nav-item" tootlip="Perfil">
                     <a class="nav-link" href="#"><?= $_SESSION['name'] ?></a>
                 </li>
@@ -81,15 +101,15 @@ $navbarCSS = $css . 'headers/navbar.css';
                     <a class="nav-link" href="#"><i class="nf nf-md-cart_variant"></i></a>
                 </li>
             <?php
-            else :
+        else :
             ?>
                 <li class="nav-item" tootlip="Iniciar sesión">
                     <a class="nav-link" id="logInNav"><i class="nf nf-md-login"></i></a>
                 </li>
             <?php
-            endif;
+        endif;
             ?>
-        </div>
+                </div>
     </div>
 </nav>
 
