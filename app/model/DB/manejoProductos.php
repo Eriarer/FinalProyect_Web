@@ -46,9 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $response = $db->login($email, $password);
     //resetear los intentos fallidos
-    $db->unblock($email);
     if ($response == 0) {
       $user = $db->getUserByEmail($email);
+      $db->unblock($email);
       //escribir la variable de sesion
       $_SESSION['email'] = $email;
       $_SESSION['name'] = $user['usr_account'];

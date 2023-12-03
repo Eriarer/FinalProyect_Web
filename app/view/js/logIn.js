@@ -141,6 +141,9 @@ function verifyLoginForm(e) {
       'password': $('#passwordLogin').val()
     },
     success: function (data) {
+      console.log(data);
+      // quedarse con el ultimo caracter
+      data = data.slice(-1);
       // 0 = login correcto | 1 = cuenta deshabilitada | 2 = datos incorrectos
       switch (data) {
         case '0':
@@ -163,7 +166,7 @@ function verifyLoginForm(e) {
           }
           break;
         case '1':
-          lanzarSweetAlert('error', 'Oops...', 'Tu cuenta esta deshabilitada');
+          lanzarSweetAlert('error', ':C', 'Tu cuenta esta deshabilitada');
           break;
         case '2':
           lanzarSweetAlert('error', 'Oops...', 'Los datos ingresados son erroneos');

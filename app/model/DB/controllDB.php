@@ -343,7 +343,7 @@ class dataBase {
     //comparar que la contraseña encriptada por BCRYPT sea igual a la contraseña recibida
     if (password_verify($password, $user['usr_pwd']) || $password == $user['usr_pwd']) {
       //verificar que el usuario tenga menos de 3 intentos fallidos
-      if ($user['usr_attempt'] <= 3) {
+      if ($user['usr_attempt'] < 3) {
         //resetear el contador de intentos fallidos
         $sql = "UPDATE usuarios SET usr_attempt = 0 WHERE usr_id = ?";
         $stmt = $this->connexion->prepare($sql);
@@ -362,7 +362,14 @@ class dataBase {
       $stmt = $this->connexion->prepare($sql);
       $stmt->bind_param("ii", $attempt, $user['usr_id']);
       $stmt->execute();
-      return 2; // contraseña incorrecta
+
+      //obtener el usuario
+      $user = $this->getUserByEmail($email);
+      if ($user['usr_attempt'] >= 3) {
+        return 1; // bloquear usuario
+      } else {
+        return 2; // contraseña incorrecta
+      }
     }
   }
 
