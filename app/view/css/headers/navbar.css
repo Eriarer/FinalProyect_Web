@@ -2,6 +2,11 @@
     background: #143877;
 }
 
+ul,
+li {
+    list-style: none;
+}
+
 .nav-item a {
     color: #D9844C;
     font-size: 2.2em;
