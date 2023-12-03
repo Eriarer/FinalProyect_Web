@@ -6,6 +6,8 @@ var PREGUNTA_SEGUIRDA = {
   "3": "¿Cuál es tu película favorita?"
 };
 
+
+
 $(document).ready(function () {
   refreshCaptcha();
   initView();
@@ -214,84 +216,110 @@ function verifyRegisterForm(e) {
 // recuperar cuenta
 function recuperarCuenta() {
   $('#btnRecuperar').click(function () {
+    console.log($('#recuperarCuenta').attr('tabindex'));
+    // imprimir todos los atributos del modal
     console.log('recuperarCuenta');
     var regex = /\S+@\S+\.\S+/;
     if (!$('#cuestionarioRecuperar').is(':visible') && $('#emailRecuperar').val() != '' && regex.test($('#emailRecuperar').val())) {
-      // verificar que el email exista en la base de datos
-      $.ajax({
-        url: '../../model/DB/manejoProductos.php',
-        type: 'POST',
-        data: {
-          'method': 'emailExist',
-          'email': $('#emailRecuperar').val()
-        },
-        success: function (data) {
-          if (data == 'success') {
-            //recuperar la pregunta de seguridad
-            $.ajax({
-              url: '../../model/DB/manejoProductos.php',
-              type: 'POST',
-              data: {
-                'method': 'getSecurityQuestion',
-                'email': $('#emailRecuperar').val()
-              },
-              success: function (data) {
-                console.log(data);
-                data = JSON.parse(data);
-                console.log(data);
-                console.log(PREGUNTA_SEGUIRDA[data['pregunta']]);
-                if (data != 'error') {
-                  $('#emailRecuperar').attr('readonly', true);
-                  $('#preguntaSeguridad').val(PREGUNTA_SEGUIRDA[data['pregunta']]);
-                  $('#btnRecuperar').text('Enviar');
-                  $('#cuestionarioRecuperar').show('slow');
-                }
-              }
-            });
-          } else {
-            lanzarSweetAlert('error', 'Oops...', 'El email ingresado no existe');
-          }
-        }
-      });
+      verificarEmailRecuperacion();
     } else {
-      if ($('#respuestaSeguridad').val() != '') {
+      obtenerPreguntaSeguridad();
+    }
+  });
+
+
+  var modal = $('#recuperarCuenta');
+  // si el modal se cierra, se limpian los campos, el tabindex vuelve a -1
+  $('#recuparCuenta').on('hidden.bs.modal', function () {
+    console.log('modal cerrado');
+    limpiarRecuperar();
+  });
+}
+
+function verificarEmailRecuperacion() {
+  // verificar que el email exista en la base de datos
+  $.ajax({
+    url: '../../model/DB/manejoProductos.php',
+    type: 'POST',
+    data: {
+      'method': 'emailExist',
+      'email': $('#emailRecuperar').val()
+    },
+    success: function (data) {
+      if (data == 'success') {
+        //recuperar la pregunta de seguridad
         $.ajax({
           url: '../../model/DB/manejoProductos.php',
           type: 'POST',
           data: {
-            'method': 'verifySecurityAnswer',
-            'email': $('#emailRecuperar').val(),
-            'respuesta': $('#respuestaSeguridad').val()
+            'method': 'getSecurityQuestion',
+            'email': $('#emailRecuperar').val()
           },
           success: function (data) {
             console.log(data);
-            if (data == 'success') {
-              $.ajax({
-                url: '../../model/DB/manejoProductos.php',
-                type: 'POST',
-                data: {
-                  'method': 'unblock',
-                  'email': $('#emailRecuperar').val(),
-                },
-                success: function (data) {
-                  if (data == 'success') {
-                    lanzarSweetAlert('success', 'Éxito', 'Tu cuenta ha sido desbloqueada');
-                    $('#cuestionarioRecuperar').hide('slow');
-                    $('#emailRecuperar').attr('readonly', false);
-                    $('#btnRecuperar').text('Recuperar');
-                    $('#emailRecuperar').val('');
-                    $('#respuestaSeguridad').val('');
-                  } else {
-                    lanzarSweetAlert('error', 'Oops...', 'Ha ocurrido un error<br>Intentalo más tarde.');
-                  }
-                }
-              });
+            data = JSON.parse(data);
+            console.log(data);
+            console.log(PREGUNTA_SEGUIRDA[data['pregunta']]);
+            if (data != 'error') {
+              $('#emailRecuperar').attr('readonly', true);
+              $('#preguntaSeguridad').val(PREGUNTA_SEGUIRDA[data['pregunta']]);
+              $('#btnRecuperar').text('Enviar');
+              $('#cuestionarioRecuperar').show('slow');
             }
           }
         });
+      } else {
+        lanzarSweetAlert('error', 'Oops...', 'El email ingresado no existe');
       }
     }
   });
+}
+
+function obtenerPreguntaSeguridad() {
+  if ($('#respuestaSeguridad').val() != '') {
+    $.ajax({
+      url: '../../model/DB/manejoProductos.php',
+      type: 'POST',
+      data: {
+        'method': 'verifySecurityAnswer',
+        'email': $('#emailRecuperar').val(),
+        'respuesta': $('#respuestaSeguridad').val()
+      },
+      success: function (data) {
+        console.log(data);
+        if (data == 'success') {
+          $.ajax({
+            url: '../../model/DB/manejoProductos.php',
+            type: 'POST',
+            data: {
+              'method': 'unblock',
+              'email': $('#emailRecuperar').val(),
+            },
+            success: function (data) {
+              if (data == 'success') {
+                limpiarRecuperar();
+                lanzarSweetAlert('success', 'Éxito', 'Tu cuenta ha sido desbloqueada');
+              } else {
+                lanzarSweetAlert('error', 'Oops...', 'Ha ocurrido un error<br>Intentalo más tarde.');
+              }
+            }
+          });
+        } else {
+          //limpiar el campo de respuesta pregunta y email de recuperacion
+          limpiarRecuperar();
+          lanzarSweetAlert('error', 'Oops...', 'La respuesta de seguridad es incorrecta');
+        }
+      }
+    });
+  }
+}
+
+function limpiarRecuperar() {
+  $('#cuestionarioRecuperar').hide('slow');
+  $('#emailRecuperar').attr('readonly', false);
+  $('#emailRecuperar').val('');
+  $('#respuestaSeguridad').val('');
+  $('#preguntaSeguridad').val('');
 }
 
 //Lanzar SweetAlert

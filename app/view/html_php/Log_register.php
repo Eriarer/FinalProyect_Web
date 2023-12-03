@@ -159,12 +159,12 @@ if (isset($_SESSION['user'])) {
         </div>
         <div class="mt-3 mx-auto h6 d-flex flex-column justify-content-center align-items-center">
           <p>¿No tienes una cuenta? <a href="#" onclick="toggleForm()">Registrarse</a></p>
-          <p class="mt-2">¿Tu cuenta está bloqueada? <a href="#" data-target="#recuparCuenta" data-toggle="modal">Recuperar Cuenta</a></p>
+          <p class="mt-2">¿Tu cuenta está bloqueada? <a href="#" data-target="#recuparCuenta" data-toggle="modal" onclick="limpiarRecuperar()">Recuperar Cuenta</a></p>
         </div>
       </div>
 
-      <div class=" modal fade" id="recuparCuenta" tabindex="-1" onfocusout="detectarPérdidaDeFoco()">
-        <div class="modal-dialog">
+      <div class=" modal fade" id="recuparCuenta" tabindex="-1">
+        <div class=" modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">Recuperar Cuenta</h5>
