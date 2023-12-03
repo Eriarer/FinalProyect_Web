@@ -13,10 +13,15 @@ session_start();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../css/contacto.css">
     <link rel="stylesheet" href="../css/main.css">
+    <!-- sweet alert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Estilos para los icons -->
     <title>Acerca de</title>
 </head>
-<?php include_once("navbar.php") ?>
+<?php
+include_once("navbar.php");
+include_once __DIR__ . '/../../model/routes_files.php';
+?>
 
 <body>
     <div class="container">
@@ -47,5 +52,33 @@ session_start();
 
     <?php include_once("footer.php") ?>
 </body>
+
+<script>
+    var emailPath = "<?= $CONFIG['P_model'] ?>";
+    $(document).ready(function() {
+        $('#formContacto').submit(function(e) {
+            var name = $('#exampleInputName1').val();
+            var email = $('#exampleInputEmail1').val();
+            var message = $('#exampleFormControlTextarea1').val();
+            e.preventDefault();
+            $.ajax({
+                url: emailPath + 'mail/contacto/correoContacto.php',
+                type: "POST",
+                data: {
+                    name: name,
+                    email: email,
+                    message: message
+                },
+                success: function(data) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Mensaje enviado con éxito!',
+                        text: 'Responderemos pronto a tu consulta.',
+                    });
+                }
+            });
+        });
+    });
+</script>
 
 </html>
