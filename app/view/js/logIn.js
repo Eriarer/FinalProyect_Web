@@ -371,6 +371,13 @@ function limpiarRecuperar() {
   $('#btnRecuperar').prop('disabled', false);
   $('#btnRecuperar').off('click');
   $('#passwordRecuperarText').text('');
+  //verificar si es un input de texto, si es asi, cambiarlo a password
+  if ($('#passwordRecuperar').attr('type') == 'text') {
+    togglePassword('passwordRecuperar');
+  }
+  if ($('#confirmPasswordRecuperar').attr('type') == 'text') {
+    togglePassword('confirmPasswordRecuperar');
+  }
 }
 
 //Lanzar SweetAlert

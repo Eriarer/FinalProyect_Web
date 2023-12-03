@@ -159,7 +159,7 @@ if (isset($_SESSION['name'])) {
         </div>
         <div class="mt-3 mx-auto h6 d-flex flex-column justify-content-center align-items-center">
           <p>¿No tienes una cuenta? <a href="#" onclick="toggleForm()">Registrarse</a></p>
-          <p class="mt-2">¿Tu cuenta está bloqueada? <a href="#" data-target="#recuparCuenta" data-toggle="modal" onclick="recuperarCuenta()">Recuperar Cuenta</a></p>
+          <p class="mt-2">¿Tu cuenta está bloqueada? <a href="#" data-target="#recuparCuenta" data-toggle="modal" onclick="recuperarCuenta()">Cambiar contraseña</a></p>
         </div>
       </div>
 
@@ -167,7 +167,7 @@ if (isset($_SESSION['name'])) {
         <div class=" modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Recuperar Cuenta</h5>
+              <h5 class="modal-title">Cambiar contraseña</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -192,9 +192,25 @@ if (isset($_SESSION['name'])) {
                 </div>
                 <div class="form-row mt-1" id="cambiarPassword">
                   <label for="passwordRecuperar">Nueva Contraseña</label>
-                  <input type="password" class="form-control" id="passwordRecuperar" name="passwordRecuperar" required>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="passwordRecuperar" name="passwordRecuperar" required>
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <input type="checkbox" id="showLoginPasswordRecuperar" onclick="togglePassword('passwordRecuperar')" hidden>
+                        <label class="form-check-label" for="showLoginPasswordRecuperar" id="passwordRecuperarToggle"><i class="nf nf-fa-eye_slash"></i></label>
+                      </div>
+                    </div>
+                  </div>
                   <label for="confirmPasswordRecuperar">Repetir Contraseña</label>
-                  <input type="password" class="form-control" id="confirmPasswordRecuperar" name="confirmPasswordRecuperar" required>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="confirmPasswordRecuperar" name="confirmPasswordRecuperar" required>
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <input type="checkbox" id="showConfirmPasswordRecuperar" onclick="togglePassword('confirmPasswordRecuperar')" hidden>
+                        <label class="form-check-label" for="showConfirmPasswordRecuperar" id="confirmPasswordRecuperarToggle"><i class="nf nf-fa-eye_slash"></i></label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="form-row mt-1">
                   <small id="passwordRecuperarText" class="form-text text-danger"></small>
