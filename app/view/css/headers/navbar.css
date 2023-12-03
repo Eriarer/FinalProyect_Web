@@ -16,6 +16,7 @@
 
     &:i {
         color: #D9844C;
+
         &:hover {
             color: #f5ac7b !important;
             transform: scale(1.05);
@@ -28,7 +29,8 @@
     position: relative;
 }
 
-.nav-item::after {
+/* Colocando estilos para todos los nav-item, menos para el nav-item-admin */
+.nav-item:not(.nav-item-admin)::after {
     content: attr(tootlip);
     position: absolute;
     z-index: 3;
@@ -39,7 +41,7 @@
     transform: translateX(-50%);
     padding: 0.5em;
     background-color: #ff9257e9;
-    color: #27170d;
+    color: #363433;
     border-radius: 10px;
     width: min-content;
     opacity: 0;
@@ -51,4 +53,48 @@
 .nav-item:hover::after {
     opacity: 1;
     visibility: visible;
+}
+
+/* Estilos del desplegable del Administrador */
+.nav-item-admin::after {
+    content: attr(tootlip);
+    position: absolute;
+    z-index: 3;
+    font-size: 1.5em;
+    font-weight: bold;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5em;
+    border-radius: 10px;
+    width: min-content;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+    text-align: center;
+}
+
+.menu {
+    position: relative;
+    display: inline-block;
+}
+
+.menu_desple {
+    border-radius: 10px;
+    display: none;
+    position: absolute;
+    background-color: #D9844C;
+    min-width: 250px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    font-size: 0.75em;
+}
+
+.menu_desple a {
+    color: #363433;
+    text-decoration: none;
+}
+
+.menu:hover .menu_desple {
+    display: block;
 }
