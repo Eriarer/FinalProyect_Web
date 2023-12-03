@@ -1,29 +1,60 @@
-body{
+body {
     background: #F5F5DC;
     box-sizing: border-box;
     margin: 0;
     background-repeat: no-repeat;
     background-size: cover;
-}
-
-#titulo{
-    text-align:center;
-    padding-top: 20px;
-    font-weight: bold;  
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;  
-}
-
-.introduccion{
-  text-align: justify;
-  margin: 25px;
-  font-size: 20px;
-}
-.accordion-button{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-weight: bold ;
+}
+
+.headContact h1 {
+    color: #57D6EA;
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.introduccion {
+    text-align: justify;
+    margin: 25px;
+    font-size: 1.25em;
+}
+
+.accordion-button {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
     font-size: 20px;
 }
 
-.preguntas{
+
+.preguntas {
     padding: 25px;
+}
+
+.preguntas button {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans;
+    background-color: #e2eced;
+    font-size: 0.5em;
+    color: rgb(45, 62, 160);
+    transition: 0.4s;
+}
+
+.accordion-item {
+    background-color: #e2eced;
+    border-radius: 10px;
+    margin-bottom: 10px;
+
+}
+
+.accordion-body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1em;
+}
+
+.imgPreguntas {
+    width: 7%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
 }
