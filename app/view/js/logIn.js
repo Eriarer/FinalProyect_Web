@@ -197,10 +197,11 @@ function verifyRegisterForm(e) {
           type: 'POST',
           data: {
             'method': 'login',
-            'email': $('#emailLogin').val(),
-            'password': $('#passwordLogin').val()
+            'email': $('#emailReg').val(),
+            'password': $('#passwordReg').val()
           },
           success: function (data) {
+            // logear el usuario
             window.location.href = '../../../index.php';
           }
         });

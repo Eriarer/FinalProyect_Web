@@ -1,7 +1,7 @@
 <?php
 session_start();
-if (isset($_SESSION['user'])) {
-  header('Location: ../html_php/index.php');
+if (isset($_SESSION['name'])) {
+  header('Location: ../../../index.php');
 }
 ?>
 <!DOCTYPE html>
