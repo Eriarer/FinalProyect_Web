@@ -1,5 +1,5 @@
 <?php
-$base = '/FinalProyect_Web';
+$base = '';
 $CONFIG = array(
   'base_url' => $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $base . '/',
   'P_app' => $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $base . '/app/',
