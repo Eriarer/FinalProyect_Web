@@ -1,3 +1,4 @@
-test/**
-
+**/images/productos/**
+**/images/captcha/**
+dataBaseCredentials.php
 *Credentials.php
