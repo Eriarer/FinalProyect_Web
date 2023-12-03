@@ -22,6 +22,8 @@ if (isset($_SESSION['name'])) {
   <!-- css -->
   <link rel="stylesheet" href="../css/log_reg.css" />
   <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/formularios.css">
+
 </head>
 
 <body>
@@ -102,7 +104,7 @@ if (isset($_SESSION['name'])) {
               <small id="coinciden" class="text-danger text-right"></small>
             </div>
             <div class="form-group-col-md-12 mt-0 pt-0 mb-3">
-              <button type="submit" id="btnReg" class="btn btn-primary ">Registrarse</button>
+              <button type="submit" id="btnReg" class="boton">Registrarse</button>
             </div>
           </form>
         </div>
@@ -153,7 +155,7 @@ if (isset($_SESSION['name'])) {
             </div>
             <!-- Iniciar sesión -->
             <div class="form-group-col-md-12 ">
-              <button type="submit" class="btn btn-primary mt-3 ml-auto mr-3" id="iniciarSesion">Iniciar Sesión</button>
+              <button type="submit" class="boton mt-3 ml-auto mr-3" id="iniciarSesion">Iniciar Sesión</button>
             </div>
           </form>
         </div>

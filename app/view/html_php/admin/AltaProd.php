@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 ?>
 <!DOCTYPE html>
@@ -18,6 +18,7 @@ session_start();
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- CSS -->
   <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/formularios.css">
 </head>
 
 <body>
@@ -103,22 +104,22 @@ session_start();
                 <input type="number" class="form-control" id="descuento" name="descuento" required>
               </div>
             </div>
-            <div class="row">
-              <div class="form-col">
-                <div class="form-group col-md-6 text-left">
+            <div class="row row-cols-2">
+              <div class="form-col-1">
+                <div class="form-group col-md-6 text-left mt-4">
                   <label for="imagen">Imagen del producto</label>
                   <input type="file" class="form-control-file" id="imagen" name="imagen" accept=".jpg, .jpeg, .png, .webp, .svg, .webm" required>
                   <!-- Agrega el elemento img para mostrar la vista previa -->
                   <img id="imagenPreview" src="../../../media/images/imgRelleno.png" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 200px; margin-top: 10px;">
                 </div>
               </div>
-              <div class="form-group mt-3 col-md-6 text-left">
+              <div class="form-group form-col-1 mt-3 text-left">
                 <label for="descripcion">Descripción</label><br>
                 <textarea name="descripcion" id="descripcion" class="form-control" cols="30" rows="10" required></textarea>
               </div>
             </div>
-
-            <button class="btn btn-success" type="submit" name="submit">Aceptar</button>
+            <br>
+            <button class="boton" type="submit" name="submit">Aceptar</button>
           </form>
         </div>
       </div>
