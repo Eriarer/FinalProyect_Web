@@ -60,7 +60,7 @@ $navbarCSS = $css . 'headers/navbar.css';
         <a class="nav-link" tootlip="Acerca de" href="<?= $php . 'acercaDe.php' ?>"><i class="nf nf-fa-info_circle"></i></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" tootlip="Contacto" href="#"><i class="nf nf-fa-phone_square"></i></a>
+        <a class="nav-link" tootlip="Contacto" href="<?= $php . 'contacto.php' ?>"><i class="nf nf-fa-phone_square"></i></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" tootlip="Preguntas frecuentes" href="<?= $php . 'FAQs.php' ?>"><i class="nf nf-fa-question_circle"></i></a>
