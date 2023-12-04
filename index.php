@@ -93,29 +93,43 @@ $baseUrl = 'app/media/images/productos/';
     <div class="conteiner_des">
       <?php
       for ($i = 0; $i < 15; $i++) {
-        $index = $i % $cantidadProductos;
-        //agregar al carrucerl la cantidad de productos necesarios hasta que haya 16 productos
-        // prod_name
-        // prod_description
-        // prod_stock
-        // prod_imgPath
-        //quedarse con la ultima parte de la ruta de la imagen dividida por /
-        $imgUrl = $productosDestacados[$index]['prod_imgPath'];
-        $imgUrl = $baseUrl . $imgUrl;
-        // verificar si existe la imagen
-        if (!file_exists($imgUrl)) {
-          $imgUrl = $baseUrl . '../imgRelleno.png';
+        if ($cantidadProductos != 0) {
+          $index = $i % $cantidadProductos;
+          //agregar al carrucerl la cantidad de productos necesarios hasta que haya 16 productos
+          // prod_name
+          // prod_description
+          // prod_stock
+          // prod_imgPath
+          //quedarse con la ultima parte de la ruta de la imagen dividida por /
+          $imgUrl = $productosDestacados[$index]['prod_imgPath'];
+          $imgUrl = $baseUrl . $imgUrl;
+          // verificar si existe la imagen
+          if (!file_exists($imgUrl)) {
+            $imgUrl = $baseUrl . '../imgRelleno.png';
+          }
+          echo '<article class="card_des">
+                  <img src="' . $imgUrl . '" alt="" class="image">
+                  <section class="body_des">
+                    <h3 class="tit_des">' . $productosDestacados[$index]['prod_name'] . '</h4>
+                    <p class="texto">' . $productosDestacados[$index]['categoria'] . '<br>
+                      <sub> stock: ' . $productosDestacados[$index]['prod_stock'] . '</sub>
+                    </p>
+                  </section>
+                </article>';
+        } else {
+          //llenar 15 productos de place holder
+          echo '<article class="card_des">
+                  <img src="app/media/images/imgRelleno.png" alt="" class="image">
+                  <section class="body_des">
+                    <h3 class="tit_des">producto</h4>
+                    <p class="texto">categoria<br>
+                      <sub> stock: stock</sub>
+                    </p>
+                  </section>
+                </article>';
         }
-        echo '<article class="card_des">
-                <img src="' . $imgUrl . '" alt="" class="image">
-                <section class="body_des">
-                  <h3 class="tit_des">' . $productosDestacados[$index]['prod_name'] . '</h4>
-                  <p class="texto">' . $productosDestacados[$index]['categoria'] . '<br>
-                    <sub> stock: ' . $productosDestacados[$index]['prod_stock'] . '</sub>
-                  </p>
-                </section>
-              </article>';
       }
+      $cantidadProductos = $cantidadProductos == 0 ? 6 : $cantidadProductos;
       ?>
     </div>
     <hr><br>
@@ -223,6 +237,7 @@ $baseUrl = 'app/media/images/productos/';
         // obtener el ancho del contenedor incluyendo 6 tarjetas + el margin en x que tienen
         //obtener la cantidad de tarjetas que hay en el contenedor
         var productos = <?= $cantidadProductos ?>;
+        console.log(productos);
         // quitarle el string px al margin-right
         var marginX = parseInt($('.card_des').css('margin-right').substring(0, $('.card_des').css('margin-right').length - 2) +
           $('.card_des').css('margin-left').substring(0, $('.card_des').css('margin-left').length - 2));
