@@ -1,5 +1,7 @@
 <?php
-include_once __DIR__ . '/../app/model/DB/dataBaseCredentials.php';
+include_once __DIR__ . '/../app/model/dataBaseCredentials.php';
+include_once __DIR__ . '/../app/model/routes_files.php';
+include_once __DIR__ . '/../app/model/controllDB.php';
 
 // Establecer la conexión a la base de datos
 $conn = new mysqli($credentials['host'], $credentials['user'], $credentials['pass'], $credentials['db']);
