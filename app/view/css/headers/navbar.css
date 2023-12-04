@@ -33,17 +33,18 @@ li {
     &:not(.no-tooltip) {
         & a {
             &::after {
+                margin-top: 1em;
                 content: attr(tootlip);
                 position: absolute;
                 z-index: 3;
-                font-size: 0.7em;
+                font-size: 0.5em;
                 font-weight: bold;
                 top: 0%;
                 left: 50%;
                 transform: translateX(-50%) translateY(3em) scale(0);
                 padding: 0.5em;
                 background-color: #ff9257f5;
-                color: #363433;
+                color: black;
                 border-radius: 10px;
                 width: min-content;
                 opacity: 0.5;
