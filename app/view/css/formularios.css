@@ -4,8 +4,13 @@
     border: none;
 }
 
+.card {
+    border: none !important;
+    z-index: -1 !important;
+}
+
 .card-body {
-    background-color: rgb(219, 150, 90);
+    background-color: #e3f2fc;
     border-radius: 15px;
 }
 
@@ -18,7 +23,10 @@
 .boton {
     border-color: transparent;
     border-radius: 2px;
-    background-color: rgb(68, 43, 22);
-    color: rgb(255, 255, 255);
+    background-color: black;
+    font-size: 2em;
+    font-weight: bolder;
+    color: white;
     font-weight: bold;
+    border-radius: 15px;
 }

@@ -169,33 +169,37 @@ $navbarCSS = $css . 'headers/navbar.css';
       $(":root").css("--menu-translateX", "0px");
     }
 
-    $('#menu').hover(function() {
-      var menuInner = $(this).find('#menu_inner');
-      menuInner.css('animation', 'none');
-      menuInner.css('opacity', '0');
-      menuInner.css('display', 'block');
-      menuInner.css('transform', 'translateX(0px)');
-      // Obtener la posición actual del menú desplegable
-      var menuPosition = $("#menu_inner").offset().left;
-      var menuWidth = $("#menu_inner").width();
-      // Obtener el ancho de la ventana
-      var windowWidth = $(window).width();
-      // Si el menú desplegable se sale de la ventana, moverlo hacia la izquierda
-      if (menuPosition + menuWidth > windowWidth) {
-        //calcular los pixeles que se salen del ancho de la ventana
-        var pixels = menuPosition + menuWidth - windowWidth + 10;
-        menuInner.css('transform', 'translateX(-' + pixels + 'px)');
-        $(":root").css("--menu-translateX", "-" + pixels + "px");
-      } else {
+    var menu = $(this).find('#menu');
+    // si existe el menu
+    if (menu.length > 0) {
+      menu.hover(function() {
+        var menuInner = $(this).find('#menu_inner');
+        menuInner.css('animation', 'none');
+        menuInner.css('opacity', '0');
+        menuInner.css('display', 'block');
         menuInner.css('transform', 'translateX(0px)');
-        $(":root").css("--menu-translateX", "0px");
-      }
-      menuInner.css('animation', 'none');
-      menuInner.css('animation', 'desplegar-menu 0.3s ease-in-out forwards');
-      menuInner.css('display', 'block');
-    }, function() {
-      var menuInner = $(this).find('#menu_inner');
-      menuInner.css('animation', 'plegar-menu 0.3s ease-in-out forwards');
-    });
+        // Obtener la posición actual del menú desplegable
+        var menuPosition = $("#menu_inner").offset().left;
+        var menuWidth = $("#menu_inner").width();
+        // Obtener el ancho de la ventana
+        var windowWidth = $(window).width();
+        // Si el menú desplegable se sale de la ventana, moverlo hacia la izquierda
+        if (menuPosition + menuWidth > windowWidth) {
+          //calcular los pixeles que se salen del ancho de la ventana
+          var pixels = menuPosition + menuWidth - windowWidth + 10;
+          menuInner.css('transform', 'translateX(-' + pixels + 'px)');
+          $(":root").css("--menu-translateX", "-" + pixels + "px");
+        } else {
+          menuInner.css('transform', 'translateX(0px)');
+          $(":root").css("--menu-translateX", "0px");
+        }
+        menuInner.css('animation', 'none');
+        menuInner.css('animation', 'desplegar-menu 0.3s ease-in-out forwards');
+        menuInner.css('display', 'block');
+      }, function() {
+        var menuInner = $(this).find('#menu_inner');
+        menuInner.css('animation', 'plegar-menu 0.3s ease-in-out forwards');
+      });
+    }
   });
 </script>
