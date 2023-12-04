@@ -23,7 +23,10 @@ hr {
 }
 
 .myCard {
+    align-items: center;
+    justify-content: center;
     min-height: 100%;
+    max-width: 460px;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.757);
     margin: 0px;
     border-radius: 0.5em;
@@ -39,7 +42,7 @@ hr {
 .cardHeader {
     position: relative;
     border-radius: 0.5em 0.5em 0px 0px;
-    min-height: 100px;
+    background: #abb6be;
 
     &>img {
         position: relative;
@@ -62,62 +65,70 @@ hr {
     }
 
     &>.overlay {
-        border-radius: 0.5em 0.5em 0px 0px;
+        border-radius: 0.5em;
         font-size: 1.4em;
         position: absolute;
         bottom: 0;
+        left: 0;
         width: 100%;
         padding: 0.2em;
         text-align: center;
         opacity: 0;
         color: #ffffff;
-        transform: scaleX(0) translateY(50%);
+        transform: scaleY(0) translateY(1.4em);
         transition: all 0.75s ease;
     }
 
     &:hover .overlay {
         opacity: 1;
+        border-radius: 0.5em 0.5em 0px 0px;
         background: rgba(0, 0, 0, 0.624);
-        transform: scaleX(1) translateY(0%);
+        transform: scaleY(1) translateY(0%);
     }
 }
 
 .cardBody {
-    padding: 0.3em;
-    margin: 0px;
-
+    padding: 3em;
+    padding-bottom: 1.5em;
     &>h3 {
+        text-align: center;
         font-size: 1.2em;
         font-weight: 700;
-        margin: 0px;
         color: #000000;
     }
 
     &>p {
         font-size: 0.9em;
         font-weight: 400;
-        margin: 10px;
+        padding-left: 0.2em;
         color: #000000;
+        text-align: justify;
     }
 
     &>span {
+        align-items: center;
+        margin: auto;
         background-color: skyblue;
         padding: 8px 10px;
         border-radius: 30px;
         font-weight: 400;
         font-size: 14px;
     }
+    &.existencias{
+        text-align: center;
+    }
 }
 
 .cardFooter {
-    margin-top: 0.2em;
     position: relative;
     bottom: 0;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     text-align: center;
-    padding: 10px 0px;
+    padding-bottom: 1.5em;
+    padding-left: 3em;
+    padding-right: 3em;
 
     &>* {
         z-index: 2;

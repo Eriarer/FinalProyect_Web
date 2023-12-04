@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 ?>
 <!DOCTYPE html>
@@ -7,7 +7,6 @@ session_start();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../css/Productoestilo.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <title>Tienda</title>
   <!-- Boostrap v4.6.% -->
@@ -18,6 +17,7 @@ session_start();
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <!-- CSS -->
   <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/Productoestilo.css">
 </head>
 
 <body>
@@ -63,7 +63,7 @@ session_start();
       <div id="<?= str_replace(" ", "_", $categoria) ?>">
         <h1 class='text-center mt-4'><?= $categoria ?></h1>
         <hr>
-        <div class='row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4'>
+        <div class='row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 d-flex justify-content-center'>
           <?php foreach ($productosCategoria[$categoria] as $producto) :
             $imagenBase = '../../media/images/productos/';
             // quitarle a la ruta de la imagen
@@ -78,15 +78,14 @@ session_start();
               <div class='myCard'>
                 <div class='cardHeader'>
                   <img src="<?= $targetImage ?>" alt="<?= $producto['prod_name'] ?>">
-                </div>
-                <div class='overlay'>$<?= $producto['prod_precio'] ?></div>
-
-                <?php if ($producto['prod_descuento'] != 0) : ?>
-                  <div class='descuento'>
-                    Ahorra <?= $producto['prod_descuento'] ?>%
+                  <div class='overlay'>$<?= $producto['prod_precio'] ?>
                   </div>
-                <?php endif; ?>
-
+                  <?php if ($producto['prod_descuento'] != 0) : ?>
+                      <div class='descuento'>
+                        Ahorra <?= $producto['prod_descuento'] ?>%
+                      </div>
+                    <?php endif; ?>
+                </div>
 
                 <div class='cardBody'>
                   <h3 class='title-product'><?= $producto['prod_name'] ?></h3>
