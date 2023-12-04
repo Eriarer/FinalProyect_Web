@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once __DIR__ . '/../../model/DB/dataBaseCredentials.php';
 include_once __DIR__ . '/../../model/routes_files.php';
 include_once __DIR__ . '/../../model/DB/controllDB.php';
@@ -56,7 +57,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     return $response;
   } else if ($method === "logout") {
     session_unset();
+    //eliminar los datos de la sesion
     session_destroy();
+    session_write_close();
     //borrar las cookies
     setcookie("name", '', time() - 3600, "/");
     setcookie('email', '', time() - 3600, '/');

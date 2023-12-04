@@ -1,8 +1,11 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- Boostrap v4.6.2 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 <!-- Jquery -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
 
 <?php
 require_once __DIR__ . '/../../model/routes_files.php';
@@ -136,9 +139,10 @@ $navbarCSS = $css . 'headers/navbar.css';
         data: {
           method: 'logout'
         },
-        success: function() {
-          // refresh the page
-          window.location.href = window.location.href;
+        success: function(data) {
+          console.log(data);
+          // ir al index
+          window.location.href = base + 'index.php';
         }
       });
     });
@@ -152,11 +156,12 @@ $navbarCSS = $css . 'headers/navbar.css';
       var menuInner = $(this).find('#menu_inner');
       menuInner.css('animation', 'none');
       menuInner.css('opacity', '0');
-      menuInner.css('display', 'block');
       menuInner.css('transform', 'translateX(0px)');
       // Obtener la posición actual del menú desplegable
+      menuInner.css('display', 'block');
       var menuPosition = $("#menu_inner").offset().left;
       var menuWidth = $("#menu_inner").width();
+      menuInner.css('display', 'none');
       // Obtener el ancho de la ventana
       var windowWidth = $(window).width();
       // Si el menú desplegable se sale de la ventana, moverlo hacia la izquierda
@@ -176,11 +181,12 @@ $navbarCSS = $css . 'headers/navbar.css';
         var menuInner = $(this).find('#menu_inner');
         menuInner.css('animation', 'none');
         menuInner.css('opacity', '0');
-        menuInner.css('display', 'block');
         menuInner.css('transform', 'translateX(0px)');
         // Obtener la posición actual del menú desplegable
+        menuInner.css('display', 'block');
         var menuPosition = $("#menu_inner").offset().left;
         var menuWidth = $("#menu_inner").width();
+        menuInner.css('display', 'none');
         // Obtener el ancho de la ventana
         var windowWidth = $(window).width();
         // Si el menú desplegable se sale de la ventana, moverlo hacia la izquierda
