@@ -74,7 +74,7 @@ session_start();
               $targetImage = $imagenBase . '../imgRelleno.png';
             }
           ?>
-            <div class='col p-2'>
+            <div class='col p-2 d-flex justify-content-center'>
               <div class='myCard'>
                 <div class='cardHeader'>
                   <img src="<?= $targetImage ?>" alt="<?= $producto['prod_name'] ?>">
@@ -89,6 +89,8 @@ session_start();
 
                 <div class='cardBody'>
                   <h3 class='title-product'><?= $producto['prod_name'] ?></h3>
+                  <!-- id del producto -->
+                  <small class='id-product'>ID: <?= $producto['prod_id'] ?></small>
                   <p class='desciption'><?= $producto['prod_description'] ?></p>
                   <?php if ($producto['prod_stock'] != 0) : ?>
                     <span class='price'>Existencias: <?= $producto['prod_stock'] ?></span>
@@ -96,10 +98,12 @@ session_start();
                     <span class='price out-stock'>Agotado</span>
                   <?php endif; ?>
                 </div>
-                <div class='cardFooter'>
-                  <a href='#' class='btn-cart'>Comprar ahora</a>
-                  <a href='#'><i class='nf nf-md-cart_plus'></i></a>
-                </div>
+                <?php if ($producto['prod_stock'] != 0) : ?>
+                  <div class='cardFooter'>
+                    <a href='#' class='btn-cart'>Comprar ahora</a>
+                    <a href='#'><i class='nf nf-md-cart_plus'></i></a>
+                  </div>
+                <?php endif; ?>
               </div>
             </div>
           <?php endforeach; ?>
