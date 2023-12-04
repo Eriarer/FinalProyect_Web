@@ -106,14 +106,20 @@ hr {
         text-align: justify;
     }
 
-    &>span {
+    &>.price {
         align-items: center;
         margin: auto;
         background-color: skyblue;
         padding: 8px 10px;
         border-radius: 30px;
-        font-weight: 400;
+        font-weight: 700;
         font-size: 14px;
+    }
+
+    &>.out-stock {
+        background-color: #9a0909;
+        color: #ffffff;
+        font-weight: 700;
     }
 
     &.existencias {

@@ -90,7 +90,11 @@ session_start();
                 <div class='cardBody'>
                   <h3 class='title-product'><?= $producto['prod_name'] ?></h3>
                   <p class='desciption'><?= $producto['prod_description'] ?></p>
-                  <span class='price'>Existencias: <?= $producto['prod_stock'] ?></span>
+                  <?php if ($producto['prod_stock'] != 0) : ?>
+                    <span class='price'>Existencias: <?= $producto['prod_stock'] ?></span>
+                  <?php else : ?>
+                    <span class='price out-stock'>Agotado</span>
+                  <?php endif; ?>
                 </div>
                 <div class='cardFooter'>
                   <a href='#' class='btn-cart'>Comprar ahora</a>
