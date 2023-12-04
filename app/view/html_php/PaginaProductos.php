@@ -1,3 +1,6 @@
+<?php 
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -66,6 +69,10 @@
             // quitarle a la ruta de la imagen
             $imageName = explode("/", $producto['prod_imgPath'])[count(explode("/", $producto['prod_imgPath'])) - 1];
             $targetImage = $imagenBase . $imageName;
+            // verificar si exista la imagen
+            if (!file_exists($targetImage)) {
+              $targetImage = $imagenBase . '../imgRelleno.png';
+            }
           ?>
             <div class='col p-2'>
               <div class='myCard'>

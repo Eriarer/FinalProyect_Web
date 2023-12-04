@@ -1,0 +1,45 @@
+#captchaImage {
+  transition: all 0.3s ease-in-out;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.045);
+  }
+}
+
+#changeCaptcha {
+  font-size: 1.2rem;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
+  margin-left: 0.2rem;
+  margin-right: 0.5rem;
+  /* hacer el tamaño un cuadrado */
+  width: 2.5rem;
+  height: 2.5rem;
+  /* alinear sus elementos hijos al centro */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  /* desabilidar el focus del boton */
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.rotate-left {
+  animation: rotate-left 0.3s ease-in;
+}
+
+@keyframes rotate-left {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-360deg);
+  }
+}

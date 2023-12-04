@@ -39,6 +39,34 @@ if ($result->num_rows > 0) {
     echo "0 results";
 }
 
+echo "<br>";
+
+//mostrar el contedido de la tabla de usuarios
+$sql = "SELECT * FROM usuarios";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    echo "<table>";
+    echo "<tr>";
+    echo "<th>id</th>";
+    echo "<th>email</th>";
+    echo "<th>nombre</th>";
+    echo "<th>cuenta</th>";
+    echo "<th>intentos</th>";
+    echo "<th>password</th>";
+    echo "<th>admin</th>";
+    echo "</tr>";
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        foreach ($row as $key => $value) {
+            echo "<td>" . $value . "</td>";
+        }
+        echo "</tr>";
+    }
+    echo "</table>";
+} else {
+    echo "0 results";
+}
+
 
 ?>
 <style>
