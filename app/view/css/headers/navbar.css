@@ -41,7 +41,7 @@ li {
                 font-weight: bold;
                 top: 0%;
                 left: 50%;
-                transform: translateX(-50%) translateY(3em) scale(0);
+                transform: translateX(-50%) translateY(2.4em) scale(0);
                 padding: 0.5em;
                 background-color: #ff9257f5;
                 color: black;
@@ -58,7 +58,7 @@ li {
                 &::after {
                     opacity: 1;
                     visibility: visible;
-                    transform: translateX(-50%) translateY(3em) scale(1);
+                    transform: translateX(-50%) translateY(2.4em) scale(1);
                 }
             }
         }
