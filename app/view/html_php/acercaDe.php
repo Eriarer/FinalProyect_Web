@@ -18,8 +18,8 @@
     <hr>
   </div>
 
-  <div class="Historia row-col-12">
-    <div class="logoSlogan col-6">
+  <div class="Historia row-col-lg-2">
+    <div class="logoSlogan col">
       <img src="../../media/images/LogoSF.png" alt="">
       <div>
         <br>
@@ -28,7 +28,7 @@
         </p><br>
       </div>
     </div>
-    <div class="col-6">
+    <div class="col">
       <p>
         En FluffyHugs, una empresa familiar fundada en 2023, nos dedicamos a enriquecer vidas con nuestros peluches únicos y cariñosamente creados.
         Nuestro compromiso con la calidad, sostenibilidad y creatividad se refleja en cada diseño, desde tiernos animales hasta imaginativas creaciones. Valoramos la conexión con nuestros clientes, ofreciendo más que juguetes: compañeros de vida que crean recuerdos inolvidables y un servicio excepcional que nos distingue.
@@ -46,14 +46,14 @@
 
   <div class="cajitas">
     <div class="card-group">
-      <div class="card">
-        <img class="card-img-top" src="../../media/images/vision.jpeg" alt="Card image cap" width="auto" height="auto">
+      <div class="card col ">
+        <img class="card-img-top imgCards" src="../../media/images/vision.jpeg" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">Visión:</h5>
           <p class="card-text">Nuestra visión es ser líderes en el mundo de los peluches, inspirando sonrisas y creando momentos mágicos para personas de todas las edades. Nos esforzamos por innovar y expandir nuestra gama de productos, manteniendo siempre un compromiso firme con la sostenibilidad y la alegría pura.</p>
         </div>
       </div>
-      <div class="card">
+      <div class="card ">
         <img class="card-img-top" src="../../media/images/mision.jpeg" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">Misión:</h5>
@@ -64,15 +64,19 @@
         <img class="card-img-top" src="../../media/images/objetivo.jpeg" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">Objetivos:</h5>
-          <p class="card-text">Calidad y Seguridad: Garantizar que cada peluche cumpla con los más altos estándares de calidad y seguridad.
-            Sostenibilidad: Implementar prácticas ecológicas en la producción y distribución de nuestros productos.
-            Innovación: Continuar innovando en diseño y funcionalidad para ofrecer una gama diversa y atractiva de peluches.
-            Satisfacción del Cliente: Mantener una excelente atención al cliente y asegurar la plena satisfacción en cada compra.
-            Crecimiento: Expandir nuestra presencia en el mercado, tanto a nivel nacional como internacional.</p>
+          <p class="card-text">
+          <ul>
+            <li>Calidad y Seguridad: Garantizar que cada peluche cumpla con los más altos estándares de calidad y seguridad.</li>
+            <li>Sostenibilidad: Implementar prácticas ecológicas en la producción y distribución de nuestros productos.</li>
+            <li>Innovación: Continuar innovando en diseño y funcionalidad para ofrecer una gama diversa y atractiva de peluches.</li>
+            <li> Satisfacción del Cliente: Mantener una excelente atención al cliente y asegurar la plena satisfacción en cada compra.</li>
+            <li> Crecimiento: Expandir nuestra presencia en el mercado, tanto a nivel nacional como internacional. </li>
+          </ul>
+          </p>
         </div>
       </div>
     </div>
-  </div><br>
+  </div>
 
   <?php include_once("footer.php") ?>
 </body>
