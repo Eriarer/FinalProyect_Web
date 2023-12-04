@@ -6,14 +6,39 @@ require_once __DIR__ . '/app/model/DB/manejoProductos.php';
 $db = new dataBase($credentials, $CONFIG);
 $productos = json_decode($db->getAllProducts(), true);
 // obtener los primeros 6 productos de la base de datos, si hay menos de 6 productos, obtener los que haya
-$productosDestacados = array();
-if (count($productos) > 6) {
-  for ($i = 0; $i < 6; $i++) {
-    array_push($productosDestacados, $productos[$i]);
+// ver que haya una distribución de productos por categoria
+// ejemplo hay dos categorias, son 6 productos, 3 de una categoria y 3 de otra si se puede
+// si no se puede, llenar con productos de la otra categoria
+$categorias = [];
+foreach ($productos as $producto) {
+  if (!in_array($producto['categoria'], $categorias)) {
+    array_push($categorias, $producto['categoria']);
   }
-} else {
-  $productosDestacados = $productos;
 }
+// crear un vector de productos, agrupados por categoria
+$productosCategoria = array();
+foreach ($categorias as $categoria) {
+  $productosCategoria[$categoria] = array();
+  foreach ($productos as $producto) {
+    if ($producto['categoria'] == $categoria) {
+      array_push($productosCategoria[$categoria], $producto);
+    }
+  }
+}
+$productosDestacados = array();
+// Iterar hasta alcanzar el límite de productos destacados (6)
+while (count($productosDestacados) < 6) {
+  // Iterar por cada categoría
+  foreach ($categorias as $categoria) {
+    // Verificar si hay productos disponibles en la categoría actual
+    if (!empty($productosCategoria[$categoria])) {
+      // Agregar un producto de la categoría actual a los destacados
+      $productosDestacados[] = array_shift($productosCategoria[$categoria]);
+    }
+  }
+}
+
+
 $cantidadProductos = count($productosDestacados);
 $baseUrl = 'app/media/images/productos/';
 ?>
