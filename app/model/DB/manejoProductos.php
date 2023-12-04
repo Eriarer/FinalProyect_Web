@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo $json;
     return $json;
   } else if ($method === "emailExist") {
-    $email = $_POST[' '];
+    $email = $_POST['email'];
     $response = $db->emailExist($email);
     echo $response ? "success" : "error";
     return $response ? "success" : "error";
@@ -45,8 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $response = $db->login($email, $password);
+    //resetear los intentos fallidos
     if ($response == 0) {
       $user = $db->getUserByEmail($email);
+      $db->unblock($email);
       //escribir la variable de sesion
       $_SESSION['email'] = $email;
       $_SESSION['name'] = $user['usr_account'];
@@ -74,6 +76,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     setcookie("password", $passwordCrypt, $time, "/");
     echo "success";
     return "success";
+  } else if ($method === "getSecurityQuestion") {
+    $email = $_POST['email'];
+    $response = $db->getSecurityQuestion($email);
+    echo $response;
+    return $response;
+  } else if ($method === "verifySecurityAnswer") {
+    $email = $_POST['email'];
+    $respuesta = $_POST['respuesta'];
+    $response = $db->verifySecurityAnswer($email, $respuesta);
+    echo $response ? "success" : "error";
+    return $response ? "success" : "error";
+  } else if ($method === "unblock") {
+    $email = $_POST['email'];
+    $response = $db->unblock($email);
+    if (!$response) {
+      echo "error";
+      return "error";
+    }
+    $password = $_POST['password'];
+    $password = password_hash($password, PASSWORD_BCRYPT);
+    $response = $db->updatePassword($email, $password);
+    echo $response ? "success" : "error";
+    return $response ? "success" : "error";
   }
   echo "error";
   return "error";

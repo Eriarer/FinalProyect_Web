@@ -67,6 +67,29 @@ if ($result->num_rows > 0) {
     echo "0 results";
 }
 
+echo "<br>";
+
+$sql = "SELECT * FROM preguntas_seguridad";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    echo "<table>";
+    echo "<tr>";
+    echo "<th>id</th>";
+    echo "<th>pregunta</th>";
+    echo "<th>respuesta</th>";
+    echo "</tr>";
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        foreach ($row as $key => $value) {
+            echo "<td>" . $value . "</td>";
+        }
+        echo "</tr>";
+    }
+    echo "</table>";
+} else {
+    echo "0 results";
+}
+
 
 ?>
 <style>

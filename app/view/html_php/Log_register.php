@@ -1,7 +1,7 @@
 <?php
 session_start();
-if (isset($_SESSION['user'])) {
-  header('Location: ../html_php/index.php');
+if (isset($_SESSION['name'])) {
+  header('Location: ../../../index.php');
 }
 ?>
 <!DOCTYPE html>
@@ -22,6 +22,8 @@ if (isset($_SESSION['user'])) {
   <!-- css -->
   <link rel="stylesheet" href="../css/log_reg.css" />
   <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/formularios.css">
+
 </head>
 
 <body>
@@ -102,7 +104,7 @@ if (isset($_SESSION['user'])) {
               <small id="coinciden" class="text-danger text-right"></small>
             </div>
             <div class="form-group-col-md-12 mt-0 pt-0 mb-3">
-              <button type="submit" id="btnReg" class="btn btn-primary ">Registrarse</button>
+              <button type="submit" id="btnReg" class="boton">Registrarse</button>
             </div>
           </form>
         </div>
@@ -153,32 +155,74 @@ if (isset($_SESSION['user'])) {
             </div>
             <!-- Iniciar sesión -->
             <div class="form-group-col-md-12 ">
-              <button type="submit" class="btn btn-primary mt-3 ml-auto mr-3" id="iniciarSesion">Iniciar Sesión</button>
+              <button type="submit" class="boton mt-3 ml-auto mr-3" id="iniciarSesion">Iniciar Sesión</button>
             </div>
           </form>
         </div>
         <div class="mt-3 mx-auto h6 d-flex flex-column justify-content-center align-items-center">
           <p>¿No tienes una cuenta? <a href="#" onclick="toggleForm()">Registrarse</a></p>
-          <p class="mt-2">¿Tu cuenta está bloqueada? <a href="#">Recuperar Cuenta</a></p>
+          <p class="mt-2">¿Tu cuenta está bloqueada? <a href="#" data-target="#recuparCuenta" data-toggle="modal" onclick="recuperarCuenta()">Cambiar contraseña</a></p>
         </div>
       </div>
 
-      <!-- Tarjeta para Recuperar cuenta -->
-      <div class="card" id="recuperar">
-        <!-- formulario que pide primero el email, si no existe, no hace nada y solo pone un mensaje de error 
-        al conseguir el email, nos traemos la pregunta de seguridad y el usuario debe responderla, si la respuesta es correcta, 
-        al responder correctamente se le desbloquea la cuenta
-      -->
-        <div class="form-row">
-          <div class="form-group col-md-12">
-            <label for="emailRecuperar">Email</label>
-            <input type="email" class="form-control" id="emailRecuperar" name="emailRecuperar" required>
-            <small id="emailRecuperarText" class="form-text text-danger"></small>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-12">
-            <button type="button" class="btn btn-primary" id="btnRecuperar">Recuperar Cuenta</button>
+      <div class=" modal fade" id="recuparCuenta" tabindex="-1">
+        <div class=" modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Cambiar contraseña</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <label for="emailRecuperar">Email</label>
+                    <input type="email" class="form-control" id="emailRecuperar" name="emailRecuperar" required>
+                    <small id="emailRecuperarText" class="form-text text-danger"></small>
+                  </div>
+                </div>
+                <!-- pregunta de Seguridad -->
+                <div class="form-row mt-1" id="cuestionarioRecuperar">
+                  <label for="preguntaSeguridad">Pregunta de seguridad</label>
+                  <input type="text" class="form-control" id="preguntaSeguridad" name="preguntaSeguridad" readonly>
+                  <small id="preguntaSeguridadText" class="form-text text-danger"></small>
+                  <label for="respuestaSeguridad">Respuesta</label>
+                  <input type="text" class="form-control" id="respuestaSeguridad" name="respuestaSeguridad" required>
+                  <small id="respuestaSeguridadText" class="form-text text-danger"></small>
+                </div>
+                <div class="form-row mt-1" id="cambiarPassword">
+                  <label for="passwordRecuperar">Nueva Contraseña</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="passwordRecuperar" name="passwordRecuperar" required>
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <input type="checkbox" id="showLoginPasswordRecuperar" onclick="togglePassword('passwordRecuperar')" hidden>
+                        <label class="form-check-label" for="showLoginPasswordRecuperar" id="passwordRecuperarToggle"><i class="nf nf-fa-eye_slash"></i></label>
+                      </div>
+                    </div>
+                  </div>
+                  <label for="confirmPasswordRecuperar">Repetir Contraseña</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="confirmPasswordRecuperar" name="confirmPasswordRecuperar" required>
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <input type="checkbox" id="showConfirmPasswordRecuperar" onclick="togglePassword('confirmPasswordRecuperar')" hidden>
+                        <label class="form-check-label" for="showConfirmPasswordRecuperar" id="confirmPasswordRecuperarToggle"><i class="nf nf-fa-eye_slash"></i></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row mt-1">
+                  <small id="passwordRecuperarText" class="form-text text-danger"></small>
+                </div>
+              </form>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="btnRecuperar">Recuperar Cuenta</button>
+            </div>
           </div>
         </div>
       </div>

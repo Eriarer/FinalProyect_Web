@@ -1,0 +1,32 @@
+.container {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 50px;
+    border: none;
+}
+
+.card {
+    border: none !important;
+    z-index: 0 !important;
+}
+
+.card-body {
+    background-color: #e3f2fc;
+    border-radius: 15px;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: rgb(0, 0, 0);
+}
+
+.boton {
+    border-color: transparent;
+    border-radius: 2px;
+    background-color: black;
+    font-size: 1.2em;
+    font-weight: bolder;
+    color: white;
+    font-weight: bold;
+    border-radius: 15px;
+}

@@ -2,6 +2,10 @@
   transition: all 0.3s ease-in-out;
   border-radius: 10px;
   border: 1px solid #ccc;
+  width: 60%;
+  height: auto;
+  max-width: 200px;
+  max-height: 100px;
 
   &:hover {
     cursor: pointer;
@@ -28,18 +32,28 @@
   &:focus {
     box-shadow: none;
   }
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .rotate-left {
   animation: rotate-left 0.3s ease-in;
+  background: #015adf !important;
+  color: #fff !important;
 }
 
 @keyframes rotate-left {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(-180deg) scale(1.1);
   }
 
   100% {
-    transform: rotate(-360deg);
+    transform: rotate(-360deg) scale(1);
   }
 }
