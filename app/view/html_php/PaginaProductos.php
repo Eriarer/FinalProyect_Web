@@ -67,7 +67,7 @@ session_start();
           <?php foreach ($productosCategoria[$categoria] as $producto) :
             $imagenBase = '../../media/images/productos/';
             // quitarle a la ruta de la imagen
-            $imageName = explode("/", $producto['prod_imgPath'])[count(explode("/", $producto['prod_imgPath'])) - 1];
+            $imageName = $producto['prod_imgPath'];
             $targetImage = $imagenBase . $imageName;
             // verificar si exista la imagen
             if (!file_exists($targetImage)) {
@@ -81,10 +81,10 @@ session_start();
                   <div class='overlay'>$<?= $producto['prod_precio'] ?>
                   </div>
                   <?php if ($producto['prod_descuento'] != 0) : ?>
-                      <div class='descuento'>
-                        Ahorra <?= $producto['prod_descuento'] ?>%
-                      </div>
-                    <?php endif; ?>
+                    <div class='descuento'>
+                      Ahorra <?= $producto['prod_descuento'] ?>%
+                    </div>
+                  <?php endif; ?>
                 </div>
 
                 <div class='cardBody'>

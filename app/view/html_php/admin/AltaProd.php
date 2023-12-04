@@ -36,16 +36,15 @@ session_start();
     $precio = $_POST['precio'];
     $descuento = $_POST['descuento'];
     $imagen = $_FILES["imagen"]["name"];
-    // guardar la imagen en el servidor
-    $direccion = __DIR__ . '/../../../media/images/productos/';
 
     $db = new dataBase($credentials, $CONFIG);
     //obtener el ultimo id de la tabla productos
     $id = $db->getLastProductId() + 1;
     //              ruta            nombra       extension
-    $Archivo = $direccion . $id . "." . pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
+    $Archivo = $id . "." . pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
+    $base = '../../../media/images/productos/';
     // guardar la imagen en la ruta del servidor
-    move_uploaded_file($_FILES["imagen"]["tmp_name"], $Archivo);
+    move_uploaded_file($_FILES["imagen"]["tmp_name"], $base . $Archivo);
 
     $respose = $db->altaProducto($categoria, $nombre, $descripcion, $Archivo, $stock, $precio, $descuento);
 

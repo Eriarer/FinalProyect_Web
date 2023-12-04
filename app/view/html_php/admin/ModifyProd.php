@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 ?>
 <!DOCTYPE html>
@@ -56,10 +56,10 @@ session_start();
     if (isset($_FILES["imagen"]) && $_FILES["imagen"]["error"] == 0) {
       $imagen = $_FILES["imagen"]["name"];
       // guardar la imagen en el servidor
-      $direccion = __DIR__ . '/../../../media/images/productos/';
-      $Archivo = $direccion . $id . "." . pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
+      $Archivo = $id . "." . pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
+      $base = '../../../media/images/productos/';
       // guardar la imagen en la ruta del servidor
-      move_uploaded_file($_FILES["imagen"]["tmp_name"], $Archivo);
+      move_uploaded_file($_FILES["imagen"]["tmp_name"], $base . $Archivo);
       $imagen = $Archivo;
     } else {
       $imagen = null;
@@ -316,8 +316,7 @@ session_start();
         tr.append("<td>" + producto.prod_description + "</td>");
         // la ruta de la imagen se guarda en la base de datos va a ser local, por lo que se debe agregar el path de la carpeta
         // cortar la ruta de la imagen '/' y obtener el ultimo elemento
-        var prodImg = producto.prod_imgPath.split("/");
-        prodImg = prodImg[prodImg.length - 1];
+        var prodImg = producto.prod_imgPath;
         var url = "../../../media/images/productos/" + prodImg;
         var img = $("<img src='" + url + "' alt='" + prodImg + "' width='100px'>");
         img.on("error", function() {

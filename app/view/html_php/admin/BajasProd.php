@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 ?>
 <!DOCTYPE html>
@@ -213,8 +213,8 @@ session_start();
         tr.append("<td>" + producto.prod_description + "</td>");
         // la ruta de la imagen se guarda en la base de datos va a ser local, por lo que se debe agregar el path de la carpeta
         // cortar la ruta de la imagen '/' y obtener el ultimo elemento
-        var prodImg = producto.prod_imgPath.split("/");
-        prodImg = prodImg[prodImg.length - 1];
+        var prodImg = producto.prod_imgPath;
+        console.log(prodImg);
         var url = "../../../media/images/productos/" + prodImg;
         var img = $("<img src='" + url + "' alt='" + prodImg + "' width='100px'>");
         img.on("error", function() {

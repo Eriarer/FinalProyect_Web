@@ -1,5 +1,21 @@
 <?php
 session_start();
+require_once __DIR__ . '/app/model/DB/dataBaseCredentials.php';
+require_once __DIR__ . '/app/model/routes_files.php';
+require_once __DIR__ . '/app/model/DB/manejoProductos.php';
+$db = new dataBase($credentials, $CONFIG);
+$productos = json_decode($db->getAllProducts(), true);
+// obtener los primeros 6 productos de la base de datos, si hay menos de 6 productos, obtener los que haya
+$productosDestacados = array();
+if (count($productos) > 6) {
+  for ($i = 0; $i < 6; $i++) {
+    array_push($productosDestacados, $productos[$i]);
+  }
+} else {
+  $productosDestacados = $productos;
+}
+$cantidadProductos = count($productosDestacados);
+$baseUrl = 'app/media/images/productos/';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,112 +91,38 @@ session_start();
   <div class="destacados">
     <h3 class="subTitulo">LO MAS DESTACADO</h3>
     <div class="conteiner_des">
-      <!-- -------card 1------- -->
-      <article class="card_des">
-        <img src="app/media/images/productos/Pirata.png" alt="" class="image">
-        <section class="body_des">
-          <h3 class="tit_des">Ake Pirata</h3>
-          <p class="texto">Compañero de aventuras <br>
-            <sub><b>1</b></sub>
-          </p>
-        </section>
-      </article>
-      <!-- --------card 2-------- -->
-      <article class="card_des">
-        <img src="app/media/images/productos/monoNiev.png" alt="" class="image">
-        <section class="body_des">
-          <h3 class="tit_des">Copito</h3>
-          <p class="texto">Perfecto para tus Navidades <br>
-            <sub><b>2</b></sub>
-          </p>
-        </section>
-      </article>
-      <!-- -----------card 3------------------ -->
-      <article class="card_des">
-        <img src="app/media/images/productos/florC.png" alt="" class="image">
-        <section class="body_des">
-          <h3 class="tit_des">Xochitl</h3>
-          <p class="texto">Nuestros recuerdos iluminan los caminos del alma <br>
-            <sub><b>3</b></sub>
-          </p>
-        </section>
-      </article>
-      <!-- -----------card 4------------------ -->
-      <article class="card_des">
-        <img src="app/media/images/productos/DinoGlobos.png" alt="" class="image">
-        <section class="body_des">
-          <h3 class="tit_des">Bob Stegosaurus</h3>
-          <p class="texto">Tu amigo favorito de la prehistoria <br>
-            <sub><b>4</b></sub>
-          </p>
-        </section>
-      </article>
-      <!-- -----------card 5------------------ -->
-      <article class="card_des">
-        <img src="app/media/images/productos/Elefante.png" alt="" class="image">
-        <section class="body_des">
-          <h3 class="tit_des">Valentina Elefantina</h3>
-          <p class="texto">En cada abrazo, un corazón elefante de amor. <br>
-            <sub><b>5</b></sub>
-          </p>
-        </section>
-      </article>
-      <!-- -------card 1------- -->
-      <article class="card_des">
-        <img src="app/media/images/productos/Pirata.png" alt="" class="image">
-        <section class="body_des">
-          <h3 class="tit_des">Ake Pirata</h3>
-          <p class="texto">Compañero de aventuras <br>
-            <sub><b>1</b></sub>
-          </p>
-        </section>
-      </article>
-      <!-- --------card 2-------- -->
-      <article class="card_des">
-        <img src="app/media/images/productos/monoNiev.png" alt="" class="image">
-        <section class="body_des">
-          <h3 class="tit_des">Copito</h3>
-          <p class="texto">Perfecto para tus Navidades <br>
-            <sub><b>2</b></sub>
-          </p>
-        </section>
-      </article>
-      <!-- -----------card 3------------------ -->
-      <article class="card_des">
-        <img src="app/media/images/productos/florC.png" alt="" class="image">
-        <section class="body_des">
-          <h3 class="tit_des">Xochitl</h3>
-          <p class="texto">Nuestros recuerdos iluminan los caminos del alma <br>
-            <sub><b>3</b></sub>
-          </p>
-        </section>
-      </article>
-      <!-- -----------card 4------------------ -->
-      <article class="card_des">
-        <img src="app/media/images/productos/DinoGlobos.png" alt="" class="image">
-        <section class="body_des">
-          <h3 class="tit_des">Bob Stegosaurus</h3>
-          <p class="texto">Tu amigo favorito de la prehistoria <br>
-            <sub><b>4</b></sub>
-          </p>
-        </section>
-      </article>
-      <!-- -----------card 5------------------ -->
-      <article class="card_des">
-        <img src="app/media/images/productos/Elefante.png" alt="" class="image">
-        <section class="body_des">
-          <h3 class="tit_des">Valentina Elefantina</h3>
-          <p class="texto">En cada abrazo, un corazón elefante de amor. <br>
-            <sub><b>5</b></sub>
-          </p>
-        </section>
-      </article>
-
+      <?php
+      for ($i = 0; $i < 15; $i++) {
+        $index = $i % $cantidadProductos;
+        //agregar al carrucerl la cantidad de productos necesarios hasta que haya 16 productos
+        // prod_name
+        // prod_description
+        // prod_stock
+        // prod_imgPath
+        //quedarse con la ultima parte de la ruta de la imagen dividida por /
+        $imgUrl = $productosDestacados[$index]['prod_imgPath'];
+        $imgUrl = $baseUrl . $imgUrl;
+        // verificar si existe la imagen
+        if (!file_exists($imgUrl)) {
+          $imgUrl = $baseUrl . '../imgRelleno.png';
+        }
+        echo '<article class="card_des">
+                <img src="' . $imgUrl . '" alt="" class="image">
+                <section class="body_des">
+                  <h3 class="tit_des">' . $productosDestacados[$index]['prod_name'] . '</h4>
+                  <p class="texto">' . $productosDestacados[$index]['categoria'] . '<br>
+                    <sub> stock: ' . $productosDestacados[$index]['prod_stock'] . '</sub>
+                  </p>
+                </section>
+              </article>';
+      }
+      ?>
     </div>
     <hr><br>
     <!-- Informacion extra -->
     <div class="container mt-4 cajasInfo">
       <div class="row text-center">
+
         <!-- Caja de "Sitio mayorista" -->
         <div class="col-md-3 mb-3">
           <div class="card h-100">
@@ -276,6 +218,34 @@ session_start();
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <?php include_once("app/view/html_php/footer.php") ?>
+    <script>
+      $(document).ready(function() {
+        // obtener el ancho del contenedor incluyendo 6 tarjetas + el margin en x que tienen
+        //obtener la cantidad de tarjetas que hay en el contenedor
+        var productos = <?= $cantidadProductos ?>;
+        // quitarle el string px al margin-right
+        var marginX = parseInt($('.card_des').css('margin-right').substring(0, $('.card_des').css('margin-right').length - 2) +
+          $('.card_des').css('margin-left').substring(0, $('.card_des').css('margin-left').length - 2));
+        var conteinerWidth = ($('.card_des').width() + marginX) * productos;
+        var animationDuration = 30; // segundos
+        // Calcula la velocidad de desplazamiento necesario para cubrir el ancho en la duración deseada
+
+        // modificar el :root --container_des_width para que coincida con el ancho del contenedor
+        document.documentElement.style.setProperty('--container_des_width', -conteinerWidth + 'px');
+        // agregar la animación al contenedor desplazar
+        $('.conteiner_des').css('animation', 'desplazar ' + animationDuration + 's linear infinite');
+        // si el viewPort cambia de tamaño, de orientación, o cualquier cambio que afecte el tamaño, recalcular el ancho del contenedor
+        $(window).on('resize orientationchange', function() {
+          var productos = <?= $cantidadProductos ?>;
+          // quitarle el string px al margin-right
+          var marginX = parseInt($('.card_des').css('margin-right').substring(0, $('.card_des').css('margin-right').length - 2) +
+            $('.card_des').css('margin-left').substring(0, $('.card_des').css('margin-left').length - 2));
+          var conteinerWidth = ($('.card_des').width() + marginX) * productos;
+          $('.conteiner_des').css('animation', 'desplazar ' + animationDuration + 's linear infinite');
+        });
+
+      });
+    </script>
 </body>
 
 </html>

@@ -1,3 +1,7 @@
+:root {
+  --container_des_width: 100%;
+}
+
 .incarrusel {
   background-color: #b7e8f0;
   justify-content: center;
@@ -137,7 +141,7 @@
   }
 
   100% {
-    transform: translateX(calc(-109.55%));
+    transform: translateX(var(--container_des_width));
   }
 
   /* -10px es para compensar el margen derecho de la última tarjeta */
@@ -155,8 +159,6 @@
   scroll-snap-type: x mandatory;
   /* Habilita el desplazamiento suave */
   flex-wrap: nowrap;
-  animation: desplazar 30s linear infinite;
-
 }
 
 /* tarjetitas */

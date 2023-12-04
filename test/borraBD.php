@@ -12,27 +12,11 @@ $sql_disable_fk = "SET foreign_key_checks = 0";
 $conn->query($sql_disable_fk);
 
 // Eliminar registros de la tabla preguntas_seguridad
-$sql_preguntas_seguridad = "DELETE FROM preguntas_seguridad";
+$sql_preguntas_seguridad = "DELETE FROM productos";
 if ($conn->query($sql_preguntas_seguridad) === TRUE) {
-    echo "El contenido de la tabla preguntas_seguridad se ha borrado correctamente.";
+    echo "Tabla productos borrada exitosamente<br>";
 } else {
-    echo "Error al borrar el contenido de la tabla preguntas_seguridad: " . $conn->error;
-}
-
-// Eliminar registros de la tabla usuarios
-$sql_usuarios = "DELETE FROM usuarios";
-if ($conn->query($sql_usuarios) === TRUE) {
-    echo "El contenido de la tabla usuarios se ha borrado correctamente.";
-} else {
-    echo "Error al borrar el contenido de la tabla usuarios: " . $conn->error;
-}
-
-// resetear el id de la tabla productos AUTO_INCREMENT
-$sql = "ALTER TABLE usuarios AUTO_INCREMENT = 1";
-if ($conn->query($sql) === TRUE) {
-    echo " Id de la tabla usuarios reseteado correctamente";
-} else {
-    echo "Error reseteando el id de la tabla usuarios: " . $conn->error;
+    echo "Error borrando la tabla productos: " . $conn->error . "<br>";
 }
 
 // Reactivar restricciones de clave externa

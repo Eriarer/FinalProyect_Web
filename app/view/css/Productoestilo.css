@@ -90,6 +90,7 @@ hr {
 .cardBody {
     padding: 3em;
     padding-bottom: 1.5em;
+
     &>h3 {
         text-align: center;
         font-size: 1.2em;
@@ -114,7 +115,8 @@ hr {
         font-weight: 400;
         font-size: 14px;
     }
-    &.existencias{
+
+    &.existencias {
         text-align: center;
     }
 }
