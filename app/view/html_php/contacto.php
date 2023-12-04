@@ -7,6 +7,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FluffyHugs | Contacto</title>
     <!-- Boostrap v4.6.2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -15,8 +16,9 @@ session_start();
     <link rel="stylesheet" href="../css/main.css">
     <!-- sweet alert -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Estilos para los icons -->
-    <title>Acerca de</title>
+    <title>FluffyHugs | Contacto</title>
+    <!-- favIcon -->
+    <link rel="icon" type="image/x-icon" href="../../media/images/oso-de-peluche.png" />
 </head>
 <?php
 include_once("navbar.php");

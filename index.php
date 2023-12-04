@@ -56,7 +56,9 @@ $baseUrl = 'app/media/images/productos/';
 
   <link rel="stylesheet" href="app/view/css/Tiendaestilos.css">
   <link rel="stylesheet" href="app/view/css/main.css">
-  <title>Document</title>
+  <title>FluffyHugs | Inicio</title>
+  <!-- favIcon -->
+  <link rel="icon" type="image/x-icon" href="app/media/images/oso-de-peluche.png" />
 </head>
 <?php include_once("app/view/html_php/navbar.php") ?>
 
