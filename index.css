@@ -11,10 +11,24 @@
 .backCarr {
   opacity: 0.8;
   position: absolute;
-  top: 20%;
-  left: 40%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   filter: drop-shadow(10px 10px 5px rgba(0, 0, 0, 0.75));
+  max-width: 100%;
+  /* Ajustar el ancho máximo según tus necesidades */
+  max-height: 100%;
+  /* Ajustar la altura máxima según tus necesidades */
+  width: auto;
+  /* Hace que la imagen sea responsiva en términos de ancho */
+  height: auto;
+  /* Hace que la imagen sea responsiva en términos de altura */
+}
 
+.imgcarrusel img {
+  width: 100%;
+  max-width: 800px;
+  z-index: 2;
 }
 
 /* --------------fin de carrusel------------ */

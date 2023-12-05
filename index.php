@@ -16,7 +16,7 @@ session_start();
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
   <!-- Jquery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="app/view/css/Tiendaestilos.css">
+  <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="app/view/css/main.css">
   <title>FluffyHugs | Inicio</title>
   <!-- favIcon -->
@@ -25,31 +25,31 @@ session_start();
 <?php include_once("app/view/html_php/navbar.php") ?>
 
 <body>
-  <br>
-  <div id="carouselExampleIndicators" class="carousel slide carrusel" data-ride="carousel">
+  <div id="carouselExampleIndicators" class="carousel slide carrusel mt-5" data-ride="carousel">
     <div class="carousel-inner incarrusel">
       <img class="backCarr" src="app/media/images/LogoSF.png" alt="logo">
       <div class="carousel-item active imgcarrusel">
-        <img class="d-block w-100" src="app/media/images/fondoNavidad.png" alt="First slide" width="auto" height="500">
+        <img src="app/media/images/fondoNavidad.png" alt="First slide" class="mx-auto d-block img-fluid ">
       </div>
       <div class="carousel-item imgcarrusel">
-        <img class="d-block w-100" src="app/media/images/fondoHalloween.png" alt="Second slide" width="auto" height="500">
+        <img src="app/media/images/fondoHalloween.png" alt="Second slide" class="mx-auto d-block img-fluid ">
       </div>
       <div class="carousel-item imgcarrusel">
-        <img class="d-block w-100" src="app/media/images/fondoCumple.png" alt="Third slide" width="auto" height="500">
+        <img src="app/media/images/fondoCumple.png" alt="Third slide" class="mx-auto d-block img-fluid ">
       </div>
       <div class="carousel-item imgcarrusel">
-        <img class="d-block w-100" src="app/media/images/fondoGradua.png" alt="Fourth slide" width="auto" height="500">
+        <img src="app/media/images/fondoGradua.png" alt="Fourth slide" class="mx-auto d-block img-fluid ">
       </div>
     </div>
-    <a class="carousel-control-prev carrAnt" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <a class="carousel-control-prev carrAnt carousel-control" href="#carouselExampleIndicators" role="button" data-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="sr-only">Previous</span>
     </a>
-    <a class="carousel-control-next carrSig" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <a class="carousel-control-next carrSig carousel-control" href="#carouselExampleIndicators" role="button" data-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    </a><br>
+    </a>
   </div>
+
 
   <!-- fin carrusel -->
   <div class="bienvenida container">
