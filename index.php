@@ -1,45 +1,5 @@
 <?php
-require_once __DIR__ . '/app/model/DB/dataBaseCredentials.php';
-require_once __DIR__ . '/app/model/routes_files.php';
-require_once __DIR__ . '/app/model/DB/manejoProductos.php';
-$db = new dataBase($credentials, $CONFIG);
-$productos = json_decode($db->getAllProducts(), true);
-// obtener los primeros 6 productos de la base de datos, si hay menos de 6 productos, obtener los que haya
-// ver que haya una distribución de productos por categoria
-// ejemplo hay dos categorias, son 6 productos, 3 de una categoria y 3 de otra si se puede
-// si no se puede, llenar con productos de la otra categoria
-$categorias = [];
-foreach ($productos as $producto) {
-  if (!in_array($producto['categoria'], $categorias)) {
-    array_push($categorias, $producto['categoria']);
-  }
-}
-// crear un vector de productos, agrupados por categoria
-$productosCategoria = array();
-foreach ($categorias as $categoria) {
-  $productosCategoria[$categoria] = array();
-  foreach ($productos as $producto) {
-    if ($producto['categoria'] == $categoria) {
-      array_push($productosCategoria[$categoria], $producto);
-    }
-  }
-}
-$productosDestacados = array();
-// Iterar hasta alcanzar el límite de productos destacados (6)
-while (count($productosDestacados) < 6) {
-  // Iterar por cada categoría
-  foreach ($categorias as $categoria) {
-    // Verificar si hay productos disponibles en la categoría actual
-    if (!empty($productosCategoria[$categoria])) {
-      // Agregar un producto de la categoría actual a los destacados
-      $productosDestacados[] = array_shift($productosCategoria[$categoria]);
-    }
-  }
-}
-
-
-$cantidadProductos = count($productosDestacados);
-$baseUrl = 'app/media/images/productos/';
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -120,46 +80,7 @@ $baseUrl = 'app/media/images/productos/';
   <div class="destacados">
     <h3 class="subTitulo">LO MAS DESTACADO</h3>
     <div class="conteiner_des">
-      <?php
-      for ($i = 0; $i < 15; $i++) {
-        if ($cantidadProductos != 0) {
-          $index = $i % $cantidadProductos;
-          //agregar al carrucerl la cantidad de productos necesarios hasta que haya 16 productos
-          // prod_name
-          // prod_description
-          // prod_stock
-          // prod_imgPath
-          //quedarse con la ultima parte de la ruta de la imagen dividida por /
-          $imgUrl = $productosDestacados[$index]['prod_imgPath'];
-          $imgUrl = $baseUrl . $imgUrl;
-          // verificar si existe la imagen
-          if (!file_exists($imgUrl)) {
-            $imgUrl = $baseUrl . '../imgRelleno.png';
-          }
-          echo '<article class="card_des">
-                  <img src="' . $imgUrl . '" alt="" class="image">
-                  <section class="body_des">
-                    <h3 class="tit_des">' . $productosDestacados[$index]['prod_name'] . '</h4>
-                    <p class="texto">' . $productosDestacados[$index]['categoria'] . '<br>
-                      <sub> stock: ' . $productosDestacados[$index]['prod_stock'] . '</sub>
-                    </p>
-                  </section>
-                </article>';
-        } else {
-          //llenar 15 productos de place holder
-          echo '<article class="card_des">
-                  <img src="app/media/images/imgRelleno.png" alt="" class="image">
-                  <section class="body_des">
-                    <h3 class="tit_des">producto</h4>
-                    <p class="texto">categoria<br>
-                      <sub> stock: stock</sub>
-                    </p>
-                  </section>
-                </article>';
-        }
-      }
-      $cantidadProductos = $cantidadProductos == 0 ? 6 : $cantidadProductos;
-      ?>
+
     </div>
     <hr><br>
     <!-- Informacion extra -->
@@ -253,35 +174,7 @@ $baseUrl = 'app/media/images/productos/';
 
     <br>
     <?php include_once("app/view/html_php/footer.php") ?>
-    <script>
-      $(document).ready(function() {
-        // obtener el ancho del contenedor incluyendo 6 tarjetas + el margin en x que tienen
-        //obtener la cantidad de tarjetas que hay en el contenedor
-        var productos = <?= $cantidadProductos ?>;
-        console.log(productos);
-        // quitarle el string px al margin-right
-        var marginX = parseInt($('.card_des').css('margin-right').substring(0, $('.card_des').css('margin-right').length - 2) +
-          $('.card_des').css('margin-left').substring(0, $('.card_des').css('margin-left').length - 2));
-        var conteinerWidth = ($('.card_des').width() + marginX) * productos;
-        var animationDuration = 30; // segundos
-        // Calcula la velocidad de desplazamiento necesario para cubrir el ancho en la duración deseada
-
-        // modificar el :root --container_des_width para que coincida con el ancho del contenedor
-        document.documentElement.style.setProperty('--container_des_width', -conteinerWidth + 'px');
-        // agregar la animación al contenedor desplazar
-        $('.conteiner_des').css('animation', 'desplazar ' + animationDuration + 's linear infinite');
-        // si el viewPort cambia de tamaño, de orientación, o cualquier cambio que afecte el tamaño, recalcular el ancho del contenedor
-        $(window).on('resize orientationchange', function() {
-          var productos = <?= $cantidadProductos ?>;
-          // quitarle el string px al margin-right
-          var marginX = parseInt($('.card_des').css('margin-right').substring(0, $('.card_des').css('margin-right').length - 2) +
-            $('.card_des').css('margin-left').substring(0, $('.card_des').css('margin-left').length - 2));
-          var conteinerWidth = ($('.card_des').width() + marginX) * productos;
-          $('.conteiner_des').css('animation', 'desplazar ' + animationDuration + 's linear infinite');
-        });
-
-      });
-    </script>
+    <script src="index.js"></script>
 </body>
 
 </html>
