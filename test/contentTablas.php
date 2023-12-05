@@ -1,13 +1,13 @@
 <?php
-include_once __DIR__ . '/../app/model/dataBaseCredentials.php';
+include_once __DIR__ . '/../app/model/DB/dataBaseCredentials.php';
 include_once __DIR__ . '/../app/model/routes_files.php';
-include_once __DIR__ . '/../app/model/controllDB.php';
+include_once __DIR__ . '/../app/model/DB/controllDB.php';
 
 $conn = new mysqli(
-    $credntials['host'],
-    $credntials['user'],
-    $credntials['pass'],
-    $credntials['db']
+    $credentials['host'],
+    $credentials['user'],
+    $credentials['pass'],
+    $credentials['db']
 );
 //mostrar el contedido de la tabla productos
 $sql = "SELECT * FROM productos";
