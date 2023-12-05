@@ -79,6 +79,7 @@ foreach ($files as $file) {
     unlink($file);
   }
 }
+sleep(0.01);
 // conseguir el numero mas pequeño que no este en uso
 $files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
 foreach ($files as $file) {
@@ -90,9 +91,11 @@ $fileNumber = 1;
 while (isset($usedNumbers[$fileNumber])) {
   $fileNumber++;
 }
+sleep(0.02);
 $TARGETFILE = $TARGETDIR . $fileNumber . '.jpg';
 // Guardar la imagen
 imagejpeg($wrapped_image2, $TARGETFILE, 100);
+sleep(0.5);
 
 
 // Destruir las imágenes

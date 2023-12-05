@@ -65,13 +65,11 @@ function initCaptcha() {
   $('#changeCaptcha').click(function () {
     $('#changeCaptcha').addClass('rotate-left');
     $('#changeCaptcha').prop('disabled', true);
+    refreshCaptcha();
     setTimeout(function () {
       $('#changeCaptcha').removeClass('rotate-left');
       $('#changeCaptcha').prop('disabled', false);
     }, 300);
-    setTimeout(function () {
-      refreshCaptcha();
-    }, 150);
   });
 }
 
