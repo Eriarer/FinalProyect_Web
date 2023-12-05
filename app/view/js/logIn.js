@@ -140,47 +140,38 @@ function verifyLoginForm(e) {
     refreshCaptcha();
     return;
   }
+  coockie = false;
+  //imprimir el estado de rememberMe
+  console.log("coockies: " + $('#rememberMe').is(':checked'));
+  if ($('#rememberMe').is(':checked')) {
+    coockie = true;
+  }
 
   $.ajax({
-    url: '../../model/DB/manejoProductos.php',
+    url: '../../model/user/logIn.php',
     type: 'POST',
     data: {
-      'method': 'login',
       'email': $('#emailLogin').val(),
-      'password': $('#passwordLogin').val()
+      'password': $('#passwordLogin').val(),
+      'coockie': coockie
     },
     success: function (data) {
-      // quedarse con el ultimo caracter
-      data = data.slice(-1);
       // 0 = login correcto | 1 = cuenta deshabilitada | 2 = datos incorrectos
       switch (data) {
         case '0':
-          // si el boton de recordarme esta activado, se crea una cookie
-          if ($('#rememberMe').is(':checked')) {
-            $.ajax({
-              url: '../../model/DB/manejoProductos.php',
-              type: 'POST',
-              data: {
-                'method': 'setCoockie',
-                'email': $('#emailLogin').val(),
-              },
-              success: function () {
-                window.location.href = '../../../index.php';
-              }
-            });
-          } else {
-            window.location.href = '../../../index.php';
-          }
+          window.location.href = '../../../index.php';
           break;
         case '1':
           lanzarSweetAlert('error', ':C', 'Tu cuenta esta deshabilitada');
-          refreshCaptcha();
           break;
         case '2':
           lanzarSweetAlert('error', 'Oops...', 'Los datos ingresados son erroneos');
-          refreshCaptcha();
+          break;
+        case '9':
+          lanzarSweetAlert('error', ':C', 'Ha ocurrido un error, intentalo más tarde');
           break;
       }
+      refreshCaptcha();
     }
   });
   e.preventDefault();
