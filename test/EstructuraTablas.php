@@ -1,12 +1,9 @@
 <?php
-$credntials = array(
-    'host' => '162.241.62.48',
-    'user' => 'gbfrallc_admin',
-    'pass' => 'losmejorespeluches:3',
-    'db' => 'gbfrallc_fluffyhugs'
-);
+include_once __DIR__ . '/../app/model/DB/dataBaseCredentials.php';
+include_once __DIR__ . '/../app/model/routes_files.php';
+include_once __DIR__ . '/../app/model/DB/controllDB.php';
 
-$conn = new mysqli($credntials['host'], $credntials['user'], $credntials['pass'], $credntials['db']);
+$conn = new mysqli($credentials['host'], $credentials['user'], $credentials['pass'], $credentials['db']);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
