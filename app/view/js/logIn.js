@@ -78,9 +78,11 @@ function refreshCaptcha() {
     url: '../../model/captcha/captcha_generator.php',
     type: 'GET',
     success: function (data) {
+      console.log(data);
       var data = JSON.parse(data);
       IMAGE = data.image;
       TEXT = data.text;
+      $('#captchaImage').attr('src', '#');
       $('#captchaImage').attr('src', '../../media/images/captcha/' + IMAGE);
       $('#captchaText').val(TEXT);
     }
@@ -142,7 +144,6 @@ function verifyLoginForm(e) {
   }
   coockie = false;
   //imprimir el estado de rememberMe
-  console.log("coockies: " + $('#rememberMe').is(':checked'));
   if ($('#rememberMe').is(':checked')) {
     coockie = true;
   }
@@ -218,23 +219,19 @@ function verifyRegisterForm(e) {
 // recuperar cuenta
 function recuperarCuenta() {
   limpiarRecuperar();
-  console.log('recuperarCuenta');
   $('#btnRecuperar').click(function () {
     // imprimir todos los atributos del modal
     var regex = /\S+@\S+\.\S+/;
     // verificamos
     // el cuestionario no este visible, el email sea valido y el campo no sea readonly
-    console.log('VerificandoEmail');
     if (!$('#cuestionarioRecuperar').is(':visible') && $('#emailRecuperar').val() != '' && regex.test($('#emailRecuperar').val()) && !$('#emailRecuperar').is('[readonly]')) {
       verificarEmailRecuperacion();
     }
   });
 
-
   var modal = $('#recuperarCuenta');
   // si el modal se cierra, se limpian los campos, el tabindex vuelve a -1
   $('#recuparCuenta').on('hidden.bs.modal', function () {
-    console.log('modal cerrado');
     limpiarRecuperar();
   });
 }
@@ -269,7 +266,6 @@ function verificarEmailRecuperacion() {
           }
         });
         // mostrar el campo de respuesta
-        console.log('mostrar el campo de respuesta');
         $('#btnRecuperar').text('Enviar');
         //elimimar el listener del boton
         $('#btnRecuperar').off('click');
@@ -300,7 +296,6 @@ function obtenerPreguntaSeguridad() {
           // mostrar el campo de contraseña
           $('#cambiarPassword').show('slow');
 
-          console.log('mostrar el campo de contraseña');
           //elimimar el listener del boton
           $('#btnRecuperar').prop('disabled', true);
           $('#btnRecuperar').text('Cambiar contraseña');
@@ -350,7 +345,6 @@ function cambiarContrasena() {
 
 
 function newPaswordVerify() {
-  console.log('newPaswordVerify');
   if ($('#passwordRecuperar').val() == $('#confirmPasswordRecuperar').val()) {
     $('#passwordRecuperarText').text('');
     $('#btnRecuperar').prop('disabled', false);
