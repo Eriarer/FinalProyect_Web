@@ -134,11 +134,8 @@ $navbarCSS = $css . 'headers/navbar.css';
   $(document).ready(function() {
     $('#logOutNav').click(function() {
       $.ajax({
-        url: pathModel + 'DB/manejoProductos.php',
+        url: pathModel + 'user/logout.php',
         type: 'POST',
-        data: {
-          method: 'logout'
-        },
         success: function(data) {
           console.log(data);
           // ir al index
