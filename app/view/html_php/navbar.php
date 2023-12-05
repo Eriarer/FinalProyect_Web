@@ -1,12 +1,3 @@
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-<!-- Boostrap v4.6.2 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-<!-- Jquery -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
 <?php
 require_once __DIR__ . '/../../model/routes_files.php';
 include_once __DIR__ . '/../../model/DB/dataBaseCredentials.php';
@@ -51,7 +42,7 @@ $navbarCSS = $css . 'headers/navbar.css';
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div id="navbarSupportedContent" class="navbar-collapse collapse">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class=" navbar-nav me-auto">
       <li class="nav-item">
         <a class="nav-link" tootlip="Inicio" href="<?= $base . 'index.php' ?>"><i class="nf nf-md-home"></i></a>
@@ -174,7 +165,7 @@ $navbarCSS = $css . 'headers/navbar.css';
 
       var menu = $(this).find('#menu');
       // si existe el menu
-      menu.hover(function() {
+      menu.mouseenter(function() {
         var menuInner = $(this).find('#menu_inner');
         menuInner.css('animation', 'none');
         menuInner.css('opacity', '0');
@@ -199,12 +190,15 @@ $navbarCSS = $css . 'headers/navbar.css';
         menuInner.css('animation', 'none');
         menuInner.css('animation', 'desplegar-menu 0.3s ease-in-out forwards');
         menuInner.css('display', 'block');
-      }, function() {
+      });
+      menu.mouseleave(function() {
         var menuInner = $(this).find('#menu_inner');
+        menuInner.css('animation', 'none');
         menuInner.css('animation', 'plegar-menu 0.3s ease-in-out forwards');
+        menuInner.css('display', 'block');
       });
     } catch (e) {
-      console.log("");
+      console.log(e);
     }
   });
 </script>
