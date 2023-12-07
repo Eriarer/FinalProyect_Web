@@ -43,6 +43,84 @@ class dataBase
   █▀▀ ▄▀▄ █▀ ▀█▀ █ █ █▀▄ ▄▀▄ █▀
   █▀  █▀█ █▄  █  █▄█ █▀▄ █▀█ ▄█
   */
+  public function altaFactura($email, $productos, $fecha, $iva, $gastos_envio) {
+    // Verificar que existen parámetros
+    if ($email == null || $productos == null || $iva == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    // conseguir el id del usuario
+    $user = $this->getUserByEmail($email);
+    if ($user == null) return false;
+    $user_id = $user['usr_id'];
+
+    // el folio tiene detalles productos  en una tabla detalles_factura, la cual tiene como llave foranea
+    $folio = $this->getFolio();
+    // la tabla cuenta con folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total
+    $subtotal = 0;
+    foreach ($productos as $producto) {
+      $subtotal += $producto['cantidad'] * $producto['precio'];
+      // agregar el producto a la tabla detalles_factura
+      $this->detalles_factura($folio, $producto);
+    }
+    // TODO: verificar que el iva sea un numero entre 0 y 100
+    $total = $subtotal * (1 + $iva / 100) + $gastos_envio;
+
+    // la fecha debe tener formato YYYY-MM-DD, asi que hay que convertirla
+    $fecha = date("Y-m-d", strtotime($fecha));
+    // preparar la sentencia para evitar <--inyección sql-->
+    $sql = "INSERT INTO facturas (folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $this->connexion->prepare($sql);
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("siidddd", $folio, $user_id, $fecha, $iva, $subtotal, $gastos_envio, $total);
+
+    $result = $stmt->execute();
+    return $result;
+  }
+
+  public function getFolio() {
+    //el folio se genera dependiendo del ultimo folio agregado a la base de datos
+    // este folio es un string el cual va incrementando 1 en 1
+    // empieza en 000000 y termina en ZZZZZZ
+    // ejemplo: 000000, 000001 ... 000009, 00000A ... 00000Z, 000010
+    $sql = "SELECT folio FROM facturas ORDER BY folio DESC";
+    $result = $this->connexion->query($sql);
+    $last = $result->fetch_assoc();
+    if ($last == null) {
+      return "000000";
+    } else {
+      $last = $last['folio'];
+    }
+    // incrementar el folio
+    $last = base_convert($last, 36, 10);
+    $last++;
+    $last = base_convert($last, 10, 36);
+    // retornar el folio
+    return $last;
+  }
+
+  // el producto es un vector con una lista de vectores que contienen los datos
+  public function detalles_factura($folio, $productos) {
+    if ($folio == null || $productos == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+    $prod_id = $productos['prod_id'];
+    $cantidad = $productos['cantidad'];
+    $precio = $productos['precio'];
+    $descuento = $productos['descuento'];
+
+    // la tabla detalles facctura contiene:
+    // folio_factura, prod_id, cantidad, precio, descuento
+    // preparar la sentencia para evitar <--inyección sql-->
+    $sql = "INSERT INTO detalles_factura (folio_factura, prod_id, cantidad, precio, descuento) VALUES (?, ?, ?, ?, ?)";
+    $stmt = $this->connexion->prepare($sql);
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("iiiii", $folio, $prod_id, $cantidad, $precio, $descuento);
+
+    $result = $stmt->execute();
+
+    return $result;
+  }
 
   /* Función para insertar productos en la tabla de carrito del usuario. forma de la tabla:
   Carrito:
