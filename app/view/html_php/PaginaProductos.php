@@ -103,7 +103,7 @@ session_start();
                 <?php if ($producto['prod_stock'] != 0) : ?>
                   <div class='cardFooter'>
                     <a href='#' class='btn-cart'>Comprar ahora</a>
-                    <a href='#'><i class='nf nf-md-cart_plus'></i></a>
+                    <a href='#'><i class='nf nf-md-cart_plus' onclick="agregarAlCarrito(<?= $producto['prod_id'] ?>)"></i></a> <!-- agregar al carrito -->
                   </div>
                 <?php endif; ?>
               </div>
@@ -134,6 +134,25 @@ session_start();
         }
       });
     });
+
+    function agregarAlCarrito(id) {
+      $.ajax({
+        type: "POST",
+        url: "../../../model/DB/manejoCarrito.php",
+        data: {
+          method: "add",
+          prod_id: id,
+          cantidad: 1
+        },
+        success: function(response) {
+          console.log(response);
+
+        },
+        error: function(error) {
+          console.error('Error al obtener la información del carrito:', error);
+        }
+      });
+    }
   </script>
 </body>
 
