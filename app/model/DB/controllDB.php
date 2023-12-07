@@ -60,7 +60,6 @@ class dataBase {
       // agregar el producto a la tabla detalles_factura
       $this->detalles_factura($folio, $producto);
     }
-    // el iva nos viene en un numero de 0 a 100
     // TODO: verificar que el iva sea un numero entre 0 y 100
     $total = $subtotal * (1 + $iva / 100) + $gastos_envio;
 
