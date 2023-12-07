@@ -102,7 +102,7 @@ $navbarCSS = $css . 'headers/navbar.css';
         <li class="nav-item d-flex align-items-center no-tooltip" id="carriotContainer">
           <a class="nav-link " href=" #" id="carrito">
             <i class="nf nf-md-cart_variant"></i>
-            <span><?= isset($_SESSION['productos']) ? $_SESSION['productos'] : 0; ?></span>
+            <span id="num_prod"><?= isset($_SESSION['productos']) ? $_SESSION['productos'] : 0; ?></span> <!-- cantidad de productos -->
           </a>
         </li>
       <?php
