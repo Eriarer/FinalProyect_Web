@@ -43,7 +43,8 @@ class dataBase
   █▀▀ ▄▀▄ █▀ ▀█▀ █ █ █▀▄ ▄▀▄ █▀
   █▀  █▀█ █▄  █  █▄█ █▀▄ █▀█ ▄█
   */
-  public function altaFactura($email, $productos, $fecha, $iva, $gastos_envio) {
+  public function altaFactura($email, $productos, $fecha, $iva, $gastos_envio)
+  {
     // Verificar que existen parámetros
     if ($email == null || $productos == null || $iva == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -78,7 +79,8 @@ class dataBase
     return $result;
   }
 
-  public function getFolio() {
+  public function getFolio()
+  {
     //el folio se genera dependiendo del ultimo folio agregado a la base de datos
     // este folio es un string el cual va incrementando 1 en 1
     // empieza en 000000 y termina en ZZZZZZ
@@ -100,7 +102,8 @@ class dataBase
   }
 
   // el producto es un vector con una lista de vectores que contienen los datos
-  public function detalles_factura($folio, $productos) {
+  public function detalles_factura($folio, $productos)
+  {
     if ($folio == null || $productos == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
@@ -121,7 +124,10 @@ class dataBase
 
     return $result;
   }
-
+  /*
+  █▀ ▄▀▄ █▀▄ █▀▄ █ ▀█▀ █▀█
+  █▄ █▀█ █▀▄ █▀▄ █  █  █▄█
+  */
   /* Función para insertar productos en la tabla de carrito del usuario. forma de la tabla:
   Carrito:
   usr_id  prod_id  cantidad
@@ -148,6 +154,7 @@ class dataBase
 
     // Obtener el número de filas afectadas por la última consulta
     $affected_rows = $stmt->affected_rows;
+    return $affected_rows > 0;
   }
 
   // Función para eliminar un producto del carrito
@@ -158,21 +165,27 @@ class dataBase
       throw new Exception("Todos los campos son obligatorios.");
     }
 
+    // Desactivar restricciones de clave externa
+    $sql_disable_fk = "SET foreign_key_checks = 0";
+    $this->connexion->query($sql_disable_fk);
+
     // Preparar la sentencia para evitar la <--inyección SQL-->
     $sql = "DELETE FROM carrito WHERE usr_id = ? AND prod_id = ?";
-
     $stmt = $this->connexion->prepare($sql);
 
     // Vincular parámetros a la sentencia preparada como cadenas
     $stmt->bind_param("ii", $usr_id, $prod_id);
-
     // Ejecutar la sentencia
     $success = $stmt->execute();
-
     // Cerrar la sentencia
     $stmt->close();
 
-    return $success;
+    // Reactivar restricciones de clave externa
+    $sql_enable_fk = "SET foreign_key_checks = 1";
+    $this->connexion->query($sql_enable_fk);
+    $this->connexion->close();
+
+    return $this->obtenerTotalProductos($usr_id);
   }
 
   // Función para aumentar en 1 la cantidad de un producto en el carrito
@@ -182,22 +195,24 @@ class dataBase
     if ($usr_id == null || $prod_id == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
-
-    // Preparar la sentencia para evitar la <--inyección SQL-->
-    $sql = "UPDATE carrito SET cantidad = cantidad + 1 WHERE usr_id = ? AND prod_id = ?";
-
+    //Busca si el producto ya se encuentra en el carrito, si esta, aumenta la cantidad en 1, sino lo agrega al carrito
+    $sql = "SELECT * FROM carrito WHERE usr_id = ? AND prod_id = ?";
     $stmt = $this->connexion->prepare($sql);
-
-    // Vincular parámetros a la sentencia preparada como cadenas
     $stmt->bind_param("ii", $usr_id, $prod_id);
-
-    // Ejecutar la sentencia
-    $success = $stmt->execute();
-
-    // Cerrar la sentencia
-    $stmt->close();
-
-    return $success;
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $producto = $result->fetch_assoc();
+    if ($producto) {
+      $cantidad = $producto['cantidad'] + 1;
+      // Preparar la sentencia para evitar la <--inyección SQL-->
+      $sql = "UPDATE carrito SET cantidad = ? WHERE usr_id = ? AND prod_id = ?";
+      $stmt = $this->connexion->prepare($sql);
+      $stmt->bind_param("iii", $cantidad, $usr_id, $prod_id);
+      $stmt->execute();
+    } else {
+      $this->insertarCarrito($usr_id, $prod_id, 1);
+    }
+    return $this->obtenerTotalProductos($usr_id);
   }
 
   // Función para disminuir en 1 la cantidad de un producto en el carrito
@@ -208,21 +223,25 @@ class dataBase
       throw new Exception("Todos los campos son obligatorios.");
     }
 
-    // Preparar la sentencia para evitar la <--inyección SQL-->
-    $sql = "UPDATE carrito SET cantidad = cantidad - 1 WHERE usr_id = ? AND prod_id = ?";
-
-    $stmt = $this->connexion->prepare($sql);
-
-    // Vincular parámetros a la sentencia preparada como cadenas
-    $stmt->bind_param("ii", $usr_id, $prod_id);
-
-    // Ejecutar la sentencia
-    $success = $stmt->execute();
-
-    // Cerrar la sentencia
-    $stmt->close();
-
-    return $success;
+    //Verificar que la cantidad del producto sea mayor a 1
+    if ($this->obtenerTotalProductos($usr_id) > 0) {
+      //Busca si el producto ya esta en el carrito, si esta, disminuye en 1
+      $sql = "SELECT * FROM carrito WHERE usr_id = ? AND prod_id = ?";
+      $stmt = $this->connexion->prepare($sql);
+      $stmt->bind_param("ii", $usr_id, $prod_id);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $producto = $result->fetch_assoc();
+      if ($producto) {
+        $cantidad = $producto['cantidad'] - 1;
+        // Preparar la sentencia para evitar la <--inyección SQL-->
+        $sql = "UPDATE carrito SET cantidad = ? WHERE usr_id = ? AND prod_id = ?";
+        $stmt = $this->connexion->prepare($sql);
+        $stmt->bind_param("iii", $cantidad, $usr_id, $prod_id);
+        $stmt->execute();
+      }
+    }
+    return $this->obtenerTotalProductos($usr_id);
   }
 
   // Función para obtener los productos del carrito con su cantidad
@@ -272,9 +291,10 @@ class dataBase
 
     // Obtener el número de filas afectadas por la última consulta
     $result = $stmt->get_result();
-
-    $json = json_encode($result->fetch_assoc());
-    return $json;
+    $result = ($result->fetch_assoc());
+    //obtener solo el número
+    $result = $result['SUM(cantidad)'];
+    return $result;
   }
 
 
@@ -304,7 +324,6 @@ class dataBase
 
     // Obtener el número de filas afectadas por la última consulta
     $affected_rows = $stmt->affected_rows;
-
 
     return $affected_rows > 0;
   }
