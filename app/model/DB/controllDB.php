@@ -154,7 +154,11 @@ class dataBase
 
     // Obtener el número de filas afectadas por la última consulta
     $affected_rows = $stmt->affected_rows;
-    return $affected_rows > 0;
+    if ($affected_rows > 0) {
+      return $this->obtenerTotalProductos($usr_id);
+    } else {
+      return false;
+    }
   }
 
   // Función para eliminar un producto del carrito
@@ -185,7 +189,11 @@ class dataBase
     $this->connexion->query($sql_enable_fk);
     $this->connexion->close();
 
-    return $this->obtenerTotalProductos($usr_id);
+    if ($success) {
+      return $this->obtenerTotalProductos($usr_id);
+    } else {
+      return false;
+    }
   }
 
   // Función para aumentar en 1 la cantidad de un producto en el carrito
