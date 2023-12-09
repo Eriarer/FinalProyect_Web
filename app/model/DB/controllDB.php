@@ -49,41 +49,61 @@ class dataBase
     if ($email == null || $productos == null || $iva == null || $gastos_envio == null || $pais == null || $direccion == null || $metodo_pago == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
-
-    // conseguir el id del usuario
-    $user = $this->getUserByEmail($email);
-    if ($user == null) return false;
-    $user_id = $user['usr_id'];
-
-    // el folio tiene detalles productos  en una tabla detalles_factura, la cual tiene como llave foranea
-    $folio = $this->getFolio();
-    // la tabla cuenta con folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total, pais, direccion, metodo_pago
-    $subtotal = 0;
-    $total = 0;
-    foreach ($productos as $producto) {
-      $subtotal += $producto['cantidad'] * $producto['precio'];
-      $total += $producto['cantidad'] * ($producto['precio'] * (1 - ($producto['descuento'] / 100)));
-      // agregar el producto a la tabla detalles_factura
-      $this->detalles_factura($folio, $producto);
-    }
-    $total = ($total * (1 + ($iva / 100))) + $gastos_envio;
-    if (!strtotime($fecha)) {
-      //convertir la fecha a formato YYYY-MM-DD
-      $fecha = date("Y-m-d", strtotime($fecha));
-      if (!strtotime($fecha)) {
-        throw new Exception("La fecha no tiene un formato válido.");
+    try {
+      $user = $this->getUserByEmail($email);
+      if ($user == null) {
+        throw new Exception("Usuario no encontrado.");
       }
-    }
-    // preparar la sentencia para evitar <--inyección sql-->
-    $sql = "INSERT INTO facturas (folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total, pais, direccion, metodo_pago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $this->connexion->prepare($sql);
-    // Vincular parámetros a la sentencia preparada como cadenas fecha es un tip
-    $stmt->bind_param("sisddddsss", $folio, $user_id, $fecha, $iva, $subtotal, $gastos_envio, $total, $pais, $direccion, $metodo_pago);
 
-    $result = $stmt->execute();
-    $stmt->close();
-    return $result;
+      $user_id = $user['usr_id'];
+      $folio = $this->getFolio();
+
+      $subtotal = 0;
+      $total = 0;
+
+      foreach ($productos as $producto) {
+        $subtotal += $producto['cantidad'] * $producto['precio'];
+        $total += $producto['cantidad'] * ($producto['precio'] * (1 - ($producto['descuento'] / 100)));
+      }
+
+      $total = ($total * (1 + ($iva / 100))) + $gastos_envio;
+
+      if (!strtotime($fecha)) {
+        $fecha = date("Y-m-d", strtotime($fecha));
+        if (!strtotime($fecha)) {
+          throw new Exception("La fecha no tiene un formato válido.");
+        }
+      }
+
+      $sql = "INSERT INTO facturas (folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total, pais, direccion, metodo_pago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      $stmt = $this->connexion->prepare($sql);
+      $stmt->bind_param("sisddddsss", $folio, $user_id, $fecha, $iva, $subtotal, $gastos_envio, $total, $pais, $direccion, $metodo_pago);
+      $result = $stmt->execute();
+
+      if (!$result) {
+        throw new Exception("Error al insertar la factura.");
+      }
+
+      // Recopilar detalles para una única inserción
+      $detalles = [];
+
+      foreach ($productos as $producto) {
+        $detalles[] = [
+          'folio' => $folio,
+          'producto' => $producto,
+        ];
+      }
+
+      $this->detalles_factura($detalles);
+
+      $this->connexion->commit();
+      return true;
+    } catch (Exception $e) {
+      $this->connexion->rollback();
+      return false;
+    }
   }
+
 
   public function getFolio()
   {
@@ -94,6 +114,7 @@ class dataBase
     $sql = "SELECT folio_factura FROM facturas ORDER BY folio_factura DESC";
     $result = $this->connexion->query($sql);
     $last = $result->fetch_assoc();
+    $result->close();
     if ($last == null) {
       return "000000";
     } else {
@@ -110,35 +131,22 @@ class dataBase
   }
 
   // el producto es un vector con una lista de vectores que contienen los datos
-  public function detalles_factura($folio, $productos)
+  public function detalles_factura($detalles)
   {
-    if ($folio == null || $productos == null) {
+    if ($detalles == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
-    $prod_id = $productos['prod_id'];
-    $cantidad = $productos['cantidad'];
-    $precio = $productos['precio'];
-    $descuento = $productos['descuento'];
-    //deshabilitar la restriccion de llave foranea
-    $sql = "SET FOREIGN_KEY_CHECKS=0";
-    $this->connexion->query($sql);
 
-    // la tabla detalles facctura contiene:
-    // folio_factura, prod_id, cantidad, precio, descuento
-    // preparar la sentencia para evitar <--inyección sql-->
     $sql = "INSERT INTO detalles_factura (folio_factura, prod_id, cantidad, precio, descuento) VALUES (?, ?, ?, ?, ?)";
     $stmt = $this->connexion->prepare($sql);
-    // Vincular parámetros a la sentencia preparada como cadenas
-    // folio string, prod_id int, cantidad int, precio float, descuento float
-    $stmt->bind_param("siidd", $folio, $prod_id, $cantidad, $precio, $descuento);
 
-    $result = $stmt->execute();
+    foreach ($detalles as $detalle) {
+      $producto = $detalle['producto'];
+      $stmt->bind_param("siidd", $detalle['folio'], $producto['prod_id'], $producto['cantidad'], $producto['precio'], $producto['descuento']);
+      $stmt->execute();
+    }
 
     $stmt->close();
-    //habilitar la restriccion de llave foranea
-    $sql = "SET FOREIGN_KEY_CHECKS=1";
-    $this->connexion->query($sql);
-    return $result;
   }
 
   //retorna la factura con el folio y todos sus detalles
@@ -147,34 +155,51 @@ class dataBase
     if ($folio == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
-    // preparar la sentencia para evitar <--inyección sql-->
-    $sql = "SELECT * FROM facturas WHERE folio_factura = ?";
-    $stmt = $this->connexion->prepare($sql);
-    // Vincular parámetros a la sentencia preparada como cadenas
-    $stmt->bind_param("s", $folio);
 
+    // Preparar la sentencia para evitar inyección SQL
+    $sql = "SELECT f.*, df.*
+            FROM facturas f 
+            LEFT JOIN detalles_factura df ON f.folio_factura = df.folio_factura
+            WHERE f.folio_factura = ?";
+
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("s", $folio);
     $result = $stmt->execute();
+
     if (!$result) {
       return false;
     }
-    $factura = $stmt->get_result();
-    $factura = $factura->fetch_assoc();
 
+    // Obtener todos los resultados en un solo llamado
+    $resultArray = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     $stmt->close();
 
-    // conseguir los detalles de la factura
-    $sql = "SELECT * FROM detalles_factura WHERE folio_factura = ?";
-    $stmt = $this->connexion->prepare($sql);
-    // Vincular parámetros a la sentencia preparada como cadenas
-    $stmt->bind_param("s", $folio);
-    $result = $stmt->execute();
+    // Agrupar resultados por folio_factura
+    $factura = null;
+    foreach ($resultArray as $row) {
+      if (
+        $factura === null
+      ) {
+        $factura = [
+          'folio_factura' => $row['folio_factura'],
+          'fecha_factura' => $row['fecha_factura'],
+          'detalles' => []
+        ];
+      }
 
-    if (!$result) {
-      return false;
+      // Agregar detalles a la factura
+      $factura['detalles'][] = [
+        'prod_id' => $row['prod_id'],
+        'cantidad' => $row['cantidad'],
+        'precio' => $row['precio'],
+        'descuento' => $row['descuento']
+        // Agregar otros campos de detalles_factura según sea necesario
+      ];
     }
 
-    $factura['detalles'] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    // Convertir el array en JSON
     $json = json_encode($factura);
+
     return $json;
   }
 
@@ -184,39 +209,88 @@ class dataBase
     if ($fecha_inicio == null || $fecha_fin == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
-    // la fecha debe tener formato YYYY-MM-DD, asi que hay que convertirla
+
+    // Preparar la sentencia para evitar inyección SQL
+    $sql = "SELECT f.folio_factura, f.fecha_factura, df.prod_id, df.cantidad, df.precio, df.descuento
+            FROM facturas f 
+            LEFT JOIN detalles_factura df ON f.folio_factura = df.folio_factura
+            WHERE f.fecha_factura BETWEEN ? AND ? 
+            ORDER BY f.fecha_factura ASC";
+
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("ss", $fecha_inicio, $fecha_fin);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $stmt->close();
+
+    // Obtener todos los resultados en un solo llamado
+    $resultArray = $result->fetch_all(MYSQLI_ASSOC);
+
+    // Agrupar resultados por folio_factura
+    $facturas = [];
+    foreach ($resultArray as $row) {
+      $folio_factura = $row['folio_factura'];
+
+      // Crear la factura si no existe en el array
+      if (!isset($facturas[$folio_factura])) {
+        $facturas[$folio_factura] = [
+          'folio_factura' => $folio_factura,
+          'fecha_factura' => $row['fecha_factura'],
+          'detalles' => []
+        ];
+      }
+
+      // Agregar detalles a la factura
+      $facturas[$folio_factura]['detalles'][] = [
+        'prod_id' => $row['prod_id'],
+        'cantidad' => $row['cantidad'],
+        'precio' => $row['precio'],
+        'descuento' => $row['descuento']
+        // Agregar otros campos de detalles_factura según sea necesario
+      ];
+    }
+
+    // Convertir el array en JSON
+    $json = json_encode(array_values($facturas)); // Reindexar el array para evitar claves no numéricas
+
+    return $json;
+  }
+
+  public function getMostSelled($fecha_inicio, $fecha_fin)
+  {
+    if ($fecha_inicio == null || $fecha_fin == null) {
+      return "Todos los campos son obligatorios.";
+    }
+
     $fecha_inicio = date("Y-m-d", strtotime($fecha_inicio));
     $fecha_fin = date("Y-m-d", strtotime($fecha_fin));
-    // la fecha de inicio debe ser menor a la fecha de fin
-    if ($fecha_inicio > $fecha_fin) {
-      throw new Exception("La fecha de inicio debe ser menor a la fecha de fin.");
-    }
-    //retornar las facturas de forma ordenada de la mas antigua a la mas reciente
-    // preparar la sentencia para evitar <--inyección sql-->
-    $sql = "SELECT * FROM facturas WHERE fecha_factura BETWEEN ? AND ? ORDER BY fecha_factura ASC";
-    $stmt = $this->connexion->prepare($sql);
-    // Vincular parámetros a la sentencia preparada como cadenas
-    $stmt->bind_param("ss", $fecha_inicio, $fecha_fin);
 
+    $sql = "SELECT p.prod_name, SUM(df.cantidad) as total
+            FROM detalles_factura df
+            JOIN productos p ON df.prod_id = p.prod_id
+            JOIN facturas f ON df.folio_factura = f.folio_factura
+            WHERE f.fecha_factura BETWEEN ? AND ?
+            GROUP BY p.prod_name
+            ORDER BY total DESC
+            LIMIT 5";
+
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("ss", $fecha_inicio, $fecha_fin);
     $stmt->execute();
+
+    if ($stmt->errno) {
+      return "Error en la ejecución de la consulta SQL: " . $stmt->error;
+    }
+
     $result = $stmt->get_result();
     $stmt->close();
 
-    //generar un array asociativo
-    $array = [];
+    $mostSelled = [];
     while ($row = $result->fetch_assoc()) {
-      // conseguir los detalles de la factura
-      $sql = "SELECT * FROM detalles_factura WHERE folio_factura = ?";
-      $stmt = $this->connexion->prepare($sql);
-      // Vincular parámetros a la sentencia preparada como cadenas
-      $stmt->bind_param("s", $row['folio_factura']);
-      $stmt->execute();
-      $row['detalles'] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-      $stmt->close();
-      $array[] = $row;
+      $mostSelled[] = $row;
     }
-    $json = json_encode($array);
-    return $json;
+    return json_encode($mostSelled);
   }
 
   public function getLastFacturaFromEmail($email)
@@ -238,6 +312,101 @@ class dataBase
     $result = $stmt->get_result();
     $stmt->close();
     $json = json_encode($result->fetch_all(MYSQLI_ASSOC));
+    return $json;
+  }
+
+  public function getVentasPorSemana($fecha_inicio, $fecha_fin)
+  {
+    if ($fecha_inicio == null || $fecha_fin == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    // Calcular el número total de días en el rango de fechas
+    $dias_totales = round((strtotime($fecha_fin) - strtotime($fecha_inicio)) / (60 * 60 * 24)) + 1;
+
+    // Calcular la duración aproximada de cada periodo
+    $duracion_periodo = ceil($dias_totales / 4);
+
+    // Preparar la sentencia para evitar inyección SQL
+    $sql = "SELECT FLOOR((DAY(f.fecha_factura) - 1) / ?) as periodo, DAY(f.fecha_factura) as dia_mes, SUM(f.total) as total_ventas
+            FROM facturas f
+            WHERE f.fecha_factura BETWEEN ? AND ?
+            GROUP BY periodo, dia_mes
+            ORDER BY periodo ASC, dia_mes ASC";
+
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("iss", $duracion_periodo, $fecha_inicio, $fecha_fin);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $stmt->close();
+
+    // Obtener todos los resultados en un solo llamado
+    $resultArray = $result->fetch_all(MYSQLI_ASSOC);
+
+    // Agrupar resultados por periodo
+    $periodos = [];
+    $nombres_dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+
+    foreach ($resultArray as $row) {
+      $periodo = $row['periodo'];
+      $dia_mes = $row['dia_mes'];
+      $dia_periodo = $dia_mes % $duracion_periodo;
+      $dia_periodo = $dia_periodo == 0 ? $duracion_periodo : $dia_periodo;
+      $dia_semana = date("w", strtotime($row['dia_mes'] . "-" . date("m") . "-" . date("Y")));
+
+      // Crear el periodo si no existe en el array
+      if (!isset($periodos[$periodo])) {
+        $periodos[$periodo] = [
+          'total' => 0,
+          'dias' => []
+        ];
+      }
+
+      // Agregar ventas al día correspondiente del periodo
+      $periodos[$periodo]['dias'][] = [
+        'total_ventas' => $row['total_ventas'],
+        'dia_semana' => $dia_semana,
+        'nombre_dia' => $nombres_dias[$dia_semana],
+        'dia_mes' => $dia_mes
+      ];
+
+      // Sumar al total del periodo
+      $periodos[$periodo]['total'] += $row['total_ventas'];
+    }
+
+    // Convertir el array en JSON
+    $json = json_encode(array_values($periodos));
+
+    return $json;
+  }
+
+  public function getVentasPorDia($fecha_inicio, $fecha_fin)
+  {
+    if ($fecha_inicio == null || $fecha_fin == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    // Preparar la sentencia para evitar inyección SQL
+    $sql = "SELECT DATE(f.fecha_factura) as fecha, SUM(f.total) as total_ventas
+            FROM facturas f
+            WHERE f.fecha_factura BETWEEN ? AND ?
+            GROUP BY DATE(f.fecha_factura)
+            ORDER BY DATE(f.fecha_factura) ASC";
+
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("ss", $fecha_inicio, $fecha_fin);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $stmt->close();
+
+    // Obtener todos los resultados en un solo llamado
+    $resultArray = $result->fetch_all(MYSQLI_ASSOC);
+
+    // Convertir el array en JSON
+    $json = json_encode($resultArray);
+
     return $json;
   }
   /*
