@@ -55,21 +55,26 @@ class dataBase {
     $folio = $this->getFolio();
     // la tabla cuenta con folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total
     $subtotal = 0;
+    $total = 0;
     foreach ($productos as $producto) {
       $subtotal += $producto['cantidad'] * $producto['precio'];
+      $total += $producto['cantidad'] * ($producto['precio'] * ($producto['descuento'] / 100));
       // agregar el producto a la tabla detalles_factura
       $this->detalles_factura($folio, $producto);
     }
-    // TODO: verificar que el iva sea un numero entre 0 y 100
-    $total = $subtotal * (1 + $iva / 100) + $gastos_envio;
-
-    // la fecha debe tener formato YYYY-MM-DD, asi que hay que convertirla
-    $fecha = date("Y-m-d", strtotime($fecha));
+    $total = $total + $total * $iva / 100 + $gastos_envio;
+    if (!strtotime($fecha)) {
+      //convertir la fecha a formato YYYY-MM-DD
+      $fecha = date("Y-m-d", strtotime($fecha));
+      if (!strtotime($fecha)) {
+        throw new Exception("La fecha no tiene un formato válido.");
+      }
+    }
     // preparar la sentencia para evitar <--inyección sql-->
     $sql = "INSERT INTO facturas (folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $this->connexion->prepare($sql);
-    // Vincular parámetros a la sentencia preparada como cadenas
-    $stmt->bind_param("siidddd", $folio, $user_id, $fecha, $iva, $subtotal, $gastos_envio, $total);
+    // Vincular parámetros a la sentencia preparada como cadenas fecha es un tip
+    $stmt->bind_param("sisdddd", $folio, $user_id, $fecha, $iva, $subtotal, $gastos_envio, $total);
 
     $result = $stmt->execute();
     return $result;
@@ -80,18 +85,20 @@ class dataBase {
     // este folio es un string el cual va incrementando 1 en 1
     // empieza en 000000 y termina en ZZZZZZ
     // ejemplo: 000000, 000001 ... 000009, 00000A ... 00000Z, 000010
-    $sql = "SELECT folio FROM facturas ORDER BY folio DESC";
+    $sql = "SELECT folio_factura FROM facturas ORDER BY folio_factura DESC";
     $result = $this->connexion->query($sql);
     $last = $result->fetch_assoc();
     if ($last == null) {
       return "000000";
     } else {
-      $last = $last['folio'];
+      $last = $last['folio_factura'];
     }
     // incrementar el folio
     $last = base_convert($last, 36, 10);
     $last++;
     $last = base_convert($last, 10, 36);
+    // agregar ceros a la izquierda
+    $last = str_pad($last, 6, "0", STR_PAD_LEFT);
     // retornar el folio
     return $last;
   }
@@ -105,6 +112,9 @@ class dataBase {
     $cantidad = $productos['cantidad'];
     $precio = $productos['precio'];
     $descuento = $productos['descuento'];
+    //deshabilitar la restriccion de llave foranea
+    $sql = "SET FOREIGN_KEY_CHECKS=0";
+    $this->connexion->query($sql);
 
     // la tabla detalles facctura contiene:
     // folio_factura, prod_id, cantidad, precio, descuento
@@ -112,13 +122,40 @@ class dataBase {
     $sql = "INSERT INTO detalles_factura (folio_factura, prod_id, cantidad, precio, descuento) VALUES (?, ?, ?, ?, ?)";
     $stmt = $this->connexion->prepare($sql);
     // Vincular parámetros a la sentencia preparada como cadenas
-    $stmt->bind_param("iiiii", $folio, $prod_id, $cantidad, $precio, $descuento);
+    // folio string, prod_id int, cantidad int, precio float, descuento float
+    $stmt->bind_param("siidd", $folio, $prod_id, $cantidad, $precio, $descuento);
 
     $result = $stmt->execute();
 
+    //habilitar la restriccion de llave foranea
+    $sql = "SET FOREIGN_KEY_CHECKS=1";
+    $this->connexion->query($sql);
     return $result;
   }
 
+  // devuelve las facturas en un periodo de tiempo
+  public function getFacturas($fecha_inicio, $fecha_fin) {
+    if ($fecha_inicio == null || $fecha_fin == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+    // la fecha debe tener formato YYYY-MM-DD, asi que hay que convertirla
+    $fecha_inicio = date("Y-m-d", strtotime($fecha_inicio));
+    $fecha_fin = date("Y-m-d", strtotime($fecha_fin));
+    // la fecha de inicio debe ser menor a la fecha de fin
+    if ($fecha_inicio > $fecha_fin) {
+      throw new Exception("La fecha de inicio debe ser menor a la fecha de fin.");
+    }
+    // preparar la sentencia para evitar <--inyección sql-->
+    $sql = "SELECT * FROM facturas WHERE fecha_factura BETWEEN ? AND ?";
+    $stmt = $this->connexion->prepare($sql);
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("ss", $fecha_inicio, $fecha_fin);
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $json = json_encode($result->fetch_all(MYSQLI_ASSOC));
+    return $json;
+  }
   /*
   █▀▄ █▀▄ █▀█ █▀▄ █ █ █▀ ▀█▀ █▀█ █▀
   █▀  █▀▄ █▄█ █▄▀ █▄█ █▄  █  █▄█ ▄█
