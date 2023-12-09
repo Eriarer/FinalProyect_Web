@@ -71,6 +71,10 @@ if ($result->num_rows > 0) {
   echo "<th>folio_factura</th>";
   echo "<th>usr_id</th>";
   echo "<th>fecha_factura</th>";
+  echo "<th>iva</th>";
+  echo "<th>subt_total</th>";
+  echo "<th>gastos_envio</th>";
+  echo "<th>total</th>";
   echo "</tr>";
   while ($row = $result->fetch_assoc()) {
     echo "<tr>";
@@ -94,7 +98,8 @@ if ($result->num_rows > 0) {
   echo "<th>folio_factura</th>";
   echo "<th>producto_id</th>";
   echo "<th>cantidad</th>";
-  echo "<th>fubtotal</th>";
+  echo "<th>precio</th>";
+  echo "<th>descuento</th>";
   echo "</tr>";
   while ($row = $result->fetch_assoc()) {
     echo "<tr>";

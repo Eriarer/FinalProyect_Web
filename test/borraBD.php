@@ -13,6 +13,11 @@ if ($conn->connect_error) {
 $sql_disable_fk = "SET foreign_key_checks = 0";
 $conn->query($sql_disable_fk);
 
+// eliminar los datos de la tabla facturas y detalles_factura
+$sql = "DELETE FROM facturas";
+$conn->query($sql);
+$sql = "DELETE FROM detalles_factura";
+$conn->query($sql);
 
 // Reactivar restricciones de clave externa
 $sql_enable_fk = "SET foreign_key_checks = 1";
