@@ -22,10 +22,17 @@ session_start();
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
   <!-- CSS -->
   <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/admin/graficas.css" />
 </head>
 
 <body>
   <?php require_once '../navbar.php'; ?>
+  <div class="d-flex justify-content-center align-items-center">
+    <!-- generar 2 botones y un texto, el texto tiene un string del mes y los botones permiten navegar de mes a la izquierda a la dercha-->
+    <button class="btn btn-primary" id="btn-izq"><i class="nf nf-cod-triangle_left"></i></button>
+    <h1 id="mes" class="text-center px-5">Mes</h1>
+    <button class="btn btn-primary" id="btn-der"><i class="nf nf-cod-triangle_right"></i></button>
+  </div>
   <div class="d-flex justify-content-center align-items-center">
     <div class="container row row-cols-1 row-cols-lg-2">
       <div class="col ">
@@ -37,7 +44,8 @@ session_start();
     </div>
   </div>
   <?php require_once '../footer.php'; ?>
-  <script src="../../js/admin/graficas.js"></script>
+  <script src="../../js/admin/graficas.js">
+  </script>
 </body>
 
 </html>

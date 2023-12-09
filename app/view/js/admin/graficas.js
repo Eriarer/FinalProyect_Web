@@ -1,18 +1,120 @@
 let pieChart, barsChart;
 var productos, mostSell = [];
-let colors = ['#8eb99e', '#8fa3ee', '#ca9ee0', '#e2b4d1', '#eb998f', '#f7cab5', '#f5ef99', '#d2e8db'];
+const colors = ['#8eb99e', '#8fa3ee', '#ca9ee0', '#e2b4d1', '#eb998f', '#f7cab5', '#f5ef99', '#d2e8db'];
+const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
+  "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+];
 $(document).ready(function () {
-  initChart1();
-  initChart2();
+
+  // obtener el Mes actual y colocarlo en el texto
+  // agregar funcionalidad a los botones para que cambien el mes
+  var mes = new Date().getMonth();
+  var anio = new Date().getFullYear();
+  var maxMes = new Date().getMonth();
+  var maxAnio = new Date().getFullYear();
+  $("#mes").text(meses[mes] + " de " + anio);
+  $("#btn-izq").click(function () {
+    if (mes == 0) {
+      mes = 11;
+      anio--;
+    } else {
+      mes--;
+    }
+    $("#mes").text(meses[mes] + " de " + anio);
+    // actualizar los graficos
+    actualizarGraficos(anio, mes);
+  });
+  $("#btn-der").click(function () {
+    if (anio == maxAnio && mes == maxMes) {
+      return;
+    }
+    if (mes == 11) {
+      mes = 0;
+      anio++;
+    } else {
+      mes++;
+    }
+    $("#mes").text(meses[mes] + " de " + anio);
+    // actualizar los graficos
+    actualizarGraficos(anio, mes);
+  });
+
+  // obtener la fecha de inicio y fin del mes actual 
+  var fechaInicio = new Date(anio, mes, 1);
+  var fechaFin = new Date(anio, mes + 1, 0);
+  // ajustar las fechas al formato YYYY-MM-DD
+  fechaInicio = fechaInicio.toISOString().slice(0, 10);
+  fechaFin = fechaFin.toISOString().slice(0, 10);
+  initChart1(fechaInicio, fechaFin);
+  initChart2(fechaInicio, fechaFin);
 });
 
-function initChart1() {
+function actualizarGraficos(anio, mes) {
+  var fechaInicio = new Date(anio, mes, 1);
+  var fechaFin = new Date(anio, mes + 1, 0);
+  // ajustar las fechas al formato YYYY-MM-DD
+  fechaInicio = fechaInicio.toISOString().slice(0, 10);
+  fechaFin = fechaFin.toISOString().slice(0, 10);
+  console.log(fechaInicio, fechaFin);
+  updateChart1(fechaInicio, fechaFin);
+  updateChart2(fechaInicio, fechaFin);
+}
+
+function updateChart1(fechaInicio, fechaFin) {
   $.ajax({
     url: '../../../model/DB/facturas/mostSelled.php',
     method: 'POST',
     data: {
-      fechaInicio: '2023-12-01',
-      fechaFin: '2023-12-31'
+      fechaInicio: fechaInicio,
+      fechaFin: fechaFin
+    },
+    success: function (response) {
+      response = JSON.parse(response);
+      if (response.length == 0) {
+        pieChart.data = {};
+      } else {
+        pieChart.data = {
+          labels: productLabels(response),
+          datasets: [{
+            label: 'Dataset 1',
+            data: productsCount(response),
+            backgroundColor: ['#8eb99e', '#8fa3ee', '#ca9ee0', '#e2b4d1', '#eb998f', '#f7cab5', '#f5ef99', '#d2e8db']
+          }]
+        };
+      }
+      pieChart.update();
+    }
+  });
+}
+
+function updateChart2(fechaInicio, fechaFin) {
+  $.ajax({
+    url: '../../../model/DB/facturas/getVentasSemana.php',
+    method: 'POST',
+    data: {
+      fechaInicio: fechaInicio,
+      fechaFin: fechaFin
+    },
+    success: function (response) {
+      response = JSON.parse(response);
+      // si no hay datos, borrar la data
+      if (response.length == 0) {
+        barsChart.data = {};
+      } else {
+        barsChart.data = getData(response);
+      }
+      barsChart.update();
+    }
+  });
+}
+
+function initChart1(fechaInicio, fechaFin) {
+  $.ajax({
+    url: '../../../model/DB/facturas/mostSelled.php',
+    method: 'POST',
+    data: {
+      fechaInicio: fechaInicio,
+      fechaFin: fechaFin
     },
     success: function (response) {
       response = JSON.parse(response);
@@ -21,13 +123,13 @@ function initChart1() {
   });
 }
 
-function initChart2() {
+function initChart2(fechaInicio, fechaFin) {
   $.ajax({
     url: '../../../model/DB/facturas/getVentasSemana.php',
     method: 'POST',
     data: {
-      fechaInicio: '2023-12-01',
-      fechaFin: '2023-12-31'
+      fechaInicio: fechaInicio,
+      fechaFin: fechaFin
     },
     success: function (response) {
       response = JSON.parse(response);
@@ -36,23 +138,34 @@ function initChart2() {
   });
 }
 
+function productLabels(data) {
+  let productsLabels = [];
+  for (let i = 0; i < data.length; i++) {
+    productsLabels.push(data[i]['prod_name']);
+  }
+  return productsLabels;
+}
+
+function productsCount(data) {
+  let productsCount = [];
+  for (let i = 0; i < data.length; i++) {
+    productsCount.push(data[i]['total']);
+  }
+  return productsCount;
+}
+
 function drawChart1(mostSell) {
   let canva1;
   canva1 = document.getElementById('chart1').getContext('2d');
-  let productsCount = [];
-  let productsLabels = [];
-  for (let i = 0; i < mostSell.length; i++) {
-    productsCount.push(mostSell[i]['total']);
-    productsLabels.push(mostSell[i]['prod_name']);
-  }
+
   // Chart 1
   pieChart = new Chart(canva1, {
     type: 'pie',
     data: {
-      labels: productsLabels,
+      labels: productLabels(mostSell),
       datasets: [{
         label: 'Dataset 1',
-        data: productsCount,
+        data: productsCount(mostSell),
         backgroundColor: ['#8eb99e', '#8fa3ee', '#ca9ee0', '#e2b4d1', '#eb998f', '#f7cab5', '#f5ef99', '#d2e8db']
       }]
     },
@@ -79,13 +192,9 @@ function drawChart1(mostSell) {
   });
 }
 
-function drawChart2(semanas) {
-  //console.log(semanas);
-  let canva2;
-  canva2 = document.getElementById('chart2').getContext('2d');
+function getData(semanas) {
 
   var labels = [];
-  console.log(semanas[0])
   for (let i = 0; i < semanas.length; i++) {
     // truncar el total a 1 decimal
     var total = semanas[i]['total'].toFixed(1);
@@ -93,17 +202,11 @@ function drawChart2(semanas) {
       "\nTotal: " + total + '$');
   }
 
-  console.log(labels);
   // Nuevo vector para agrupar los días de la semana
   const diasAgrupados = [];
 
   // Iterar sobre cada día de la semana (0 a 6)
   for (let i = 0; i < semanas[0].dias.length; i++) {
-    // llenar el vector de dias agrupados
-    // semana[i].dias[0]
-    // semana[i].dias[1]
-    // semana[i].dias[2]
-    // si es que existe el elemento del dia[]
     const datosPorDia = [];
     for (let j = 0; j < semanas.length; j++) {
       if (semanas[j].dias[i]) {
@@ -175,10 +278,18 @@ function drawChart2(semanas) {
     labels: labels,
     datasets: dataset
   };
+  return data;
+}
+
+function drawChart2(semanas) {
+  let canva2;
+  canva2 = document.getElementById('chart2').getContext('2d');
+
+  var nomDias = ['Lunes ', 'Martes ', 'Miercoles ', 'Jueves ', 'Viernes ', 'Sabado ', 'Domingo '];
 
   barsChart = new Chart(canva2, {
     type: 'bar',
-    data: data,
+    data: getData(semanas),
     options: {
       responsive: true,
       plugins: {
