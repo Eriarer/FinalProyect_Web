@@ -12,7 +12,8 @@ prod_stock	      int(11)	      NO
 prod_precio	      float	        NO			
 prod_descuento	  float	        NO	
 */
-class dataBase {
+class dataBase
+{
   private $connexion;
   private $host;
   private $user;
@@ -21,7 +22,8 @@ class dataBase {
   private $config;
 
   //En PHP solo se permite un constructor por clase
-  public function __construct($credentials, $config) {
+  public function __construct($credentials, $config)
+  {
     $this->host = $credentials['host'];
     $this->user = $credentials['user'];
     $this->pass = $credentials['pass'];
@@ -33,14 +35,16 @@ class dataBase {
     }
   }
 
-  public function __destruct() {
+  public function __destruct()
+  {
     $this->connexion->close();
   }
   /*
   █▀▀ ▄▀▄ █▀ ▀█▀ █ █ █▀▄ ▄▀▄ █▀
   █▀  █▀█ █▄  █  █▄█ █▀▄ █▀█ ▄█
   */
-  public function altaFactura($email, $productos, $fecha, $iva, $gastos_envio, $pais, $direccion, $metodo_pago) {
+  public function altaFactura($email, $productos, $fecha, $iva, $gastos_envio, $pais, $direccion, $metodo_pago)
+  {
     // Verificar que existen parámetros
     if ($email == null || $productos == null || $iva == null || $gastos_envio == null || $pais == null || $direccion == null || $metodo_pago == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -81,7 +85,8 @@ class dataBase {
     return $result;
   }
 
-  public function getFolio() {
+  public function getFolio()
+  {
     //el folio se genera dependiendo del ultimo folio agregado a la base de datos
     // este folio es un string el cual va incrementando 1 en 1
     // empieza en 000000 y termina en ZZZZZZ
@@ -105,7 +110,8 @@ class dataBase {
   }
 
   // el producto es un vector con una lista de vectores que contienen los datos
-  public function detalles_factura($folio, $productos) {
+  public function detalles_factura($folio, $productos)
+  {
     if ($folio == null || $productos == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
@@ -136,7 +142,8 @@ class dataBase {
   }
 
   //retorna la factura con el folio y todos sus detalles
-  public function getFactura($folio) {
+  public function getFactura($folio)
+  {
     if ($folio == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
@@ -172,7 +179,8 @@ class dataBase {
   }
 
   // devuelve las facturas en un periodo de tiempo
-  public function getFacturas($fecha_inicio, $fecha_fin) {
+  public function getFacturas($fecha_inicio, $fecha_fin)
+  {
     if ($fecha_inicio == null || $fecha_fin == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
@@ -211,7 +219,8 @@ class dataBase {
     return $json;
   }
 
-  public function getLastFacturaFromEmail($email) {
+  public function getLastFacturaFromEmail($email)
+  {
     if ($email == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
@@ -240,7 +249,8 @@ class dataBase {
   usr_id  prod_id  cantidad
   */
   // Agregando un producto nuevo al carrito
-  public function insertarCarrito($usr_id, $prod_id, $cantidad) {
+  public function insertarCarrito($usr_id, $prod_id, $cantidad)
+  {
     // Verificar que existen parámetros
     if ($usr_id == null || $prod_id == null || $cantidad == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -268,7 +278,8 @@ class dataBase {
   }
 
   // Función para eliminar un producto del carrito
-  public function eliminarCarrito($usr_id, $prod_id) {
+  public function eliminarCarrito($usr_id, $prod_id)
+  {
     // Verificar que existen parámetros
     if ($usr_id == null || $prod_id == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -302,7 +313,8 @@ class dataBase {
   }
 
   // Función para aumentar en 1 la cantidad de un producto en el carrito
-  public function aumentarCantidad($usr_id, $prod_id) {
+  public function aumentarCantidad($usr_id, $prod_id)
+  {
     // Verificar que existen parámetros
     if ($usr_id == null || $prod_id == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -328,7 +340,8 @@ class dataBase {
   }
 
   // Función para disminuir en 1 la cantidad de un producto en el carrito
-  public function disminuirCantidad($usr_id, $prod_id) {
+  public function disminuirCantidad($usr_id, $prod_id)
+  {
     // Verificar que existen parámetros
     if ($usr_id == null || $prod_id == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -356,32 +369,67 @@ class dataBase {
   }
 
   // Función para obtener los productos del carrito con su cantidad
-  public function obtenerCarrito($usr_id) {
+  public function obtenerCarrito($usr_id)
+  {
     // Verificar que existen parámetros
     if ($usr_id == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
 
-    // Preparar la sentencia para evitar la <--inyección SQL-->
-    $sql = "SELECT * FROM carrito WHERE usr_id = ?";
-    // Preparar la sentencia
+    $sql = "SELECT carrito.prod_id, carrito.cantidad, productos.prod_name, productos.prod_description, productos.prod_imgPath, productos.prod_stock, productos.prod_precio, productos.prod_descuento
+            FROM carrito
+            INNER JOIN productos ON carrito.prod_id = productos.prod_id
+            WHERE carrito.usr_id = ? GROUP BY carrito.prod_id";
+
     $stmt = $this->connexion->prepare($sql);
-
-    // Vincular parámetros a la sentencia preparada como cadenas
     $stmt->bind_param("i", $usr_id);
-
-    // Ejecutar la sentencia
     $stmt->execute();
-
-    // Obtener el número de filas afectadas por la última consulta
     $result = $stmt->get_result();
-
+    $stmt->close();
     $json = json_encode($result->fetch_all(MYSQLI_ASSOC));
     return $json;
   }
 
+  public function updateCantidad($cantidad, $prod_id, $usr_id)
+  {
+    // Verificar que existen parámetros
+    if ($usr_id == null || $prod_id == null || $cantidad == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    // Preparar la sentencia para evitar la <--inyección SQL-->
+    $sql = "UPDATE carrito SET cantidad = ? WHERE usr_id = ? AND prod_id = ?";
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("iii", $cantidad, $usr_id, $prod_id);
+    $stmt->execute();
+    $stmt->close();
+    return $this->obtenerTotalProductos($usr_id);
+  }
+
+  //función para obtener el stock de un producto
+  public function getStock($prod_id)
+  {
+    // Verificar que existen parámetros
+    if ($prod_id == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    // Preparar la sentencia para evitar la <--inyección SQL-->
+    $sql = "SELECT prod_stock FROM productos WHERE prod_id = ?";
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("i", $prod_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    //guardando el resultado como número
+    $result = $result->fetch_assoc();
+    $result = $result['prod_stock'];
+    return $result;
+  }
+
   //Obtener el total de productos en el carrito
-  public function obtenerTotalProductos($usr_id) {
+  public function obtenerTotalProductos($usr_id)
+  {
     // Verificar que existen parámetros
     if ($usr_id == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -410,7 +458,8 @@ class dataBase {
   █▀▄ █▀▄ █▀█ █▀▄ █ █ █▀ ▀█▀ █▀█ █▀
   █▀  █▀▄ █▄█ █▄▀ █▄█ █▄  █  █▄█ ▄█
   */
-  public function altaProducto($categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento) {
+  public function altaProducto($categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento)
+  {
     // Verificar que existen parámetros
     if ($categoria == null || $prod_name == null || $prod_description == null || $prod_imgPath == null || $prod_stock == null || $prod_precio == null || $prod_descuento == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -436,7 +485,8 @@ class dataBase {
     return $affected_rows > 0;
   }
 
-  public function bajaProducto($id) {
+  public function bajaProducto($id)
+  {
     // verificar que existen parámetros
     if ($id == null) {
       return false;
@@ -473,7 +523,8 @@ class dataBase {
     return $success;
   }
 
-  public function modifyProduct($id, $categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento) {
+  public function modifyProduct($id, $categoria, $prod_name, $prod_description, $prod_imgPath, $prod_stock, $prod_precio, $prod_descuento)
+  {
     // verificar que id no sea nulo
     if ($id == null) {
       return false;
@@ -510,7 +561,8 @@ class dataBase {
     return $result;
   }
 
-  public function getProduct($id) {
+  public function getProduct($id)
+  {
     // verificar que existen parámetros
     if ($id == null) {
       return false;
@@ -528,7 +580,8 @@ class dataBase {
     return $json;
   }
 
-  public function getAllProducts() {
+  public function getAllProducts()
+  {
     //Devuelve todos los productos
     $sql = "SELECT * FROM productos";
     $stmt = $this->connexion->prepare($sql);
@@ -542,7 +595,8 @@ class dataBase {
     return $json;
   }
 
-  public function queryProducts($categoria, $price_min, $price_max, $stock_min, $stock_max, $discount_min, $discount_max) {
+  public function queryProducts($categoria, $price_min, $price_max, $stock_min, $stock_max, $discount_min, $discount_max)
+  {
     // Los parametros son opcionales, si todos son null, devuelve todos los productos
     if ($categoria == null && $price_min == null && $price_max == null && $stock_min == null && $stock_max == null && $discount_min == null && $discount_max == null) {
       return $this->getAllProducts();
@@ -572,7 +626,8 @@ class dataBase {
     return $json;
   }
 
-  public function getLastProductId() {
+  public function getLastProductId()
+  {
     $sql = "SELECT MAX(prod_id) AS last_id FROM productos";
     $result = $this->connexion->query($sql);
 
@@ -590,7 +645,8 @@ class dataBase {
   █▄█ ▄█ █▄█ █▀█ █▀▄ ▄█▄ █▄█ ▄█
   */
 
-  public function altaUsuario($usr_email, $usr_name, $usr_account, $usr_pwd, $usr_admin, $pregunta, $respuesta) {
+  public function altaUsuario($usr_email, $usr_name, $usr_account, $usr_pwd, $usr_admin, $pregunta, $respuesta)
+  {
     // Verificar que existen parámetros
     $usr_admin = 0;
     if ($usr_email == null || $usr_name == null || $usr_account == null || $usr_pwd == null || $usr_admin === null || $pregunta == null || $respuesta == null) {
@@ -621,7 +677,8 @@ class dataBase {
     return $this->altaPreguntaSeguridad($usr_id, $pregunta, $respuesta);
   }
 
-  public function altaPreguntaSeguridad($user_id, $pregunta, $respuesta) {
+  public function altaPreguntaSeguridad($user_id, $pregunta, $respuesta)
+  {
     // Verificar que existen parámetros
     if ($user_id == null || $pregunta == null || $respuesta == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -646,7 +703,8 @@ class dataBase {
     return $affected_rows > 0;
   }
 
-  public function getLasUsrId() {
+  public function getLasUsrId()
+  {
     //Devuelve el id del último usuario creado
     $sql = "SELECT usr_id FROM usuarios ORDER BY usr_id DESC";
     $result = $this->connexion->query($sql);
@@ -660,7 +718,8 @@ class dataBase {
     return $last;
   }
 
-  public function getID($email) {
+  public function getID($email)
+  {
     //Devuelve el id del usuario con el email recibido
     $sql = "SELECT usr_id FROM usuarios WHERE usr_email = ?";
     $stmt = $this->connexion->prepare($sql);
@@ -671,7 +730,8 @@ class dataBase {
     return $id['usr_id'];
   }
 
-  public function emailExist($email) {
+  public function emailExist($email)
+  {
     // Verificar que existen parámetros
     if ($email == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -694,7 +754,8 @@ class dataBase {
     return $result->num_rows > 0;
   }
 
-  public function getUserByEmail($email) {
+  public function getUserByEmail($email)
+  {
     // Verificar que existen parámetros
     if ($email == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -717,7 +778,8 @@ class dataBase {
     return $result->fetch_assoc();
   }
 
-  public function login($email, $password) {
+  public function login($email, $password)
+  {
     // Verificar que existen parámetros
     if ($email == null || $password == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -763,7 +825,8 @@ class dataBase {
     }
   }
 
-  public function unblock($email) {
+  public function unblock($email)
+  {
     // Verificar que existen parámetros
     if ($email == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -778,7 +841,8 @@ class dataBase {
     return $result;
   }
 
-  public function getSecurityQuestion($email) {
+  public function getSecurityQuestion($email)
+  {
     if ($email == null) {
       return false;
     }
@@ -798,7 +862,8 @@ class dataBase {
     return $json;
   }
 
-  public function verifySecurityAnswer($email, $respuesta) {
+  public function verifySecurityAnswer($email, $respuesta)
+  {
     if ($email == null || $respuesta == null) {
       return false;
     }
@@ -822,7 +887,8 @@ class dataBase {
     }
   }
 
-  public function updatePassword($email, $password) {
+  public function updatePassword($email, $password)
+  {
     if ($email == null || $password == null) {
       return false;
     }
