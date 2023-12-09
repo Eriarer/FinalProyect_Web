@@ -14,111 +14,176 @@
   <!-- agregando link para darle estilos a la alerta -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- CSS -->
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/carrito.css">
   <!-- favIcon -->
   <link rel="icon" type="image/x-icon" href="../../../media/images/oso-de-peluche.png" />
 </head>
 
 <body>
   <?php require_once 'navbar.php'; ?>
-  <div class="container d-flex justify-content-center mt-5">
-    <table class="table  table-striped table-hover">
-      <thead>
-        <tr>
-          <th scope=" col">Producto</th>
-          <th scope="col">Cantidad</th>
-          <th scope="col">Descripción</th>
-          <th scope="col">Precio unitario</th>
-          <th scope="col">Precio total</th>
-          <th scope="col">Acción</th>
-        </tr>
-      </thead>
-      <tbody>
+  <div class="container mb-5">
+    <div class="container d-flex justify-content-center mt-5">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Producto</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Precio unitario</th>
+            <th scope="col">Ahorra</th>
+            <th scope="col">Precio total</th>
+            <th scope="col">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
 
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+
+    </div>
+    <p>Subtotal:</p>
+    <!-- Boton con enlace a la página de compra -->
+    <div class="container d-flex justify-content-center">
+      <a href="compra.php" class="btn btn-primary">Comprar</a>
+    </div>
   </div>
   <?php require_once 'footer.php'; ?>
-
   <script>
-    var old_productos = null;
-    $(document).ready(function() {
-      resizeTable();
-
-      $(window).on("resize", function() {
-        resizeTable();
-      });
-
-      updateTable();
-    });
-
     /**
      * Funcion para actualizar la tabla de productos
      */
-    function updateTable() {
+    $(document).ready(function() {
       $.ajax({
         type: "POST",
         url: "../../model/DB/manejoCarrito.php",
         data: {
           method: "getCarrito",
-          prod_id: id,
         },
         success: function(responce) {
           if (responce != null) {
-            var data = JSON.parse(responce);
-            console.log(data);
+            responce = JSON.parse(responce);
             var total = 0;
             var html = '';
-            for (var i = 0; i < data.length; i++) {
-              var producto = data[i];
-              total += producto.prod_precio * producto.cantidad;
-              html += '<tr>';
-              html += '<td>' + producto.prod_nombre + '</td>';
-              html += '<td>' + producto.cantidad + '</td>';
-              html += '<td>' + producto.prod_descripcion + '</td>';
+            var url = "../../media/images/productos/";
+            // crear una fila por cada producto con sus respectivos datos
+            var tbody = $("tbody");
+            tbody.empty();
+            for (var i = 0; i < responce.length; i++) {
+              var span = '';
+              var producto = responce[i];
+              console.log(producto);
+              var tr = $("<tr></tr>");
+              var cant_edit = '';
+              var ahorro = (producto.prod_descuento / 100) * producto.prod_precio * producto.cantidad;
+              var total = producto.prod_precio * producto.cantidad;
+              var cant_edit = '<input id="changeCant' + producto.prod_id + '" type="number" value="' + producto.cantidad + '" min="1" max="' + producto.prod_stock + '" onchange="losefocus(' + producto.prod_id + ',this.value)">';
+              if (ahorro > 0) {
+                span = '<br><span style="text-decoration: line-through; color: gray; font-size: 90%;">$' + total + '</span>';
+              }
+              tr.addClass("text-center");
+              html = '<td>' + "<img src='" + url + producto.prod_imgPath + "' alt='" + producto.prod_name + "' width='100px' onerror=\"this.onerror=null;this.src='" + "../../media/images/imgRelleno.png" + "'\">" +
+                '<br>' + producto.prod_name + '</td>';
+              // html += '<td>' + producto.cantidad + '</td>';
+              html += '<td>' + cant_edit + '</td>';
+              html += '<td>' + producto.prod_description + '</td>';
               html += '<td>$' + producto.prod_precio + '</td>';
-              html += '<td>$' + producto.prod_precio * producto.cantidad + '</td>';
-              html += '<td><button class="btn btn-danger" onclick="eliminarProducto(' + producto.prod_id + ')">Eliminar</button></td>';
-              html += '</tr>';
+              html += '<td>$' + ahorro + '</td>';
+              html += '<td>$' + (total - ahorro) + span + '</td>';
+              html += '<td><button class="btn btn-danger" onclick="eliminarProducto(' + producto.prod_id + ')">Descartar</button></td>';
+              tr.html(html);
+              tbody.append(tr);
+
             }
-            html += '<tr>';
-            html += '<td></td>';
-            html += '<td></td>';
-            html += '<td></td>';
-            html += '<td></td>';
-            html += '<td>$' + total + '</td>';
-            html += '<td><button class="btn btn-success" onclick="comprar()">Comprar</button></td>';
-            html += '</tr>';
-            $('tbody').html(html);
           }
         },
         error: function() {
           console.log("No se ha podido obtener la información");
         }
       });
+    });
+
+    function losefocus(id, value) {
+      if (value <= 0) {
+        $("#changeCant" + id).val(1);
+        value = 1;
+      }
+
+      obtenerStock(id) //para hacer la promesa y que se ejecute el codigo de abajo hasta que se resuelva la promesa
+        .then(function(stock) {
+          if (value > stock) {
+            value = stock;
+            $("#changeCant" + id).val(value);
+          }
+
+          return $.ajax({
+            type: "POST",
+            url: "../../model/DB/manejoCarrito.php",
+            data: {
+              method: "updateCantidad",
+              cantidad: value,
+              prod_id: id,
+            },
+          });
+        })
+        .then(function(response) {
+          response = JSON.parse(response);
+          $("#num_prod").text(response);
+          console.log("perdio el FOCUS SUCCESS");
+        })
+        .catch(function(error) {
+          console.error('Error:', error);
+        });
     }
 
-    function agregarAlCarrito(id) {
+    function obtenerStock(id) {
+      return new Promise(function(resolve, reject) {
+        $.ajax({
+          type: "POST",
+          url: "../../model/DB/manejoCarrito.php",
+          data: {
+            method: "getStock",
+            prod_id: id,
+          },
+          success: function(response) {
+            response = JSON.parse(response);
+            resolve(response);
+          },
+          error: function(error) {
+            console.error('Error al obtener la información del carrito:', error);
+            reject(error);
+          }
+        });
+      });
+    }
+
+    
+
+    function eliminarProducto(id) {
+      // Realiza la solicitud AJAX para eliminar el producto
       $.ajax({
         type: "POST",
         url: "../../model/DB/manejoCarrito.php",
         data: {
-          method: "addOne",
-          prod_id: id,
+          method: "delete",
+          prod_id: id
         },
         success: function(response) {
-          response = JSON.parse(response);
-          console.log("Producto agregado al carrito");
-          console.log(response);
-          // Actualizar el número de productos en el carrito en la etiqueta span ID:num_prod
-          $("#num_prod").text(response);
+          Swal.fire({
+            title: "Producto eliminado",
+            text: "El artículo ha sido eliminado correctamente",
+            icon: "success"
+          });
         },
-        error: function(error) {
-          console.error('Error al obtener la información del carrito:', error);
+        error: function(xhr, status, error) {
+          Swal.fire({
+            title: "Error",
+            text: "Ha ocurrido un error al eliminar el producto",
+            icon: "error"
+          });
         }
       });
     }
-
-    function eliminarProducto(id) {}
   </script>
 
 </body>
