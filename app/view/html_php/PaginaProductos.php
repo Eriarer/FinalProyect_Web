@@ -20,6 +20,9 @@ session_start();
   <link rel="stylesheet" href="../css/Productoestilo.css">
   <!-- favIcon -->
   <link rel="icon" type="image/x-icon" href="../../media/images/oso-de-peluche.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 </head>
 
 <body>
@@ -145,8 +148,11 @@ session_start();
         },
         success: function(response) {
           response = JSON.parse(response);
-          console.log("Producto agregado al carrito");
-          console.log(response);
+          toastr.success('Producto agregado al carrito', 'Éxito', {
+            positionClass: 'toast-top-center', // Posición de la notificación
+            timeOut: 1000, // Duración en milisegundos
+            toastClass: 'custom-toast', // Clase de la notificación
+          });
           // Actualizar el número de productos en el carrito en la etiqueta span ID:num_prod
           $("#num_prod").text(response);
         },
