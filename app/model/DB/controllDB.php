@@ -40,9 +40,9 @@ class dataBase {
   █▀▀ ▄▀▄ █▀ ▀█▀ █ █ █▀▄ ▄▀▄ █▀
   █▀  █▀█ █▄  █  █▄█ █▀▄ █▀█ ▄█
   */
-  public function altaFactura($email, $productos, $fecha, $iva, $gastos_envio) {
+  public function altaFactura($email, $productos, $fecha, $iva, $gastos_envio, $pais, $direccion, $metodo_pago) {
     // Verificar que existen parámetros
-    if ($email == null || $productos == null || $iva == null) {
+    if ($email == null || $productos == null || $iva == null || $gastos_envio == null || $pais == null || $direccion == null || $metodo_pago == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
 
@@ -53,16 +53,16 @@ class dataBase {
 
     // el folio tiene detalles productos  en una tabla detalles_factura, la cual tiene como llave foranea
     $folio = $this->getFolio();
-    // la tabla cuenta con folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total
+    // la tabla cuenta con folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total, pais, direccion, metodo_pago
     $subtotal = 0;
     $total = 0;
     foreach ($productos as $producto) {
       $subtotal += $producto['cantidad'] * $producto['precio'];
-      $total += $producto['cantidad'] * ($producto['precio'] * ($producto['descuento'] / 100));
+      $total += $producto['cantidad'] * ($producto['precio'] * (1 - ($producto['descuento'] / 100)));
       // agregar el producto a la tabla detalles_factura
       $this->detalles_factura($folio, $producto);
     }
-    $total = $total + $total * $iva / 100 + $gastos_envio;
+    $total = ($total * (1 + ($iva / 100))) + $gastos_envio;
     if (!strtotime($fecha)) {
       //convertir la fecha a formato YYYY-MM-DD
       $fecha = date("Y-m-d", strtotime($fecha));
@@ -71,12 +71,13 @@ class dataBase {
       }
     }
     // preparar la sentencia para evitar <--inyección sql-->
-    $sql = "INSERT INTO facturas (folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO facturas (folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total, pais, direccion, metodo_pago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $this->connexion->prepare($sql);
     // Vincular parámetros a la sentencia preparada como cadenas fecha es un tip
-    $stmt->bind_param("sisdddd", $folio, $user_id, $fecha, $iva, $subtotal, $gastos_envio, $total);
+    $stmt->bind_param("sisddddsss", $folio, $user_id, $fecha, $iva, $subtotal, $gastos_envio, $total, $pais, $direccion, $metodo_pago);
 
     $result = $stmt->execute();
+    $stmt->close();
     return $result;
   }
 
@@ -127,10 +128,47 @@ class dataBase {
 
     $result = $stmt->execute();
 
+    $stmt->close();
     //habilitar la restriccion de llave foranea
     $sql = "SET FOREIGN_KEY_CHECKS=1";
     $this->connexion->query($sql);
     return $result;
+  }
+
+  //retorna la factura con el folio y todos sus detalles
+  public function getFactura($folio) {
+    if ($folio == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+    // preparar la sentencia para evitar <--inyección sql-->
+    $sql = "SELECT * FROM facturas WHERE folio_factura = ?";
+    $stmt = $this->connexion->prepare($sql);
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("s", $folio);
+
+    $result = $stmt->execute();
+    if (!$result) {
+      return false;
+    }
+    $factura = $stmt->get_result();
+    $factura = $factura->fetch_assoc();
+
+    $stmt->close();
+
+    // conseguir los detalles de la factura
+    $sql = "SELECT * FROM detalles_factura WHERE folio_factura = ?";
+    $stmt = $this->connexion->prepare($sql);
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("s", $folio);
+    $result = $stmt->execute();
+
+    if (!$result) {
+      return false;
+    }
+
+    $factura['detalles'] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    $json = json_encode($factura);
+    return $json;
   }
 
   // devuelve las facturas en un periodo de tiempo
@@ -145,14 +183,51 @@ class dataBase {
     if ($fecha_inicio > $fecha_fin) {
       throw new Exception("La fecha de inicio debe ser menor a la fecha de fin.");
     }
+    //retornar las facturas de forma ordenada de la mas antigua a la mas reciente
     // preparar la sentencia para evitar <--inyección sql-->
-    $sql = "SELECT * FROM facturas WHERE fecha_factura BETWEEN ? AND ?";
+    $sql = "SELECT * FROM facturas WHERE fecha_factura BETWEEN ? AND ? ORDER BY fecha_factura ASC";
     $stmt = $this->connexion->prepare($sql);
     // Vincular parámetros a la sentencia preparada como cadenas
     $stmt->bind_param("ss", $fecha_inicio, $fecha_fin);
 
     $stmt->execute();
     $result = $stmt->get_result();
+    $stmt->close();
+
+    //generar un array asociativo
+    $array = [];
+    while ($row = $result->fetch_assoc()) {
+      // conseguir los detalles de la factura
+      $sql = "SELECT * FROM detalles_factura WHERE folio_factura = ?";
+      $stmt = $this->connexion->prepare($sql);
+      // Vincular parámetros a la sentencia preparada como cadenas
+      $stmt->bind_param("s", $row['folio_factura']);
+      $stmt->execute();
+      $row['detalles'] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+      $stmt->close();
+      $array[] = $row;
+    }
+    $json = json_encode($array);
+    return $json;
+  }
+
+  public function getLastFacturaFromEmail($email) {
+    if ($email == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+    // conseguir el id del usuario
+    $user = $this->getUserByEmail($email);
+    if ($user == null) return false;
+    $user_id = $user['usr_id'];
+    // preparar la sentencia para evitar <--inyección sql-->
+    $sql = "SELECT * FROM facturas WHERE usr_id = ? ORDER BY fecha_factura DESC LIMIT 1";
+    $stmt = $this->connexion->prepare($sql);
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("i", $user_id);
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
     $json = json_encode($result->fetch_all(MYSQLI_ASSOC));
     return $json;
   }
