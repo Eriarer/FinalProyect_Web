@@ -8,10 +8,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-//agregar atributo metodo de pago a la tabla facturas
-$sql = "ALTER TABLE facturas ADD COLUMN metodo_pago VARCHAR(20) ";
-$conn->query($sql);
-
 // Función para generar facturas aleatorias
 function generarFacturasAleatorias($conn, $credentials, $CONFIG) {
     $usuarios = obtenerUsuariosAleatorios($conn);
@@ -90,8 +86,8 @@ function obtenerDireccionAleatoria() {
 
 // Función para generar una fecha aleatoria en diciembre de 2023
 function generarFechaAleatoria() {
-    $fechaInicio = strtotime('2023-12-01');
-    $fechaFin = strtotime('2023-12-31');
+    $fechaInicio = strtotime('2023-6-01');
+    $fechaFin = strtotime('2023-11-30');
     $fechaAleatoria = rand($fechaInicio, $fechaFin);
     // la fecha debe tener formato YYYY-MM-DD, asi que hay que convertirla
     $fechaFormateada = date('Y-m-d', $fechaAleatoria);
