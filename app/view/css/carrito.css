@@ -1,0 +1,9 @@
+tbody {
+    color: #000;
+    font-size: 1em;
+    text-align: center;
+}
+
+.table td {
+    vertical-align: middle;
+}
