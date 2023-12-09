@@ -256,6 +256,7 @@ class dataBase {
     // Obtener el número de filas afectadas por la última consulta
     $affected_rows = $stmt->affected_rows;
 
+    $stmt->close();
 
     return $affected_rows > 0;
   }
@@ -347,6 +348,7 @@ class dataBase {
     //crear un array asociativo
     $result = $stmt->get_result();
 
+    $stmt->close();
     $json = json_encode($result->fetch_assoc());
     return $json;
   }
@@ -360,6 +362,7 @@ class dataBase {
     $result = $stmt->get_result();
 
     $json = $result->fetch_all(MYSQLI_ASSOC);
+    $stmt->close();
     $json = json_encode($json);
     return $json;
   }
@@ -389,6 +392,7 @@ class dataBase {
     //crear un array asociativo
     $result = $stmt->get_result();
 
+    $stmt->close();
     $json = json_encode($result->fetch_all(MYSQLI_ASSOC));
     return $json;
   }
@@ -430,6 +434,8 @@ class dataBase {
     // Ejecutar la sentencia
     $stmt->execute();
 
+    $stmt->close();
+
     // Obtener el id de usuario recien creado
     $usr_id = $this->getLasUsrId();
     if ($usr_id == 0) {
@@ -460,6 +466,8 @@ class dataBase {
 
     // Obtener el número de filas afectadas por la última consulta
     $affected_rows = $stmt->affected_rows;
+
+    $stmt->close();
     return $affected_rows > 0;
   }
 
@@ -496,7 +504,7 @@ class dataBase {
 
     // Obtener el número de filas afectadas por la última consulta
     $result = $stmt->get_result();
-
+    $stmt->close();
     return $result->num_rows > 0;
   }
 
@@ -519,7 +527,7 @@ class dataBase {
 
     // Obtener el número de filas afectadas por la última consulta
     $result = $stmt->get_result();
-
+    $stmt->close();
     return $result->fetch_assoc();
   }
 
@@ -560,6 +568,7 @@ class dataBase {
 
       //obtener el usuario
       $user = $this->getUserByEmail($email);
+      $stmt->close();
       if ($user['usr_attempt'] >= 3) {
         return 1; // bloquear usuario
       } else {
@@ -579,6 +588,7 @@ class dataBase {
     $stmt = $this->connexion->prepare($sql);
     $stmt->bind_param("s", $email);
     $result = $stmt->execute();
+    $stmt->close();
     return $result;
   }
 
@@ -597,6 +607,7 @@ class dataBase {
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
+    $stmt->close();
     $json = json_encode($result->fetch_assoc());
     return $json;
   }
@@ -616,6 +627,7 @@ class dataBase {
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
+    $stmt->close();
     $result = $result->fetch_assoc();
     if ($result['respuesta'] == $respuesta) {
       return true;
@@ -633,6 +645,7 @@ class dataBase {
     $stmt = $this->connexion->prepare($sql);
     $stmt->bind_param("ss", $password, $email);
     $result = $stmt->execute();
+    $stmt->close();
     return $result;
   }
 
