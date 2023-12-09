@@ -69,22 +69,15 @@ $navbarCSS = $css . 'headers/navbar.css';
         $admin = $db->validAdmin($correo);
         if ($admin == true) {
       ?>
-          <!-- <li class="nav-item nav-item-admin mr-3 no-tooltip menu">
-            <a class="nav-link" href=""><i class="nf nf-fa-gear"></i></a>
-            <div class="menu_desple">
-              <a href="<?= $php . 'admin/AltaProd.php' ?>" class="opcion">Alta-productos</a>
-              <a href="<?= $php . 'admin/BajasProd.php' ?>" class="opcion">Baja-productos</a>
-              <a href="<?= $php . 'admin/ModifyProd.php' ?>" class="opcion">Edición-productos</a>
-            </div>
-          </li> -->
           <li class="nav-item no-tooltip" id="menu">
             <a class="nav-link" href="#" id="navbarDropdown">
               <i class="nf nf-fa-gear"></i>
             </a>
             <div id="menu_inner">
+              <a class="nav-link" href="<?= $php . 'admin/graficas.php' ?>">Analisis</a>
               <a class="nav-link" href="<?= $php . 'admin/AltaProd.php' ?>">Alta productos</a>
-              <a class="nav-link" href="<?= $php . 'admin/BajasProd.php' ?>">Baja productos</a>
               <a class="nav-link" href="<?= $php . 'admin/ModifyProd.php' ?>">Edición productos</a>
+              <a class="nav-link" href="<?= $php . 'admin/BajasProd.php' ?>">Baja productos</a>
             </div>
           </li>
         <?php
