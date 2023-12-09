@@ -102,8 +102,8 @@ session_start();
                 </div>
                 <?php if ($producto['prod_stock'] != 0) : ?>
                   <div class='cardFooter'>
-                    <a href='#' class='btn-cart'>Comprar ahora</a>
-                    <a href='#'><i class='nf nf-md-cart_plus' onclick="agregarAlCarrito(<?= $producto['prod_id'] ?>)"></i></a> <!-- agregar al carrito -->
+                    <a href='#' class='btn-cart' onclick="comprarAhora(<?= $producto['prod_id'] ?>); return false;">Comprar ahora</a>
+                    <a href='#'><i class='nf nf-md-cart_plus' onclick="agregarAlCarrito(<?= $producto['prod_id'] ?>); return false"></i></a> <!-- agregar al carrito -->
                   </div>
                 <?php endif; ?>
               </div>
@@ -138,20 +138,26 @@ session_start();
     function agregarAlCarrito(id) {
       $.ajax({
         type: "POST",
-        url: "../../../model/DB/manejoCarrito.php",
+        url: "../../model/DB/manejoCarrito.php",
         data: {
-          method: "add",
+          method: "addOne",
           prod_id: id,
-          cantidad: 1
         },
         success: function(response) {
+          response = JSON.parse(response);
+          console.log("Producto agregado al carrito");
           console.log(response);
-
+          // Actualizar el número de productos en el carrito en la etiqueta span ID:num_prod
+          $("#num_prod").text(response);
         },
         error: function(error) {
           console.error('Error al obtener la información del carrito:', error);
         }
       });
+    }
+
+    function comprarAhora() {
+
     }
   </script>
 </body>
