@@ -75,6 +75,9 @@ if ($result->num_rows > 0) {
   echo "<th>subt_total</th>";
   echo "<th>gastos_envio</th>";
   echo "<th>total</th>";
+  echo "<th>pais</th>";
+  echo "<th>direccion</th>";
+  echo "<th>metodo_pago</th>";
   echo "</tr>";
   while ($row = $result->fetch_assoc()) {
     echo "<tr>";

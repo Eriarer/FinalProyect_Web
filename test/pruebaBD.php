@@ -8,22 +8,30 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+//agregar atributo metodo de pago a la tabla facturas
+$sql = "ALTER TABLE facturas ADD COLUMN metodo_pago VARCHAR(20) ";
+$conn->query($sql);
+
 // Función para generar facturas aleatorias
 function generarFacturasAleatorias($conn, $credentials, $CONFIG) {
     $usuarios = obtenerUsuariosAleatorios($conn);
     $productos = obtenerProductosAleatorios($conn);
 
-    for ($i = 0; $i < 50; $i++) {
+    for ($i = 0; $i < 100; $i++) {
         $email = $usuarios[array_rand($usuarios)]['usr_email'];
         $fecha = generarFechaAleatoria();
-        $iva = rand(5, 20); // IVA aleatorio entre 5% y 20%
-        $gastosEnvio = rand(0, 50); // Gastos de envío aleatorios entre $0 y $50
+        $iva = rand(12, 26); // IVA aleatorio entre 5% y 20%
+        $gastosEnvio = rand(0, 500); // Gastos de envío aleatorios entre $0 y $50
+        $pais = obtenerPaisAleatorio();
+        $direccion = obtenerDireccionAleatoria();
+        // oxxo o tarjeta (Visa, MasterCard)
+        $metodo_pago = rand(0, 1) ? 'oxxo' : (rand(0, 1) ? 'visa' : 'mastercard');
 
         $numProductos = rand(1, 5); // Número aleatorio de productos en la factura
         $productosFactura = obtenerProductosAleatorios($conn, $numProductos);
 
         $factura = new dataBase($credentials, $CONFIG);
-        $factura->altaFactura($email, $productosFactura, $fecha, $iva, $gastosEnvio);
+        $factura->altaFactura($email, $productosFactura, $fecha, $iva, $gastosEnvio, $pais, $direccion, $metodo_pago);
     }
 }
 
@@ -65,6 +73,21 @@ function obtenerProductosAleatorios($conn, $cantidad = 1) {
     return $productos;
 }
 
+
+// Función para obtener un país aleatorio
+function obtenerPaisAleatorio() {
+    $paises = ['USA', 'Canada', 'Mexico', 'Argentina', 'España', 'Francia', 'Italia', 'Alemania', 'China', 'Japón'];
+    return $paises[array_rand($paises)];
+}
+
+// Función para obtener una dirección aleatoria
+function obtenerDireccionAleatoria() {
+    $direcciones = ['Calle 123', 'Avenida Principal', 'Calle de los Sueños', 'Avenida del Sol', 'Callejón Oscuro', 'Boulevard de la Luna'];
+    $num = rand(1, 100);
+    return $direcciones[array_rand($direcciones)] . ", " . $num;
+}
+
+
 // Función para generar una fecha aleatoria en diciembre de 2023
 function generarFechaAleatoria() {
     $fechaInicio = strtotime('2023-12-01');
@@ -79,7 +102,6 @@ function generarFechaAleatoria() {
     }
     return $fechaFormateada;
 }
-
 
 // Llamada a la función para generar facturas aleatorias
 generarFacturasAleatorias($conn, $credentials, $CONFIG);
