@@ -6,6 +6,14 @@ body {
     margin: 0;
 }
 
+.custom-toast{
+    background-color: #dfa9c3;  /* Color de fondo */
+    color: black;  /* Color del texto */
+    font-size: 1.2em;  /* Tamaño de la letra */
+    border-radius: 10px;  /* Borde del toast */
+    padding: 10px;  /* Espacio interno */
+}
+
 hr {
     border-top: 4px double #8c8b8b;
     text-align: center;
