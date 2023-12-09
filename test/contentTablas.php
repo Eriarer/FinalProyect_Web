@@ -89,6 +89,33 @@ if ($result->num_rows > 0) {
 
 
 ?>
+
+<!-- //Mostrar la tabla de carrito -->
+<?php
+$sql = "SELECT * FROM carrito";
+$result = $conn->query($sql);
+echo "<br>";
+if ($result->num_rows > 0) {
+    echo "<table>";
+    echo "<tr>";
+    echo "<th>ID usuario</th>";
+    echo "<th>ID Producto</th>";
+    echo "<th>Cantidad</th>";
+    echo "</tr>";
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        foreach ($row as $key => $value) {
+            echo "<td>" . $value . "</td>";
+        }
+        echo "</tr>";
+    }
+    echo "</table>";
+} else {
+    echo "Sin productos en el carrito";
+}
+
+?>
+
 <style>
     table {
         border-collapse: collapse;

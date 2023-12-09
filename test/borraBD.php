@@ -13,14 +13,14 @@ if ($conn->connect_error) {
 $sql_disable_fk = "SET foreign_key_checks = 0";
 $conn->query($sql_disable_fk);
 
-// eliminar los datos de la tabla facturas y detalles_factura
-$sql = "DELETE FROM facturas";
+//Borrar el contenido de la tabla carrito
+$sql = "DELETE FROM carrito";
 $conn->query($sql);
-$sql = "DELETE FROM detalles_factura";
-$conn->query($sql);
+if ($conn->error) {
+    echo "Error borrando carrito: " . $conn->error;
+}
 
 // Reactivar restricciones de clave externa
 $sql_enable_fk = "SET foreign_key_checks = 1";
 $conn->query($sql_enable_fk);
-
 $conn->close();
