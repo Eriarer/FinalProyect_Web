@@ -20,6 +20,7 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password']) && isset($_COOKIE['n
     //escribir la variable de sesion
     $_SESSION['email'] = $email;
     $_SESSION['name'] = $user['usr_account'];
+    $_SESSION['productos'] = $db->obtenerTotalProductos($user['usr_id']);
   }
 } else {
   setcookie("name", '', time() - 3600, "/");
