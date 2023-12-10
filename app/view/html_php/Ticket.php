@@ -58,7 +58,7 @@ $total = $subtotal + $totalIva + $gastoEnvio;
             <tr>
                 <td class="linea_derecha"><?php echo $folioFactura; ?></td>
                 <td class="linea_derecha">pixelwaddle@gmail.com</td>
-                <td>Correo</td>
+                <td><?php echo $correoUsuario ?></td>
             </tr>
             <tr>
                 <td class="linea_derecha">Fecha</td>
