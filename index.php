@@ -40,6 +40,9 @@ session_start();
       <div class="carousel-item imgcarrusel">
         <img src="app/media/images/fondoGradua.png" alt="Fourth slide" class="mx-auto d-block img-fluid ">
       </div>
+      <div class="carousel-item imgcarrusel">
+        <img src="app/media/images/Cupon.png" alt="Five slide" class="mx-auto d-block img-fluid ">
+      </div>
     </div>
     <a class="carousel-control-prev carrAnt carousel-control" href="#carouselExampleIndicators" role="button" data-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
