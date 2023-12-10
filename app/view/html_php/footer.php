@@ -12,6 +12,9 @@ $footerCSS = $css . 'headers/footer.css';
 <!-- leyenda de derechos y fecha - mensaje de que es un proyecto academico -->
 <?php
 include_once __DIR__ . '/../../model/routes_files.php';
+// $image = $CONFIG['P_images'] . 'LogoSF.png';
+$base = $CONFIG['base_url'];
+$php = $CONFIG['P_php'];
 ?>
 <footer class="bg-body-tertiary text-center" id="piePag">
   <div class="container p-4">
@@ -75,19 +78,19 @@ include_once __DIR__ . '/../../model/routes_files.php';
           <h5 class="text-uppercase">Enlaces Rapidos</h5>
           <ul class="list-unstyled mb-0 ">
             <li>
-              <a class="text-body" href="#!">Inicio</a>
+              <a class="text-body" tootlip="Inicio" href="<?= $base . 'index.php' ?>">Inicio</a>
             </li>
             <li>
-              <a class="text-body" href="#!">Tienda</a>
+              <a class="text-body" tootlip="Tienda" href="<?= $php . 'PaginaProductos.php' ?>">Tienda</a>
             </li>
             <li>
-              <a class="text-body" href="#!">Acerca de Nosotros</a>
+              <a class="text-body" tootlip="Acerca de" href="<?= $php . 'acercaDe.php' ?>">Acerca de Nosotros</a>
             </li>
             <li>
-              <a class="text-body" href="#!">Contacto</a>
+              <a class="text-body" tootlip="Contacto" href="<?= $php . 'contacto.php' ?>">Contacto</a>
             </li>
             <li>
-              <a class="text-body" href="#!">FAQs</a>
+              <a class="text-body" tootlip="Preguntas frecuentes" href="<?= $php . 'FAQs.php' ?>">FAQs</a>
             </li>
           </ul>
         </div>
@@ -97,13 +100,13 @@ include_once __DIR__ . '/../../model/routes_files.php';
           <h5 class="text-uppercase">Atención al cliente</h5>
           <ul class="list-unstyled mb-0">
             <li>
-              <p class="text-body">Teléfono</p>
+              <p class="text-body">449-338-8009</p>
             </li>
             <li>
-              <p class="text-body">Dirección</p>
+              <p class="text-body"> Avenida Universidad 940, Ciudad Universitaria, Universidad Autónoma de Aguascalientes, 20100 Aguascalientes, Ags.</p>
             </li>
             <li>
-              <p class="text-body">Correo Electrónico</p>
+              <p class="text-body">fluffyhugs2023@gmail.com</p>
             </li>
           </ul>
         </div>
