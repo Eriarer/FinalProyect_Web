@@ -99,8 +99,22 @@ function generarFechaAleatoria() {
     return $fechaFormateada;
 }
 
+// a la tabla facturas agregar los atributos de:
+// nombre string(255)
+// correo string(255)
+// telefono string(40)
+$sql = "ALTER TABLE facturas ADD COLUMN nombre VARCHAR(255) AFTER usr_id";
+$conn->query($sql);
+$sql = "ALTER TABLE facturas ADD COLUMN correo VARCHAR(255) AFTER nombre";
+$conn->query($sql);
+$sql = "ALTER TABLE facturas ADD COLUMN telefono VARCHAR(40) AFTER correo";
+$conn->query($sql);
+// acutalizar el defautl del iva a 16
+$sql = "ALTER TABLE facturas MODIFY COLUMN iva INT(3) DEFAULT 16";
+$conn->query($sql);
+
 // Llamada a la función para generar facturas aleatorias
-generarFacturasAleatorias($conn, $credentials, $CONFIG);
+//generarFacturasAleatorias($conn, $credentials, $CONFIG);
 
 echo "<h1>Facturas generadas</h1>";
 // Cerrar la conexión
