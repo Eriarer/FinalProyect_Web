@@ -54,5 +54,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $response = $db->getSubtotal($usr_id);
         echo json_encode($response);
         return;
+    }else if ($method === "getCantCarr") {
+        $prod_id = $_POST['prod_id'];
+        $response = $db->getCantCarr($usr_id, $prod_id);
+        echo json_encode($response);
+        return;
     }
 }
