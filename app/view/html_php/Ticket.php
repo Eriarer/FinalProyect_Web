@@ -68,7 +68,7 @@ $total = $subtotal + $totalIva + $gastoEnvio;
             <tr>
                 <td class="linea_derecha linea_abajo"><?php echo $fechaFactura; ?></td>
                 <td class="linea_derecha linea_abajo">Avenida Universidad 940, Ciudad Universitaria, Universidad Autónoma de Aguascalientes, 20100 Aguascalientes, Ags.</td>
-                <td class="linea_abajo">Direccion</td>
+                <td class="linea_abajo"><?php echo $direccion ?></td>
             </tr>
         </table>
 
