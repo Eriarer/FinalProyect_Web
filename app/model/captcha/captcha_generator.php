@@ -1,6 +1,6 @@
 <?php
 session_start();
-$FONTPATH = __DIR__ . '/../../media/fonts/leadcoat.TTF';
+$FONTPATH = __DIR__ . '/../../media/fonts/leadcoat.ttf';
 $TARGETDIR = __DIR__ . '/../../media/images/captcha/';
 // variables para el captcha
 $TEXTLENGTH = 6;
