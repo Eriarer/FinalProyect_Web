@@ -168,6 +168,9 @@ function drawChart1() {
           position: 'bottom',
           labels: {
             usePointStyle: true,
+            font: {
+              size: '15em',
+            }
           }
         },
         title: {
@@ -290,6 +293,9 @@ function drawChart2() {
                 }
               }
               return false;
+            },
+            font: {
+              size: '15em',
             }
           },
         },
