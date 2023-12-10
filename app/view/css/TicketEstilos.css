@@ -1,0 +1,99 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 20px;
+    background-color: #96B6ED;
+    
+}
+.factura-container {
+    width: 70%;
+    margin: auto;
+    border: 3px solid #171616;
+    background-color: rgb(230, 230, 230);
+}
+
+.datos table {
+    width: 70%;
+}
+
+td{
+    vertical-align: top;
+}
+
+.datos td {
+    width: 33%;
+}
+
+.factura-body {
+    margin-bottom: 20px;
+}
+.factura-body table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.factura-body table, .factura-body th, .factura-body td {
+    border: 1px rgb(9, 9, 9);
+    padding: 5px;
+    
+}
+
+.total{
+    color: red;
+    font-weight: bold;
+    text-align: right;
+}
+
+.productos td {
+   text-align: center;
+}
+.titulos{
+    text-align: center;
+}
+
+#titulo_fac{
+    text-align: center;
+    font-weight: bold;
+    font-size: xx-large;
+    display: flex;
+    width: 100%;
+}
+
+.linea_abajo{
+    border-bottom: 2px dotted black;
+}
+
+.linea_derecha{
+    border-right: 2px dotted black;
+
+}
+
+.pago {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.factura_totales {
+    text-align: right;
+    font-weight: bold; 
+}
+
+.botonpdf{
+    padding-top:8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button:hover {
+    border-color: #180b65;
+    background-color: rgb(126, 164, 241);
+    transform: scale(1.05);
+  }
+
+button{
+    text-align: center;
+    background: #1E53AE;
+    color: aliceblue;
+
+
+}
