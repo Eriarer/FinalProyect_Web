@@ -623,6 +623,31 @@ class dataBase
     return $result;
   }
 
+  public function getCantCarr($usr_id, $prod_id) {
+    // Devuelve la cantidad de un producto en el carrito del usuario
+    // Verificar que existen parámetros
+    if ($usr_id == null || $prod_id == null) {
+        throw new Exception("Todos los campos son obligatorios.");
+    }
+    
+    $sql = "SELECT cantidad FROM carrito WHERE usr_id = ? AND prod_id = ?";
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("ii", $usr_id, $prod_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    
+    // Verificar si hay resultados antes de intentar acceder a la cantidad
+    if ($result !== false && $result->num_rows > 0) {
+        // Guardando el resultado como número
+        $row = $result->fetch_assoc();
+        return $row['cantidad'];
+    } else {
+        // Si no hay resultados, devolver 0 o cualquier valor predeterminado según tu lógica
+        return 0;
+    }
+}
+
   //función para obtener el subtotal de los productos del carrito junto con el descuento
   public function getSubtotal($usr_id){
     // Verificar que existen parámetros
