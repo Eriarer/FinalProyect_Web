@@ -50,7 +50,7 @@
     <span id="iva">Sin iva incluido</span>
     <!-- Boton con enlace a la página de compra -->
     <div class="container d-flex justify-content-center">
-      <a href="compra.php" class="btn btn-primary">Comprar</a>
+      <a href="finalizar_compra.php" class="btn btn-primary">Comprar</a>
     </div>
   </div>
   <?php require_once 'footer.php'; ?>
