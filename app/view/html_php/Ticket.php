@@ -92,7 +92,7 @@ $total = $subtotal + $totalIva + $gastoEnvio;
                 
                 <div>
                     <tr>
-                        <td colspan="2" rowspan="5" class="pago">Modo de Pago</td>
+                        <td colspan="2" rowspan="5" class="pago"><?php echo $metodoPago ?></td>
                     </tr>
                     <tr>
                         <td class="factura_totales">Subtotal</td>
