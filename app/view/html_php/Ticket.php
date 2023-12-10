@@ -1,6 +1,4 @@
 <?php
-// Datos del formulario
-// $folioFactura = $_POST['nombre_completo']
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombreUsuario = $_POST['nombre-completo'];
     $correoUsuario = $_POST['email'];
@@ -8,7 +6,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $metodoPago = $_POST['MetodoP'];
     $telefono = $_POST['telefono'];
 }
-
 // Datos de la factura 
 $folioFactura = "123456";
 $idUsuario = "78910";
@@ -118,6 +115,38 @@ $total = $subtotal + $totalIva + $gastoEnvio;
 
 
     </div>
+
+    <!-- Boton que mande a ejecutar código de otro archivo -->
+    <!-- <button id="botonpdf" onclick="window.open('TicketPDF.php', '_blank')">Ver PDF</button> -->
+
+    <!-- Boton que mande a ejecutar código de otro archivo -->
+    <div class="botonpdf">
+        <button onclick="generarPDF()">Ver PDF</button>
+    </div>
+<!--  $nombreUsuario = $_POST['nombre-completo'];
+    $correoUsuario = $_POST['email'];
+    $direccion = $_POST['direccion'] . ', ' . $_POST['codigo-postal'] . ', ' . $_POST['ciudad'] . ', ' . $_POST['pais'];
+    $metodoPago = $_POST['MetodoP'];
+    $telefono = $_POST['telefono']; -->
+    <script>
+        // Obtener los valores del formulario
+        var nombre = '<?php echo $nombreUsuario ?>';
+        var email = '<?php echo $correoUsuario ?>';
+        var direccion = '<?php echo $direccion ?>';
+        var metodoPago = '<?php echo $metodoPago ?>';
+        var telefono = '<?php echo $telefono ?>';
+
+        function generarPDF() {
+            // Redirigir a TicketPDF.php con los parámetros
+            // Abrir una nueva pestaña con TicketPDF.php y parámetros
+            window.open('TicketPDF.php' +
+                '?nombre=' + encodeURIComponent(nombre) +
+                '&email=' + encodeURIComponent(email) +
+                '&direccion=' + encodeURIComponent(direccion) +
+                '&metodoPago=' + encodeURIComponent(metodoPago) +
+                '&telefono=' + encodeURIComponent(telefono), '_blank');
+        }
+    </script>
 
 </body>
 
