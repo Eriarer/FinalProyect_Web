@@ -1,9 +1,10 @@
 let pieChart, barsChart;
 var productos, mostSell = [];
-const colors = ['#8eb99e', '#8fa3ee', '#ca9ee0', '#e2b4d1', '#eb998f', '#f7cab5', '#f5ef99', '#d2e8db'];
+const colors = ['#b5ead7', '#c6cfea', '#ddbdf0', '#ff9aa2', '#ffb7b2', '#fedac0', '#e2f0cb'];
 const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
   "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
 ];
+const nomDias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 $(document).ready(function () {
 
   // obtener el Mes actual y colocarlo en el texto
@@ -55,7 +56,6 @@ function actualizarGraficos(anio, mes) {
   // ajustar las fechas al formato YYYY-MM-DD
   fechaInicio = fechaInicio.toISOString().slice(0, 10);
   fechaFin = fechaFin.toISOString().slice(0, 10);
-  console.log(fechaInicio, fechaFin);
   updateChart1(fechaInicio, fechaFin);
   updateChart2(fechaInicio, fechaFin);
 }
@@ -78,7 +78,7 @@ function updateChart1(fechaInicio, fechaFin) {
           datasets: [{
             label: 'Dataset 1',
             data: productsCount(response),
-            backgroundColor: ['#8eb99e', '#8fa3ee', '#ca9ee0', '#e2b4d1', '#eb998f', '#f7cab5', '#f5ef99', '#d2e8db']
+            backgroundColor: colors
           }]
         };
       }
@@ -97,6 +97,7 @@ function updateChart2(fechaInicio, fechaFin) {
     },
     success: function (response) {
       response = JSON.parse(response);
+      console.log(response);
       // si no hay datos, borrar la data
       if (response.length == 0) {
         barsChart.data = {};
@@ -133,6 +134,7 @@ function initChart2(fechaInicio, fechaFin) {
     },
     success: function (response) {
       response = JSON.parse(response);
+      console.log(response);
       drawChart2(response);
     }
   });
@@ -166,7 +168,7 @@ function drawChart1(mostSell) {
       datasets: [{
         label: 'Dataset 1',
         data: productsCount(mostSell),
-        backgroundColor: ['#8eb99e', '#8fa3ee', '#ca9ee0', '#e2b4d1', '#eb998f', '#f7cab5', '#f5ef99', '#d2e8db']
+        backgroundColor: colors
       }]
     },
     options: {
@@ -193,56 +195,43 @@ function drawChart1(mostSell) {
 }
 
 function getData(semanas) {
-
   var labels = [];
   for (let i = 0; i < semanas.length; i++) {
-    // truncar el total a 1 decimal
     var total = semanas[i]['total'].toFixed(1);
     labels.push('Dia: ' + semanas[i]['dias'][0]['dia_mes'] + '/' + semanas[i]['dias'][semanas[i]['dias'].length - 1]['dia_mes'] +
       "\nTotal: " + total + '$');
   }
 
-  // Nuevo vector para agrupar los días de la semana
-  const diasAgrupados = [];
-
-  // Iterar sobre cada día de la semana (0 a 6)
-  for (let i = 0; i < semanas[0].dias.length; i++) {
-    const datosPorDia = [];
-    for (let j = 0; j < semanas.length; j++) {
-      if (semanas[j].dias[i]) {
-        datosPorDia.push(semanas[j].dias[i]);
-      } else {
-        datosPorDia.push({});
-      }
-    }
-    diasAgrupados.push(datosPorDia);
-  }
-
-
-  // crear el dataset
   var dataset = [];
-  for (let i = 0; i < diasAgrupados.length; i++) {
-    var tempdataset = {
-      label: "",
-      data: [],
-      backgroundColor: [],
-      order: 2
-    };
-    for (let j = 0; j < diasAgrupados[i].length; j++) {
-      var ventas = diasAgrupados[i][j]['total_ventas'];
-      ventas = ventas ? ventas : 0;
-      var dia = diasAgrupados[i][j]['dia_semana'];
-      dia = dia ? dia : 0;
-      tempdataset.data.push(ventas);
-      tempdataset.backgroundColor.push(colors[dia]);
-    }
-    for (let j = 0; j < diasAgrupados[i].length; j++) {
-      if (diasAgrupados[i][j]['nombre_dia']) {
-        tempdataset.label = diasAgrupados[i][j]['nombre_dia'];
-        break;
+  for (let i = 0; i < semanas.length; i++) {
+    for (let j = 0; j < semanas[i]['dias'].length; j++) {
+      var temp = {
+        label: "",
+        data: [],
+        backgroundColor: '',
+        order: 2
       }
+      temp.label = semanas[i]['dias'][j]['nombre_dia'] + '-' + semanas[i]['dias'][j]['dia_mes'];
+      switch (i) {
+        case 0:
+          temp.data = [semanas[i]['dias'][j]['total_ventas'], 0, 0, 0];
+          break;
+        case 1:
+          temp.data = [0, semanas[i]['dias'][j]['total_ventas'], 0, 0];
+          break;
+        case 2:
+          temp.data = [0, 0, semanas[i]['dias'][j]['total_ventas'], 0];
+          break;
+        case 3:
+          temp.data = [0, 0, 0, semanas[i]['dias'][j]['total_ventas']];
+          break;
+        default:
+          temp.data = [0, 0, 0, 0];
+          break;
+      }
+      temp.backgroundColor = colors[semanas[i]['dias'][j]['dia_semana']];
+      dataset.push(temp);
     }
-    dataset.push(tempdataset);
   }
 
   var line = {
@@ -257,10 +246,7 @@ function getData(semanas) {
   }
   dataset.push(line);
 
-  // crear un vector de datast de dias para mostrar la leyenda
   var dias = [];
-
-  var nomDias = ['Lunes ', 'Martes ', 'Miercoles ', 'Jueves ', 'Viernes ', 'Sabado ', 'Domingo '];
   for (let i = 0; i < 7; i++) {
     var tempDia = {
       label: nomDias[i],
@@ -272,21 +258,21 @@ function getData(semanas) {
     dias.push(tempDia);
   }
 
-  // empujar los tempdias al dataset
   dataset.push(...dias);
   var data = {
     labels: labels,
     datasets: dataset
   };
+
+  console.log(data);
   return data;
 }
+
+
 
 function drawChart2(semanas) {
   let canva2;
   canva2 = document.getElementById('chart2').getContext('2d');
-
-  var nomDias = ['Lunes ', 'Martes ', 'Miercoles ', 'Jueves ', 'Viernes ', 'Sabado ', 'Domingo '];
-
   barsChart = new Chart(canva2, {
     type: 'bar',
     data: getData(semanas),
@@ -316,7 +302,6 @@ function drawChart2(semanas) {
           color: '#153977',
           font: {
             size: '50em',
-            // cambiar el color de la fuente
           }
         }
       },
