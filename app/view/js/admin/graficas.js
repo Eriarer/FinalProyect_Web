@@ -6,7 +6,9 @@ const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
 ];
 const nomDias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 $(document).ready(function () {
-
+  $("#noData").hide();
+  $("#chart1").hide();
+  $("#chart2").hide();
   // obtener el Mes actual y colocarlo en el texto
   // agregar funcionalidad a los botones para que cambien el mes
   var mes = new Date().getMonth();
@@ -46,8 +48,10 @@ $(document).ready(function () {
   // ajustar las fechas al formato YYYY-MM-DD
   fechaInicio = fechaInicio.toISOString().slice(0, 10);
   fechaFin = fechaFin.toISOString().slice(0, 10);
-  initChart1(fechaInicio, fechaFin);
-  initChart2(fechaInicio, fechaFin);
+  drawChart1();
+  drawChart2();
+
+  actualizarGraficos(anio, mes);
 });
 
 function actualizarGraficos(anio, mes) {
@@ -58,6 +62,7 @@ function actualizarGraficos(anio, mes) {
   fechaFin = fechaFin.toISOString().slice(0, 10);
   updateChart1(fechaInicio, fechaFin);
   updateChart2(fechaInicio, fechaFin);
+
 }
 
 function updateChart1(fechaInicio, fechaFin) {
@@ -83,6 +88,7 @@ function updateChart1(fechaInicio, fechaFin) {
         };
       }
       pieChart.update();
+      return response.length;
     }
   });
 }
@@ -98,44 +104,28 @@ function updateChart2(fechaInicio, fechaFin) {
     success: function (response) {
       response = JSON.parse(response);
       console.log(response);
+      // si todos los totales son 0
+      var total = 0;
+      for (let i = 0; i < response.length; i++) {
+        total += response[i]['total'];
+      }
       // si no hay datos, borrar la data
-      if (response.length == 0) {
+      if (total == 0) {
         barsChart.data = {};
+        $("#chart1").hide();
+        $("#chart2").hide();
+        //dormir el hilo
+        $("#noData").show('slow');
       } else {
         barsChart.data = getData(response);
+        $("#noData").hide('slow');
+        setTimeout(() => {
+          $("#chart1").show();
+          $("#chart2").show();
+        }, 600);
       }
       barsChart.update();
-    }
-  });
-}
-
-function initChart1(fechaInicio, fechaFin) {
-  $.ajax({
-    url: '../../../model/DB/facturas/mostSelled.php',
-    method: 'POST',
-    data: {
-      fechaInicio: fechaInicio,
-      fechaFin: fechaFin
-    },
-    success: function (response) {
-      response = JSON.parse(response);
-      drawChart1(response);
-    }
-  });
-}
-
-function initChart2(fechaInicio, fechaFin) {
-  $.ajax({
-    url: '../../../model/DB/facturas/getVentasSemana.php',
-    method: 'POST',
-    data: {
-      fechaInicio: fechaInicio,
-      fechaFin: fechaFin
-    },
-    success: function (response) {
-      response = JSON.parse(response);
-      console.log(response);
-      drawChart2(response);
+      return response.length;
     }
   });
 }
@@ -156,7 +146,7 @@ function productsCount(data) {
   return productsCount;
 }
 
-function drawChart1(mostSell) {
+function drawChart1() {
   let canva1;
   canva1 = document.getElementById('chart1').getContext('2d');
 
@@ -164,10 +154,10 @@ function drawChart1(mostSell) {
   pieChart = new Chart(canva1, {
     type: 'pie',
     data: {
-      labels: productLabels(mostSell),
+      labels: ['test', 'test2'],
       datasets: [{
         label: 'Dataset 1',
-        data: productsCount(mostSell),
+        data: [0, 1],
         backgroundColor: colors
       }]
     },
@@ -270,12 +260,19 @@ function getData(semanas) {
 
 
 
-function drawChart2(semanas) {
+function drawChart2() {
   let canva2;
   canva2 = document.getElementById('chart2').getContext('2d');
   barsChart = new Chart(canva2, {
     type: 'bar',
-    data: getData(semanas),
+    data: {
+      labels: ['test', 'test2'],
+      datasets: [{
+        label: 'Dataset 1',
+        data: [0, 1],
+        backgroundColor: colors
+      }]
+    },
     options: {
       responsive: true,
       plugins: {

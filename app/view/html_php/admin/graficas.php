@@ -33,7 +33,7 @@ session_start();
     <h1 id="mes" class="text-center px-5">Mes</h1>
     <button class="btn btn-primary" id="btn-der"><i class="nf nf-cod-triangle_right"></i></button>
   </div>
-  <div class="d-flex justify-content-center align-items-center">
+  <div class="d-flex justify-content-center align-items-center graphs">
     <div class="container row row-cols-1 row-cols-lg-2">
       <div class="col ">
         <canvas id="chart1" width="100%" height="100%"></canvas>
@@ -41,6 +41,11 @@ session_start();
       <div class="col ">
         <canvas id="chart2" width="100%" height="100%"></canvas>
       </div>
+    </div>
+  </div>
+  <div id="noData">
+    <div class="alert alert-primary" role="alert">
+      <h1 class="alert-heading">No hay datos para mostrar</h1>
     </div>
   </div>
   <?php require_once '../footer.php'; ?>

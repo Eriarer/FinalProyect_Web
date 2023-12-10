@@ -1,3 +1,10 @@
 #mes {
   width: 15em;
 }
+
+#noData {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
