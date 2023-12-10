@@ -106,7 +106,9 @@ session_start();
                 <?php if ($producto['prod_stock'] != 0) : ?>
                   <div class='cardFooter'>
                     <a href='#' class='btn-cart' onclick="comprarAhora(<?= $producto['prod_id'] ?>); return false;">Comprar ahora</a>
-                    <a href='#' onclick="agregarAlCarrito(<?= $producto['prod_id'] ?>); return false">
+                    <a href='#' onclick="agregarAlCarrito(<?= $producto['prod_id']?>); return false">
+              <!-- var cant_edit = '<input id="changeCant' + producto.prod_id + '" type="number" value="' + producto.cantidad + '" min="1" max="' + producto.prod_stock + '" onchange="losefocus(' + producto.prod_id + ',this.value)">'; -->
+
                     <i class='nf nf-md-cart_plus'></i>
                     </a> <!-- agregar al carrito -->
                   </div>
@@ -141,45 +143,105 @@ session_start();
     });
 
     function agregarAlCarrito(id) {
-      //Verificar que el usuario este logeado 
-      <?php
-      if(!isset($_SESSION['email'])){
-        ?>
-        Swal.fire({
-            title: "Lo sentimos",
-            text: "Debes iniciar sesión para agregar productos",
-            icon: "error"
+  <?php
+  if (!isset($_SESSION['email'])) {
+  ?>
+    Swal.fire({
+      title: "Lo sentimos",
+      text: "Debes iniciar sesión para agregar productos",
+      icon: "error"
+    });
+  <?php
+  } else {
+  ?>
+    obtenerStock(id)
+      .then(function (stock) {
+        return obtenerCantCar(id)
+          .then(function (cantCar) {
+            if (cantCar >= stock) {
+              Swal.fire({
+                title: "Lo sentimos",
+                text: "No hay más productos disponibles",
+                icon: "error"
+              });
+              return Promise.reject("No hay más productos disponibles");
+            }
+
+            // Retornar la promesa de la llamada AJAX
+            return $.ajax({
+              type: "POST",
+              url: "../../model/DB/manejoCarrito.php",
+              data: {
+                method: "addOne",
+                prod_id: id,
+              },
+              success: function (response) {
+                response = JSON.parse(response);
+                toastr.success('Producto agregado al carrito', 'Éxito', {
+                  positionClass: 'toast-top-center',
+                  timeOut: 1000,
+                  toastClass: 'custom-toast',
+                });
+                // Actualizar el número de productos en el carrito en la etiqueta span ID:num_prod
+                $("#num_prod").text(response);
+              },
+              error: function (error) {
+                console.error('Error al obtener la información del carrito:', error);
+              }
+            });
           });
-          <?php
-      }else{
-        ?>
-        $.ajax({
-        type: "POST",
-        url: "../../model/DB/manejoCarrito.php",
-        data: {
-          method: "addOne",
-          prod_id: id,
-        },
-        success: function(response) {
-          response = JSON.parse(response);
-          toastr.success('Producto agregado al carrito', 'Éxito', {
-            positionClass: 'toast-top-center', // Posición de la notificación
-            timeOut: 1000, // Duración en milisegundos
-            toastClass: 'custom-toast', // Clase de la notificación
-          });
-          // Actualizar el número de productos en el carrito en la etiqueta span ID:num_prod
-          $("#num_prod").text(response);
-        },
-        error: function(error) {
-          
-          console.error('Error al obtener la información del carrito:', error);
-        }
+      })
+      .catch(function (error) {
+        console.error('Error al obtener stock o cantidad del carrito:', error);
       });
-        <?php
+  <?php
+  }
+  ?>
+}
+
+function obtenerCantCar(prod_id) {
+  return new Promise(function (resolve, reject) {
+    $.ajax({
+      type: "POST",
+      url: "../../model/DB/manejoCarrito.php",
+      data: {
+        method: "getCantCarr",
+        prod_id: prod_id,
+      },
+      success: function (response) {
+        response = JSON.parse(response);
+        console.log(response);
+        resolve(response); // Resolver la promesa con la cantidad obtenida
+      },
+      error: function (error) {
+        console.error('Error al obtener la información del carrito:', error);
+        reject(error); // Rechazar la promesa en caso de error
       }
-      ?>
-    }
-    
+    });
+  });
+}
+
+function obtenerStock(id) {
+  return new Promise(function (resolve, reject) {
+    $.ajax({
+      type: "POST",
+      url: "../../model/DB/manejoCarrito.php",
+      data: {
+        method: "getStock",
+        prod_id: id,
+      },
+      success: function (response) {
+        response = JSON.parse(response);
+        console.log(response);
+        resolve(response); // Resolver la promesa con el stock obtenido
+      },
+      error: function (error) {
+        console.error('Error al obtener la información del carrito:', error);
+        reject(error); // Rechazar la promesa en caso de error
+      }
+    });
+  });
+}
 
     function comprarAhora() {
 
