@@ -83,3 +83,9 @@ td{
     justify-content: center;
     align-items: center;
 }
+
+button:hover {
+    border-color: #180b65;
+    background-color: rgb(126, 164, 241);
+    transform: scale(1.05);
+  }
