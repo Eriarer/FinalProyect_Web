@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 $FONTPATH = __DIR__ . '/../../media/fonts/leadcoat.ttf';
 $TARGETDIR = __DIR__ . '/../../media/images/captcha/';
 // variables para el captcha
@@ -94,8 +95,11 @@ while (isset($usedNumbers[$fileNumber])) {
 }
 sleep(0.02);
 $TARGETFILE = $TARGETDIR . $fileNumber . '.jpg';
-// Guardar la imagen
+//Guardar la imagen 
+chmod($TARGETDIR, 0777);
 imagejpeg($wrapped_image2, $TARGETFILE, 100);
+chmod($TARGETDIR, 0755);
+
 sleep(0.5);
 
 
