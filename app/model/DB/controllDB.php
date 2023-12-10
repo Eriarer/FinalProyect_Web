@@ -80,6 +80,8 @@ class dataBase {
         throw new Exception("Error al insertar la factura.");
       }
 
+      $stmt->close();
+
       // Recopilar detalles para una única inserción
       $detalles = [];
 
@@ -93,7 +95,13 @@ class dataBase {
       $this->detalles_factura($detalles);
 
       $this->connexion->commit();
-      return true;
+      // Crear un array asociativo con los datos relevantes y encriptar en JSON
+      $resultArray = [
+        'folio_factura' => $folio,
+        // Otros datos relevantes que se ocupen incluir en el futuro
+      ];
+
+      return json_encode($resultArray);
     } catch (Exception $e) {
       $this->connexion->rollback();
       return false;
