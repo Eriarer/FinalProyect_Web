@@ -89,3 +89,11 @@ button:hover {
     background-color: rgb(126, 164, 241);
     transform: scale(1.05);
   }
+
+button{
+    text-align: center;
+    background: #1E53AE;
+    color: aliceblue;
+
+
+}
