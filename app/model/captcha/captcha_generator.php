@@ -48,7 +48,7 @@ for ($x = 0; $x < $WIDTH; $x++) {
     $index = imagecolorat($image, $x, $y);
     $rgb = imagecolorsforindex($image, $index);
     $newX = $x;
-    $newY = $y + (sin($x / $FREQUENCY_Y) * $AMPLITUDE_Y);
+    $newY = $y + round(sin($x / $FREQUENCY_Y) * $AMPLITUDE_Y);
     imagesetpixel($wrapped_image, $newX, $newY, getColorForImage($wrapped_image, [$rgb['red'], $rgb['green'], $rgb['blue']]));
   }
 }
@@ -61,7 +61,7 @@ for ($x = 0; $x < $WIDTH; $x++) {
   for ($y = 0; $y < $HEIGHT; $y++) {
     $index = imagecolorat($wrapped_image, $x, $y);
     $rgb = imagecolorsforindex($wrapped_image, $index);
-    $newX = $x + (sin($y / $FREQUENCY_X) * $AMPLITUDE_X);
+    $newX = $x + round(sin($y / $FREQUENCY_X) * $AMPLITUDE_X);
     $newY = $y;
     imagesetpixel($wrapped_image2, $newX, $newY, getColorForImage($wrapped_image2, [$rgb['red'], $rgb['green'], $rgb['blue']]));
   }
@@ -72,6 +72,7 @@ imagefilter($wrapped_image2, IMG_FILTER_GAUSSIAN_BLUR);
 
 //contar cuantos archivos hay en el directorio que no sean empty
 $files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
+
 //destruir lo archivos con una antiguedad mayor a 2 minutos
 foreach ($files as $file) {
   $file = $TARGETDIR . $file;
