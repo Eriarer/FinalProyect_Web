@@ -76,3 +76,10 @@ td{
     text-align: right;
     font-weight: bold; 
 }
+
+.botonpdf{
+    padding-top:8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
