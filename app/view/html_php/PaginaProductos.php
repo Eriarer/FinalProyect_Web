@@ -106,7 +106,9 @@ session_start();
                 <?php if ($producto['prod_stock'] != 0) : ?>
                   <div class='cardFooter'>
                     <a href='#' class='btn-cart' onclick="comprarAhora(<?= $producto['prod_id'] ?>); return false;">Comprar ahora</a>
-                    <a href='#'><i class='nf nf-md-cart_plus' onclick="agregarAlCarrito(<?= $producto['prod_id'] ?>); return false"></i></a> <!-- agregar al carrito -->
+                    <a href='#' onclick="agregarAlCarrito(<?= $producto['prod_id'] ?>); return false">
+                    <i class='nf nf-md-cart_plus'></i>
+                    </a> <!-- agregar al carrito -->
                   </div>
                 <?php endif; ?>
               </div>
@@ -139,7 +141,19 @@ session_start();
     });
 
     function agregarAlCarrito(id) {
-      $.ajax({
+      //Verificar que el usuario este logeado 
+      <?php
+      if(!isset($_SESSION['email'])){
+        ?>
+        Swal.fire({
+            title: "Lo sentimos",
+            text: "Debes iniciar sesión para agregar productos",
+            icon: "error"
+          });
+          <?php
+      }else{
+        ?>
+        $.ajax({
         type: "POST",
         url: "../../model/DB/manejoCarrito.php",
         data: {
@@ -157,10 +171,15 @@ session_start();
           $("#num_prod").text(response);
         },
         error: function(error) {
+          
           console.error('Error al obtener la información del carrito:', error);
         }
       });
+        <?php
+      }
+      ?>
     }
+    
 
     function comprarAhora() {
 
