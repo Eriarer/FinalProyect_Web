@@ -19,9 +19,6 @@
 
 <body>
     <?php require_once 'navbar.php'; ?>
-    <a href="../../../index.php" class="container">
-        <img src="../../media/images/LogoSF.png" id="imgLogo">
-    </a>
     <div class="container my-4">
         <h2>¿Dónde quieres que se envíe tu pedido?</h2>
         <form action="actionFormulario.php" method="post">
@@ -43,8 +40,8 @@
             <label for="pais">País</label>
             <select id="pais" name="pais" required>
                 <option value="">Selecciona un país</option>
-                <option value="Mexico">México</option>
-                <option value="Estados Unidos">Estados Unidos</option>
+                <option value="MX">México</option>
+                <option value="EU">Estados Unidos</option>
             </select>
 
             <label for="pais">Metodo de pago</label>
