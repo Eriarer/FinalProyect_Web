@@ -52,7 +52,7 @@ class dataBase {
       }
 
       $user_id = $user['usr_id'];
-      $folio = $this->getFolio();
+      $folio = $this->generateFolioFactura();
 
       $subtotal = 0;
       $total = 0;
@@ -101,7 +101,7 @@ class dataBase {
   }
 
 
-  public function getFolio() {
+  public function generateFolioFactura() {
     //el folio se genera dependiendo del ultimo folio agregado a la base de datos
     // este folio es un string el cual va incrementando 1 en 1
     // empieza en 000000 y termina en ZZZZZZ
