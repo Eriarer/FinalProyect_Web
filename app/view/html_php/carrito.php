@@ -42,7 +42,12 @@
       </table>
 
     </div>
-    <p>Subtotal:</p>
+    <div id="divSubtotal">
+    <p>SUBTOTAL:</p>
+    <p id="money">$</p>
+    <p id="subtotal"></p>
+    </div>
+    <span id="iva">Sin iva incluido</span>
     <!-- Boton con enlace a la página de compra -->
     <div class="container d-flex justify-content-center">
       <a href="compra.php" class="btn btn-primary">Comprar</a>
@@ -54,6 +59,10 @@
      * Funcion para actualizar la tabla de productos
      */
     $(document).ready(function() {
+      createTable();
+    });
+
+    function createTable(){
       $.ajax({
         type: "POST",
         url: "../../model/DB/manejoCarrito.php",
@@ -72,7 +81,6 @@
             for (var i = 0; i < responce.length; i++) {
               var span = '';
               var producto = responce[i];
-              console.log(producto);
               var tr = $("<tr></tr>");
               var cant_edit = '';
               var ahorro = (producto.prod_descuento / 100) * producto.prod_precio * producto.cantidad;
@@ -96,12 +104,13 @@
 
             }
           }
+          subtotal();
         },
         error: function() {
           console.log("No se ha podido obtener la información");
         }
       });
-    });
+    }
 
     function losefocus(id, value) {
       if (value <= 0) {
@@ -127,9 +136,9 @@
           });
         })
         .then(function(response) {
+          createTable();
           response = JSON.parse(response);
           $("#num_prod").text(response);
-          console.log("perdio el FOCUS SUCCESS");
         })
         .catch(function(error) {
           console.error('Error:', error);
@@ -157,10 +166,47 @@
       });
     }
 
-    
+    function subtotal(){
+      $.ajax({
+        type: "POST",
+        url: "../../model/DB/manejoCarrito.php",
+        data: {
+          method: "getSubtotal",
+        },
+        success: function(response) {
+          response = JSON.parse(response);
+          $("#subtotal").text(response);
+        },
+        error: function(error) {
+          console.error('Error al obtener la información del carrito:', error);
+        }
+      });
+    }
+
+    function updateCant(id, value) {
+      $.ajax({
+        type: "POST",
+        url: "../../model/DB/manejoCarrito.php",
+        data: {
+          method: "updateCantidad",
+          cantidad: value,
+          prod_id: id,
+        },
+        success: function(response) {
+          response = JSON.parse(response);
+          $("#num_prod").text(response);
+        },
+        error: function(error) {
+          console.error('Error al obtener la información del carrito:', error);
+        }
+      });
+      
+    }
 
     function eliminarProducto(id) {
       // Realiza la solicitud AJAX para eliminar el producto
+      var value = 0;
+      updateCant(id, value);
       $.ajax({
         type: "POST",
         url: "../../model/DB/manejoCarrito.php",
@@ -174,6 +220,8 @@
             text: "El artículo ha sido eliminado correctamente",
             icon: "success"
           });
+          // Actualizar la tabla de productos
+          createTable();
         },
         error: function(xhr, status, error) {
           Swal.fire({
