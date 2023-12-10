@@ -5,7 +5,7 @@ include_once __DIR__ . '/../app/model/DB/controllDB.php';
 
 $db = new dataBase($credentials, $CONFIG);
 
-$result = $db->getFactura('000009');
+$result = $db->getFactura('000000');
 
 $result = json_decode($result, true);
 
