@@ -8,7 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $metodoPago = $_POST['MetodoP'];
     $telefono = $_POST['telefono'];
 }
-// 
+
+// Datos de la factura 
 $folioFactura = "123456";
 $idUsuario = "78910";
 $fechaFactura = date("Y-m-d"); // Fecha actual
