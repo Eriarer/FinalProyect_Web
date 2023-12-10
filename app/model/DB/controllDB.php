@@ -646,6 +646,58 @@ class dataBase {
     return $result;
   }
 
+  public function getCantCarr($usr_id, $prod_id) {
+    // Devuelve la cantidad de un producto en el carrito del usuario
+    // Verificar que existen parámetros
+    if ($usr_id == null || $prod_id == null) {
+        throw new Exception("Todos los campos son obligatorios.");
+    }
+    
+    $sql = "SELECT cantidad FROM carrito WHERE usr_id = ? AND prod_id = ?";
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("ii", $usr_id, $prod_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    
+    // Verificar si hay resultados antes de intentar acceder a la cantidad
+    if ($result !== false && $result->num_rows > 0) {
+        // Guardando el resultado como número
+        $row = $result->fetch_assoc();
+        return $row['cantidad'];
+    } else {
+        // Si no hay resultados, devolver 0 o cualquier valor predeterminado según tu lógica
+        return 0;
+    }
+}
+
+  //función para obtener el subtotal de los productos del carrito junto con el descuento
+  public function getSubtotal($usr_id){
+    // Verificar que existen parámetros
+    if ($usr_id == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+    // Preparar la sentencia para evitar la <--inyección SQL-->
+    $sql = "SELECT SUM(cantidad * prod_precio * (1 - (prod_descuento / 100))) FROM carrito INNER JOIN productos ON carrito.prod_id = productos.prod_id WHERE usr_id = ?";
+    // Preparar la sentencia
+    $stmt = $this->connexion->prepare($sql);
+
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("i", $usr_id);
+
+    // Ejecutar la sentencia
+    $stmt->execute();
+
+    // Obtener el número de filas afectadas por la última consulta
+    $result = $stmt->get_result();
+    $result = ($result->fetch_assoc());
+    //obtener solo el número
+    $result = $result['SUM(cantidad * prod_precio * (1 - (prod_descuento / 100)))'];
+    //imprimiendo el resultado en consola
+    return $result;
+  }
+  
+
   /*
   █▀▄ █▀▄ █▀█ █▀▄ █ █ █▀ ▀█▀ █▀█ █▀
   █▀  █▀▄ █▄█ █▄▀ █▄█ █▄  █  █▄█ ▄█
