@@ -158,9 +158,10 @@ class dataBase {
     }
 
     // Preparar la sentencia para evitar inyección SQL
-    $sql = "SELECT f.*, df.*
+    $sql = "SELECT f.*, df.*, p.prod_name, p.prod_imgPath, p.categoria
             FROM facturas f 
             LEFT JOIN detalles_factura df ON f.folio_factura = df.folio_factura
+            LEFT JOIN productos p ON df.prod_id = p.prod_id
             WHERE f.folio_factura = ?";
 
     $stmt = $this->connexion->prepare($sql);
@@ -175,16 +176,26 @@ class dataBase {
     $resultArray = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     $stmt->close();
 
-    // Agrupar resultados por folio_factura
+    // Inicializar la factura
     $factura = null;
+
+    // Recorrer los resultados
     foreach ($resultArray as $row) {
       if (
         $factura === null
       ) {
+        // Inicializar la factura solo una vez
         $factura = [
           'folio_factura' => $row['folio_factura'],
           'fecha_factura' => $row['fecha_factura'],
-          'detalles' => []
+          'iva' => $row['iva'],
+          'subtotal' => $row['subtotal'],
+          'gastos_envio' => $row['gastos_envio'],
+          'total' => $row['total'],
+          'pais' => $row['pais'],
+          'direccion' => $row['direccion'],
+          'metodo_pago' => $row['metodo_pago'],
+          'detalles' => []  // Inicializar el array de detalles
         ];
       }
 
@@ -193,7 +204,10 @@ class dataBase {
         'prod_id' => $row['prod_id'],
         'cantidad' => $row['cantidad'],
         'precio' => $row['precio'],
-        'descuento' => $row['descuento']
+        'descuento' => $row['descuento'],
+        'prod_name' => $row['prod_name'],
+        'prod_imgPath' => $row['prod_imgPath'],
+        'categoria' => $row['categoria']
         // Agregar otros campos de detalles_factura según sea necesario
       ];
     }
@@ -658,29 +672,29 @@ class dataBase {
     // Devuelve la cantidad de un producto en el carrito del usuario
     // Verificar que existen parámetros
     if ($usr_id == null || $prod_id == null) {
-        throw new Exception("Todos los campos son obligatorios.");
+      throw new Exception("Todos los campos son obligatorios.");
     }
-    
+
     $sql = "SELECT cantidad FROM carrito WHERE usr_id = ? AND prod_id = ?";
     $stmt = $this->connexion->prepare($sql);
     $stmt->bind_param("ii", $usr_id, $prod_id);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
-    
+
     // Verificar si hay resultados antes de intentar acceder a la cantidad
     if ($result !== false && $result->num_rows > 0) {
-        // Guardando el resultado como número
-        $row = $result->fetch_assoc();
-        return $row['cantidad'];
+      // Guardando el resultado como número
+      $row = $result->fetch_assoc();
+      return $row['cantidad'];
     } else {
-        // Si no hay resultados, devolver 0 o cualquier valor predeterminado según tu lógica
-        return 0;
+      // Si no hay resultados, devolver 0 o cualquier valor predeterminado según tu lógica
+      return 0;
     }
-}
+  }
 
   //función para obtener el subtotal de los productos del carrito junto con el descuento
-  public function getSubtotal($usr_id){
+  public function getSubtotal($usr_id) {
     // Verificar que existen parámetros
     if ($usr_id == null) {
       throw new Exception("Todos los campos son obligatorios.");
@@ -704,7 +718,7 @@ class dataBase {
     //imprimiendo el resultado en consola
     return $result;
   }
-  
+
 
   /*
   █▀▄ █▀▄ █▀█ █▀▄ █ █ █▀ ▀█▀ █▀█ █▀
