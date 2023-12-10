@@ -623,6 +623,33 @@ class dataBase
     return $result;
   }
 
+  //función para obtener el subtotal de los productos del carrito junto con el descuento
+  public function getSubtotal($usr_id){
+    // Verificar que existen parámetros
+    if ($usr_id == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+    // Preparar la sentencia para evitar la <--inyección SQL-->
+    $sql = "SELECT SUM(cantidad * prod_precio * (1 - (prod_descuento / 100))) FROM carrito INNER JOIN productos ON carrito.prod_id = productos.prod_id WHERE usr_id = ?";
+    // Preparar la sentencia
+    $stmt = $this->connexion->prepare($sql);
+
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("i", $usr_id);
+
+    // Ejecutar la sentencia
+    $stmt->execute();
+
+    // Obtener el número de filas afectadas por la última consulta
+    $result = $stmt->get_result();
+    $result = ($result->fetch_assoc());
+    //obtener solo el número
+    $result = $result['SUM(cantidad * prod_precio * (1 - (prod_descuento / 100)))'];
+    //imprimiendo el resultado en consola
+    return $result;
+  }
+  
+
   /*
   █▀▄ █▀▄ █▀█ █▀▄ █ █ █▀ ▀█▀ █▀█ █▀
   █▀  █▀▄ █▄█ █▄▀ █▄█ █▄  █  █▄█ ▄█
