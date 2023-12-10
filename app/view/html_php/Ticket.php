@@ -72,7 +72,7 @@ $total = $subtotal + $totalIva + $gastoEnvio;
             </tr>
         </table>
 
-        
+
         <div class="factura-body">
             <table>
                 <tr>
@@ -89,7 +89,7 @@ $total = $subtotal + $totalIva + $gastoEnvio;
                         <td>$<?php echo number_format($producto['precio'] * $producto['cantidad'], 2); ?></td>
                     </tr>
                 <?php endforeach; ?>
-                
+
                 <div>
                     <tr>
                         <td colspan="2" rowspan="5" class="pago"><?php echo $metodoPago ?></td>
