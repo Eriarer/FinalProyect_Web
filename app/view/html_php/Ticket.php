@@ -63,7 +63,7 @@ $total = $subtotal + $totalIva + $gastoEnvio;
             <tr>
                 <td class="linea_derecha">Fecha</td>
                 <td class="linea_derecha">449-123-4567</td>
-                <td>Numero de Telefono</td>
+                <td><?php echo $telefono ?></td>
             </tr>
             <tr>
                 <td class="linea_derecha linea_abajo"><?php echo $fechaFactura; ?></td>
