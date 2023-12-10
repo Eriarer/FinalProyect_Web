@@ -331,16 +331,16 @@ class dataBase {
     $dias_mes = date("t", strtotime($fecha_inicio));
     switch ($dias_mes) {
       case 31:
-        $dias_periodo = [7, 8, 8, 7];
+        $dias_periodo = [8, 16, 24, 31];
         break;
       case 30:
-        $dias_periodo = [7, 8, 7, 7];
+        $dias_periodo = [8, 16, 23, 30];
         break;
       case 29:
-        $dias_periodo = [7, 7, 7, 7];
+        $dias_periodo = [8, 16, 22, 29];
         break;
       case 28:
-        $dias_periodo = [6, 7, 7, 7];
+        $dias_periodo = [8, 16, 22, 28];
         break;
     }
 
@@ -370,11 +370,22 @@ class dataBase {
           'dia_mes' => $dia + 1
         ];
         array_push($periodos[$periodo_actual]['dias'], $array);
-
+        if ($dia + 1 >= $dias_periodo[$periodo_actual]) {
+          $periodo_actual++;
+          if (!isset($periodos[$periodo_actual]) && $periodo_actual < 4) {
+            $periodos[$periodo_actual] = [
+              'total' => 0,
+              'dias' => []
+            ];
+          } else {
+            $periodo_actual--;
+          }
+        }
         $dia++;
         $dia_actual_bd = $row != null ? ($row['dia_mes'] == $dia + 1 ? (int)$row['dia_mes'] : null) : null;
         $dia_semana = date("w", strtotime($dia  . "-" . date("m") . "-" . date("Y")));
       }
+      // El dia existe
       if ($dia_actual_bd === $dia + 1) {
         // Agregar ventas al día correspondiente del periodo
         $array = [
@@ -389,9 +400,8 @@ class dataBase {
         $periodos[$periodo_actual]['total'] += isset($row['total_ventas']) ? $row['total_ventas'] : 0;
       }
 
-      $arraySum = array_sum(array_slice($dias_periodo, 0, $periodo_actual + 1));
       // Mover al siguiente periodo cuando sea necesario
-      if ($dia >= array_sum(array_slice($dias_periodo, 0, $periodo_actual + 1))) {
+      if ($dia + 1 >= $dias_periodo[$periodo_actual]) {
         $periodo_actual++;
       }
       $index++;
