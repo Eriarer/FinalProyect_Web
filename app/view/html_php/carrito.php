@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="../css/main.css" />
   <link rel="stylesheet" href="../css/carrito.css">
   <!-- favIcon -->
-  <link rel="icon" type="image/x-icon" href="../../../media/images/oso-de-peluche.png" />
+  <link rel="icon" type="image/x-icon" href="../../media/images/oso-de-peluche.png" />
 </head>
 
 <body>
