@@ -40,9 +40,9 @@ class dataBase {
   █▀▀ ▄▀▄ █▀ ▀█▀ █ █ █▀▄ ▄▀▄ █▀
   █▀  █▀█ █▄  █  █▄█ █▀▄ █▀█ ▄█
   */
-  public function altaFactura($email, $productos, $fecha, $iva, $gastos_envio, $pais, $direccion, $metodo_pago, $nombre, $correo, $telefono) {
+  public function altaFactura($email, $productos, $fecha, $iva, $gastos_envio, $pais, $direccion, $metodo_pago, $nombre,  $telefono, $subtotal, $total, $cupon, $costo_iva) {
     // Verificar que existen parámetros
-    if ($email == null || $productos == null || $iva == null || $gastos_envio == null || $pais == null || $direccion == null || $metodo_pago == null) {
+    if ($email == null || $productos == null || $iva == null || $gastos_envio == null || $pais == null || $direccion == null || $metodo_pago == null || $nombre == null ||  $telefono == null || $subtotal == null || $total == null || $cupon == null || $costo_iva == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
     try {
@@ -54,16 +54,6 @@ class dataBase {
       $user_id = $user['usr_id'];
       $folio = $this->generateFolioFactura();
 
-      $subtotal = 0;
-      $total = 0;
-
-      foreach ($productos as $producto) {
-        $subtotal += $producto['cantidad'] * $producto['precio'];
-        $total += $producto['cantidad'] * ($producto['precio'] * (1 - ($producto['descuento'] / 100)));
-      }
-
-      $total = ($total * (1 + ($iva / 100))) + $gastos_envio;
-
       if (!strtotime($fecha)) {
         $fecha = date("Y-m-d", strtotime($fecha));
         if (!strtotime($fecha)) {
@@ -71,9 +61,9 @@ class dataBase {
         }
       }
 
-      $sql = "INSERT INTO facturas (folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total, pais, direccion, metodo_pago, nombre, correo, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      $sql = "INSERT INTO facturas (folio_factura, usr_id, fecha_factura, iva, subtotal, gastos_envio, total, pais, direccion, metodo_pago, nombre, correo, telefono, cupon, costo_iva) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
       $stmt = $this->connexion->prepare($sql);
-      $stmt->bind_param("sisddddsss", $folio, $user_id, $fecha, $iva, $subtotal, $gastos_envio, $total, $pais, $direccion, $metodo_pago, $nombre, $correo, $telefono);
+      $stmt->bind_param("sisddddsssssssd", $folio, $user_id, $fecha, $iva, $subtotal, $gastos_envio, $total, $pais, $direccion, $metodo_pago, $nombre, $email, $telefono, $cupon, $costo_iva);
       $result = $stmt->execute();
 
       if (!$result) {
@@ -315,16 +305,19 @@ class dataBase {
     if ($user == null) return false;
     $user_id = $user['usr_id'];
     // preparar la sentencia para evitar <--inyección sql-->
-    $sql = "SELECT * FROM facturas WHERE usr_id = ? ORDER BY fecha_factura DESC LIMIT 1";
+    $sql = "SELECT folio_factura FROM facturas WHERE usr_id = ? ORDER BY fecha_factura DESC LIMIT 1";
     $stmt = $this->connexion->prepare($sql);
     // Vincular parámetros a la sentencia preparada como cadenas
     $stmt->bind_param("i", $user_id);
 
     $stmt->execute();
     $result = $stmt->get_result();
+    // Mediante el folio conseguimos la factura completa
+    $row = $result->fetch_assoc();
     $stmt->close();
-    $json = json_encode($result->fetch_all(MYSQLI_ASSOC));
-    return $json;
+    if ($row == null) return false;
+    $folio = $row['folio_factura'];
+    return $this->getFactura($folio);
   }
 
   public function getVentasPorSemana($fecha_inicio, $fecha_fin) {
