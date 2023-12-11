@@ -18,6 +18,7 @@ session_start();
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- CSS -->
   <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/TablasAdm.css">
   <!-- favIcon -->
   <link rel="icon" type="image/x-icon" href="../../../media/images/oso-de-peluche.png" />
 </head>
