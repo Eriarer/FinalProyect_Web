@@ -269,23 +269,43 @@
         },
         success: function(responce) {
           console.log("respuesta altaFactura:", responce);
+          responce = JSON.parse(responce);
+          var factura = responce['folio_factura'];
+          enviarCorreo(factura);
+          // lanzar sweet alert
+          Swal.fire({
+            icon: 'success',
+            title: 'Compra realizada',
+            text: 'Su compra se ha realizado con éxito',
+            // cuando se 
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // vaciar el carrito
+              setTimeout(function() {
+                //window.location.href = "../../../../index.php";
+              }, 1000);
+            }
+          })
         },
       });
       vaciarCarrito();
-      // lanzar sweet alert
-      Swal.fire({
-        icon: 'success',
-        title: 'Compra realizada',
-        text: 'Su compra se ha realizado con éxito',
-        // cuando se 
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // vaciar el carrito
-          setTimeout(function() {
-            window.location.href = "../../../../index.php";
-          }, 1000);
+    }
+
+    function enviarCorreo(factura) {
+      console.log(factura);
+      $.ajax({
+        method: "POST",
+        url: "../../../model/mail/factura/correoFactura.php",
+        data: {
+          folio: factura // Corregir el nombre del parámetro a "folio"
+        },
+        success: function(response) {
+          console.log("respuesta enviarCorreo:", response);
+        },
+        error: function() {
+          console.log("No se ha podido obtener la información");
         }
-      })
+      });
     }
 
     function disminuirStock(prod_id, cantidad) {
