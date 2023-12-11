@@ -36,7 +36,7 @@ $php = $CONFIG['P_php'];
       <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://mx.linkedin.com/?src=go-pa&trk=sem-ga_campid.19001150288_asid.143806640876_crid.636777052015_kw.linkedin_d.c_tid.kwd-148086543_n.g_mt.e_geo.1010000&mcid=7000592715335761922&cid=&gclid=CjwKCAiAg9urBhB_EiwAgw88mUxXaV7fWeTs3WNFs7B4Rjy5ef2IirBSEYc1zk6H3ZE6Djl3fQ_dMBoCDR4QAvD_BwE&gclsrc=aw.ds" role="button"><i class="fab fa-linkedin-in"></i></a>
 
       <!-- Github -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-github"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://github.com/Eriarer/FinalProyect_Web" role="button"><i class="fab fa-github"></i></a>
     </section>
 
     <!-- Form -->
