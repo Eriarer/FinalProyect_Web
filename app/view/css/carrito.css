@@ -38,3 +38,12 @@ tbody {
     font-size: .7em;
     margin-right: 12em;
 }
+.btnCompra:hover {
+    border-color: #9d8cff;
+    background-color: #beceed;
+    transform: scale(1.05);
+}
+
+.titulo{
+    background-color:#A9CCE3 !important;
+}

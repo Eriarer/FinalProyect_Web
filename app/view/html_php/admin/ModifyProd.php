@@ -18,6 +18,7 @@ session_start();
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- CSS -->
   <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/TablasAdm.css">
   <!-- favIcon -->
   <link rel="icon" type="image/x-icon" href="../../../media/images/oso-de-peluche.png" />
 </head>
@@ -86,18 +87,18 @@ session_start();
   ?>
   <?php require_once '../navbar.php'; ?>
   <div class="container d-flex justify-content-center mt-5">
-    <table class="table  table-striped table-hover table-responsive-md">
+    <table class="table  table-striped table-hover table-responsive-md tableF" >
       <thead>
         <tr>
-          <th scope=" col">ID</th>
-          <th scope="col">Categoria</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Descripcion</th>
-          <th scope="col">Imagen</th>
-          <th scope="col">Stock</th>
-          <th scope="col">Precio</th>
-          <th scope="col">Descuento</th>
-          <th scope="col">Acciones</th>
+          <th scope="col" class="titulo">ID</th>
+          <th scope="col" class="titulo">Categoria</th>
+          <th scope="col" class="titulo">Nombre</th>
+          <th scope="col" class="titulo">Descripcion</th>
+          <th scope="col" class="titulo">Imagen</th>
+          <th scope="col" class="titulo">Stock</th>
+          <th scope="col" class="titulo">Precio</th>
+          <th scope="col" class="titulo">Descuento</th>
+          <th scope="col" class="titulo">Acciones</th>
         </tr>
       </thead>
       <tbody>
