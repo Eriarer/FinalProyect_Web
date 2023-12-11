@@ -171,7 +171,7 @@ session_start();
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-success" name="submit" id="submit">Aceptar</button>
+          <button type="submit" class="btn" name="submit" id="submit" style="background-color:#005EFF; color:aliceblue">Aceptar</button>
         </div>
       </div>
     </div>
