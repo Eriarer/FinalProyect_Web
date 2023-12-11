@@ -254,22 +254,24 @@
       li.html(html);
       ul.append(li);
       // Agregar el listener para actualizar el costo de envio
-      listenerUpdateCostoEnvio();
+      listenerUpdatePais();
     }
 
-    function listenerUpdateCostoEnvio() {
+
+    function listenerUpdatePais() {
       $("#country").change(function() {
         var envio = 0;
-        var lastEnvio = 0;
+        var iva = 0;
         if ($("#country").val() == "Mexico") {
           envio = 200;
-          lastEnvio = 500;
+          iva = 16;
         } else {
           envio = 500;
-          lastEnvio = 200;
+          iva = 21;
         }
+        $("#porcentajeIVA").html(iva + "%");
         $("#costo_envio").html("$" + envio);
-        updateTotalCostoEnvio(envio, lastEnvio);
+        updateTotalCostoEnvio(envio, iva);
       });
     }
 
