@@ -188,7 +188,10 @@
           ul.empty();
 
           // Agregar los productos del carrito 
-          var totcarrito = appendProductos(responce);
+          var subtotalCarrito = appendProductos(responce);
+
+          appendSubtotal(subtotalCarrito);
+
           //Actualizando el código html del carrito
           var code = $('<li class="list-group-item d-flex justify-content-between bg-light" id="cuponContainer"></li>');
           html = '<div class="text-success">';
@@ -237,6 +240,15 @@
         ul.append(li);
       }
       return totcarrito;
+    }
+
+    function appendSubtotal(subtotalCarrito) {
+      var ul = $("#carritoList");
+      var li = $('<li class="list-group-item d-flex justify-content-between"></li>');
+      html = '<h6>Subtotal</h6>';
+      html += '<strong id="subtotal_carrito">$' + subtotalCarrito + '</strong>';
+      li.html(html);
+      ul.append(li);
     }
 
     function appendCostoEnvio() {
