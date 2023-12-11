@@ -207,54 +207,52 @@ $recipientMessage = '
                             </tr>';
 foreach ($result['detalles'] as $producto) {
     $recipientMessage .= '<tr class="productos">';
-    $recipientMessage .= '<td>' . $producto['prod_name'] . '</td>';
-    $recipientMessage .= '<td>' . $producto['cantidad'] . '</td>';
-    $recipientMessage .= '<td>$' . $producto['precio'] . '</td>';
-    $recipientMessage .= '<td>$' . $producto['precio'] * $producto['cantidad'] . '</td>';
+    $recipientMessage .= '    <td>' . $producto['prod_name'] . '</td>';
+    $recipientMessage .= '    <td>' . $producto['cantidad'] . '</td>';
+    $recipientMessage .= '    <td>$' . $producto['precio'] . '</td>';
+    $recipientMessage .= '    <td>$' . $producto['precio'] * $producto['cantidad'] . '</td>';
     $recipientMessage .= '</tr>';
 }
-$recipientMessage .=  '
-                                <tr>
-                                    <td colspan="2" rowspan="5" class="pago">' . $result['metodo_pago'] . '</td>
-                                </tr>
-                                <tr>
-                                    <td class="factura_totales">Subtotal</td>
-                                    <td>' . $result['subtotal'] . '</td>
-                                </tr>
-                                <tr>
-                                    <td class="factura_totales">Gasto de Envío</td>
-                                    <td>' . $result['gastos_envio'] . '</td>
-                                </tr>
-                                <tr>
-                                    <td class="factura_totales">IVA</td>
-                                    <td>' . $result['total_iva'] . '</td>
-                                </tr>
-                                <tr>
-                                    <td class="total"><strong>Total</strong></td>
-                                    <td class="total" style="text-align: left;"><strong>' . $result['total'] . '</strong></td>
-                                </tr>
-
+$recipientMessage .=  '     <tr>
+                                <td colspan="2" rowspan="5" class="pago">' . $result['metodo_pago'] . '</td>
+                            </tr>
+                            <tr>
+                                <td class="factura_totales">Subtotal</td>
+                                <td>' . $result['subtotal'] . '</td>
+                            </tr>
+                            <tr>
+                                <td class="factura_totales">Gasto de Envío</td>
+                                <td>' . $result['gastos_envio'] . '</td>
+                            </tr>
+                            <tr>
+                                <td class="factura_totales">IVA</td>
+                                <td>' . $result['total_iva'] . '</td>
+                            </tr>
+                            <tr>
+                                <td class="total"><strong>Total</strong></td>
+                                <td class="total" style="text-align: left;"><strong>' . $result['total'] . '</strong></td>
+                            </tr>
                         </table>
                     </div>
                 </div>
             </td>
             <td class="right"></td>
-        </tr>
+            </tr>
 
-        <tr>
-            <td class="left"></td>
-            <td class="center">
-                <p class="texto">Con cariño, el equipo de FluffyHugs.</p>
-            </td>
-            <td class="right"></td>
-        </tr>
-        <tr>
-            <td class="left"></td>
-            <td class="center">
-                <p></p>
-            </td>
-            <td class="right"></td>
-        </tr>
+            <tr>
+                <td class="left"></td>
+                <td class="center">
+                    <p class="texto">Con cariño, el equipo de FluffyHugs.</p>
+                </td>
+                <td class="right"></td>
+            </tr>
+            <tr>
+                <td class="left"></td>
+                <td class="center">
+                    <p></p>
+                </td>
+                <td class="right"></td>
+            </tr>
         </tr>
     </table>
 </body>
