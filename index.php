@@ -25,7 +25,7 @@ session_start();
 <?php include_once("app/view/html_php/navbar.php") ?>
 
 <body>
-  <div id="carouselExampleIndicators" class="carousel slide carrusel mt-5" data-ride="carousel">
+  <div id="carouselExampleIndicators" class="carousel slide carrusel " data-ride="carousel">
     <div class="carousel-inner incarrusel">
       <img class="backCarr" src="app/media/images/LogoSF.png" alt="logo">
       <div class="carousel-item active imgcarrusel">

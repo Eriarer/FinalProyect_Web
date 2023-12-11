@@ -12,28 +12,31 @@ $footerCSS = $css . 'headers/footer.css';
 <!-- leyenda de derechos y fecha - mensaje de que es un proyecto academico -->
 <?php
 include_once __DIR__ . '/../../model/routes_files.php';
+// $image = $CONFIG['P_images'] . 'LogoSF.png';
+$base = $CONFIG['base_url'];
+$php = $CONFIG['P_php'];
 ?>
 <footer class="bg-body-tertiary text-center" id="piePag">
   <div class="container p-4">
     <!-- Social media -->
     <section class="mb-4">
       <h3>SIGUENOS EN REDES SOCIALES!</h3>
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-facebook-f"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://www.facebook.com/?_rdr" role="button"><i class="fab fa-facebook-f"></i></a>
 
       <!-- Twitter -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-twitter"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://twitter.com/i/flow/login?input_flow_data=%7B%22requested_variant%22%3A%22eyJsYW5nIjoiZXMifQ%3D%3D%22%7D" role="button"><i class="fab fa-twitter"></i></a>
 
       <!-- Google -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-google"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://www.youtube.com/" role="button"><i class="fab fa-google"></i></a>
 
       <!-- Instagram -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-instagram"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://www.instagram.com/fluffy_hugs_official/" role="button"><i class="fab fa-instagram"></i></a>
 
       <!-- Linkedin -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-linkedin-in"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://mx.linkedin.com/?src=go-pa&trk=sem-ga_campid.19001150288_asid.143806640876_crid.636777052015_kw.linkedin_d.c_tid.kwd-148086543_n.g_mt.e_geo.1010000&mcid=7000592715335761922&cid=&gclid=CjwKCAiAg9urBhB_EiwAgw88mUxXaV7fWeTs3WNFs7B4Rjy5ef2IirBSEYc1zk6H3ZE6Djl3fQ_dMBoCDR4QAvD_BwE&gclsrc=aw.ds" role="button"><i class="fab fa-linkedin-in"></i></a>
 
       <!-- Github -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-github"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://github.com/Eriarer/FinalProyect_Web" role="button"><i class="fab fa-github"></i></a>
     </section>
 
     <!-- Form -->
@@ -75,19 +78,19 @@ include_once __DIR__ . '/../../model/routes_files.php';
           <h5 class="text-uppercase">Enlaces Rapidos</h5>
           <ul class="list-unstyled mb-0 ">
             <li>
-              <a class="text-body" href="#!">Inicio</a>
+              <a class="text-body" tootlip="Inicio" href="<?= $base . 'index.php' ?>">Inicio</a>
             </li>
             <li>
-              <a class="text-body" href="#!">Tienda</a>
+              <a class="text-body" tootlip="Tienda" href="<?= $php . 'PaginaProductos.php' ?>">Tienda</a>
             </li>
             <li>
-              <a class="text-body" href="#!">Acerca de Nosotros</a>
+              <a class="text-body" tootlip="Acerca de" href="<?= $php . 'acercaDe.php' ?>">Acerca de Nosotros</a>
             </li>
             <li>
-              <a class="text-body" href="#!">Contacto</a>
+              <a class="text-body" tootlip="Contacto" href="<?= $php . 'contacto.php' ?>">Contacto</a>
             </li>
             <li>
-              <a class="text-body" href="#!">FAQs</a>
+              <a class="text-body" tootlip="Preguntas frecuentes" href="<?= $php . 'FAQs.php' ?>">FAQs</a>
             </li>
           </ul>
         </div>
@@ -97,13 +100,13 @@ include_once __DIR__ . '/../../model/routes_files.php';
           <h5 class="text-uppercase">Atención al cliente</h5>
           <ul class="list-unstyled mb-0">
             <li>
-              <p class="text-body">Teléfono</p>
+              <p class="text-body">449-338-8009</p>
             </li>
             <li>
-              <p class="text-body">Dirección</p>
+              <p class="text-body"> Avenida Universidad 940, Ciudad Universitaria, Universidad Autónoma de Aguascalientes, 20100 Aguascalientes, Ags.</p>
             </li>
             <li>
-              <p class="text-body">Correo Electrónico</p>
+              <p class="text-body">fluffyhugs2023@gmail.com</p>
             </li>
           </ul>
         </div>

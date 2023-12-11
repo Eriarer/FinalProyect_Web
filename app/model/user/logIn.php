@@ -22,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //escribir la variable de sesion
     $_SESSION['email'] = $email;
     $_SESSION['name'] = $user['usr_account'];
+    $_SESSION['productos'] = $db->obtenerTotalProductos($user['usr_id']);
     if ($_POST['coockie'] == true) {
       $email = $user['usr_email'];
       $password = $user['usr_pwd'];

@@ -38,6 +38,12 @@
   }
 }
 
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .rotate-left {
   animation: rotate-left 0.3s ease-in;
   background: #015adf !important;

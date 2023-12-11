@@ -21,6 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $json =  $db->getProduct($_POST['id']);
     echo $json;
     return $json;
+  } else if ($method === "disminuirStock") {
+    $id = $_POST['id'];
+    $cantidad = $_POST['cantidad'];
+    $response = $db->disminuirStock($id, $cantidad);
+    echo $response ? "success" : "error";
+    return $response ? "success" : "error";
   }
   echo "error";
   return "error";

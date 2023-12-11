@@ -1,6 +1,7 @@
 <?php
 session_start();
-$FONTPATH = __DIR__ . '/../../media/fonts/leadcoat.TTF';
+
+$FONTPATH = __DIR__ . '/../../media/fonts/leadcoat.ttf';
 $TARGETDIR = __DIR__ . '/../../media/images/captcha/';
 // variables para el captcha
 $TEXTLENGTH = 6;
@@ -48,7 +49,7 @@ for ($x = 0; $x < $WIDTH; $x++) {
     $index = imagecolorat($image, $x, $y);
     $rgb = imagecolorsforindex($image, $index);
     $newX = $x;
-    $newY = $y + (sin($x / $FREQUENCY_Y) * $AMPLITUDE_Y);
+    $newY = $y + round(sin($x / $FREQUENCY_Y) * $AMPLITUDE_Y);
     imagesetpixel($wrapped_image, $newX, $newY, getColorForImage($wrapped_image, [$rgb['red'], $rgb['green'], $rgb['blue']]));
   }
 }
@@ -61,7 +62,7 @@ for ($x = 0; $x < $WIDTH; $x++) {
   for ($y = 0; $y < $HEIGHT; $y++) {
     $index = imagecolorat($wrapped_image, $x, $y);
     $rgb = imagecolorsforindex($wrapped_image, $index);
-    $newX = $x + (sin($y / $FREQUENCY_X) * $AMPLITUDE_X);
+    $newX = $x + round(sin($y / $FREQUENCY_X) * $AMPLITUDE_X);
     $newY = $y;
     imagesetpixel($wrapped_image2, $newX, $newY, getColorForImage($wrapped_image2, [$rgb['red'], $rgb['green'], $rgb['blue']]));
   }
@@ -72,10 +73,11 @@ imagefilter($wrapped_image2, IMG_FILTER_GAUSSIAN_BLUR);
 
 //contar cuantos archivos hay en el directorio que no sean empty
 $files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
-//destruir lo archivos con una antiguedad mayor a 2 minutos
+
+//destruir lo archivos con una antiguedad mayor a 10 minutos
 foreach ($files as $file) {
   $file = $TARGETDIR . $file;
-  if (filemtime($file) < time() - 5) {
+  if (filemtime($file) < time() - 300) {
     unlink($file);
   }
 }
@@ -93,8 +95,11 @@ while (isset($usedNumbers[$fileNumber])) {
 }
 sleep(0.02);
 $TARGETFILE = $TARGETDIR . $fileNumber . '.jpg';
-// Guardar la imagen
+//Guardar la imagen 
+chmod($TARGETDIR, 0777);
 imagejpeg($wrapped_image2, $TARGETFILE, 100);
+chmod($TARGETDIR, 0755);
+
 sleep(0.5);
 
 
@@ -115,7 +120,8 @@ return $captcha;
 
 
 // funciones
-function captchaText($length) {
+function captchaText($length)
+{
   $pattern = '123456789ABCDEFGHIJKLMNOPQRSTUVWXZ';
   $max = strlen($pattern) - 1;
   $captcha = [];
@@ -125,17 +131,20 @@ function captchaText($length) {
   return $captcha;
 }
 
-function getRandomRGB_Color($min, $max) {
+function getRandomRGB_Color($min, $max)
+{
   $red = mt_rand($min, $max);
   $green = mt_rand($min, $max);
   $blue = mt_rand($min, $max);
   return $color = [$red, $green, $blue];
 }
-function getColorForImage($image, $color) {
+function getColorForImage($image, $color)
+{
   // crear el objeto de color
   return imagecolorallocate($image, $color[0], $color[1], $color[2]);
 }
 
-function getRandomAngle($angle) {
+function getRandomAngle($angle)
+{
   return mt_rand(-$angle, $angle);
 }

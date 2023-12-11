@@ -13,6 +13,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipientEmail = $_POST["email"];
         $formMessage = $_POST["message"];
     }
+}else{
+    echo 'No se adjuntaron los datos correctamente';
+    return;
 }
 
 // Asunto y mensaje
@@ -133,9 +136,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 // Bibliotecas de PHPMailer
-require __DIR__ . '/../../../view/lib/PHPMailer/src/Exception.php';
-require __DIR__ . '/../../../view/lib/PHPMailer/src/PHPMailer.php';
-require __DIR__ . '/../../../view/lib/PHPMailer/src/SMTP.php';
+require __DIR__ . '/../../../model/lib/PHPMailer/src/Exception.php';
+require __DIR__ . '/../../../model/lib/PHPMailer/src/PHPMailer.php';
+require __DIR__ . '/../../../model/lib/PHPMailer/src/SMTP.php';
 
 // Instancia de PHPMailer
 $mail = new PHPMailer(true);
@@ -161,14 +164,17 @@ try {
     $mail->isHTML(true);                // Establece el formato del correo electrónico en HTML
     $mail->Subject = $recipientSubject; // Asunto del correo  
     $imagen_url = file_get_contents($CONFIG['P_model'] . 'mail/contacto/gato.jpg');
+    $mail->CharSet = 'UTF-8';
     $mail->AddEmbeddedImage('LogoSF.png', 'Logo');
     $mail->Body = $recipientMessage; // Contenido del correo
-    
-    
+
+
     $mail->send();
 
     // Redireccionar al footer despues de 5 segundos
     echo 'Mensaje enviado correctamente';
+    return;
 } catch (Exception $e) {
     echo "No se pudo enviar el mensaje. Error de envío: {$mail->ErrorInfo}";
+    return;
 }
