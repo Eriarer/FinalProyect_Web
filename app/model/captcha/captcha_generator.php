@@ -74,10 +74,10 @@ imagefilter($wrapped_image2, IMG_FILTER_GAUSSIAN_BLUR);
 //contar cuantos archivos hay en el directorio que no sean empty
 $files = array_diff(scandir($TARGETDIR), ['.', '..', 'empty']);
 
-//destruir lo archivos con una antiguedad mayor a 2 minutos
+//destruir lo archivos con una antiguedad mayor a 10 minutos
 foreach ($files as $file) {
   $file = $TARGETDIR . $file;
-  if (filemtime($file) < time() - 5) {
+  if (filemtime($file) < time() - 300) {
     unlink($file);
   }
 }
@@ -120,7 +120,8 @@ return $captcha;
 
 
 // funciones
-function captchaText($length) {
+function captchaText($length)
+{
   $pattern = '123456789ABCDEFGHIJKLMNOPQRSTUVWXZ';
   $max = strlen($pattern) - 1;
   $captcha = [];
@@ -130,17 +131,20 @@ function captchaText($length) {
   return $captcha;
 }
 
-function getRandomRGB_Color($min, $max) {
+function getRandomRGB_Color($min, $max)
+{
   $red = mt_rand($min, $max);
   $green = mt_rand($min, $max);
   $blue = mt_rand($min, $max);
   return $color = [$red, $green, $blue];
 }
-function getColorForImage($image, $color) {
+function getColorForImage($image, $color)
+{
   // crear el objeto de color
   return imagecolorallocate($image, $color[0], $color[1], $color[2]);
 }
 
-function getRandomAngle($angle) {
+function getRandomAngle($angle)
+{
   return mt_rand(-$angle, $angle);
 }
