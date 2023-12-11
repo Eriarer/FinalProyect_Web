@@ -21,7 +21,7 @@ $php = $CONFIG['P_php'];
     <!-- Social media -->
     <section class="mb-4">
       <h3>SIGUENOS EN REDES SOCIALES!</h3>
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-facebook-f"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://www.facebook.com/?_rdr" role="button"><i class="fab fa-facebook-f"></i></a>
 
       <!-- Twitter -->
       <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-twitter"></i></a>
