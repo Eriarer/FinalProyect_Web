@@ -42,16 +42,24 @@
       </table>
 
     </div>
-    <div id="divSubtotal">
-    <p>SUBTOTAL:</p>
-    <p id="money">$</p>
-    <p id="subtotal"></p>
+    <div id="divCuenta" style="display: none;">
+      <div id="divSubtotal">
+        <p>SUBTOTAL:</p>
+        <p id="money">$</p>
+        <p id="subtotal"></p>
+      </div>
+      <span id="iva">Sin iva incluido</span>
     </div>
-    <span id="iva">Sin iva incluido</span>
     <!-- Boton con enlace a la página de compra -->
     <div class="container d-flex justify-content-center">
-      <a href="finalizar_compra.php" class="btn btn-primary">Comprar</a>
+      <!-- boton de comrar oculto -->
+      <a href="checkout/checkout.php" id="comprar" class="btn btn-primary" style="display: none;">Comprar</a>
     </div>
+  </div>
+  <div id="msgVacio">
+    <center>
+      <h3 id="carritoVacio">Carrito Vacio</h3>
+    </center>
   </div>
   <?php require_once 'footer.php'; ?>
   <script>
@@ -59,10 +67,11 @@
      * Funcion para actualizar la tabla de productos
      */
     $(document).ready(function() {
+      subtotal();
       createTable();
     });
 
-    function createTable(){
+    function createTable() {
       $.ajax({
         type: "POST",
         url: "../../model/DB/manejoCarrito.php",
@@ -166,7 +175,7 @@
       });
     }
 
-    function subtotal(){
+    function subtotal() {
       $.ajax({
         type: "POST",
         url: "../../model/DB/manejoCarrito.php",
@@ -176,6 +185,16 @@
         success: function(response) {
           response = JSON.parse(response);
           $("#subtotal").text(response);
+          console.log(response);
+          if (response != null) {
+            $("#msgVacio").css("display", "none");
+            $("#divCuenta").css("display", "block");
+            $("#comprar").css("display", "block");
+          }else{
+            $("#msgVacio").css("display", "block");
+            $("#divCuenta").css("display", "none");
+            $("#comprar").css("display", "none");
+          }
         },
         error: function(error) {
           console.error('Error al obtener la información del carrito:', error);
@@ -200,7 +219,6 @@
           console.error('Error al obtener la información del carrito:', error);
         }
       });
-      
     }
 
     function eliminarProducto(id) {
@@ -221,6 +239,7 @@
             icon: "success"
           });
           // Actualizar la tabla de productos
+          subtotal();
           createTable();
         },
         error: function(xhr, status, error) {

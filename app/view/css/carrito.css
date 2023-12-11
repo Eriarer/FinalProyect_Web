@@ -23,6 +23,11 @@ tbody {
     margin-left: 0.5em;
 }
 
+#carritoVacio{
+    color: gray;
+    padding-bottom: 2.5em;
+}
+
 #iva{
     Color: gray;
     display: flex;
