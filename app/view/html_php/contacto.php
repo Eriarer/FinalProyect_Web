@@ -19,6 +19,8 @@ session_start();
     <link rel="stylesheet" href="../css/contacto.css">
     <link rel="stylesheet" href="../css/main.css">
     <title>FluffyHugs | Contacto</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/formularios.css">
     <!-- favIcon -->
     <link rel="icon" type="image/x-icon" href="../../media/images/oso-de-peluche.png" />
 </head>
@@ -28,27 +30,32 @@ include_once __DIR__ . '/../../model/routes_files.php';
 ?>
 
 <body>
-    <div class="container">
+    <div class="container mt-5">
         <div class="card-container">
-            <div class="formulario card">
+            <div class="card-body">
                 <!-- Formulario de contacto -->
-                <h5>Contacto</h5>
+                <h5 class="card-title text-center">Contacto</h5>
                 <p>Envianos un mensaje y te responderemos a la brevedad.</p>
 
                 <form id="formContacto" action="" method="">
                     <div class="form-row form-group ">
-                        <p><i class="nf nf-oct-person_fill p-2 "></i>Nombre</p>
-                        <input type="text" class="form-control " id="exampleInputName1" required>
-                    </div>
-                    <div class="form-row form-group">
-                        <p><i class="nf nf-md-email p-2"></i>Email</p>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+                        <div class="col">
+                            <p><i class="nf nf-oct-person_fill p-2 "></i>Nombre</p>
+                            <input type="text" class="form-control " id="exampleInputName1" required>
+                        </div>
+                        <div class="col">
+                            <p><i class="nf nf-md-email p-2"></i>Email</p>
+                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+                        </div>
                     </div>
                     <div class="form-row form-group">
                         <p><i class="nf nf-md-message_draw p-2"></i>Mensaje</p>
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="boton ">Enviar</button>
+                    </div>
+
                 </form>
             </div>
         </div>
