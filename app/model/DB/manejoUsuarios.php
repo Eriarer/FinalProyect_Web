@@ -50,5 +50,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $response = $db->updatePassword($email, $password);
     echo $response ? "success" : "error";
     return $response ? "success" : "error";
+  }else if($method === "cuponExist"){
+    $cupon = $_POST['cupon'];
+    if($cupon === "NEWFLUFFY15" || $cupon === "FLUFFY10" || $cupon === "FLUFFY5"){
+      echo true;
+      return "true";
+    }else{
+      echo false;
+      return "false";
+    }
+  }else if($method === "usarCupon"){
+    $cupon = $_POST['cupon'];
+    $email = $_POST['email'];
+    $id = $db->getId($email);
+    $response = $db->usarCupon($id, $cupon);
+    echo $response ? "success" : "error";
+    return $response ? "success" : "error";
   }
 }
