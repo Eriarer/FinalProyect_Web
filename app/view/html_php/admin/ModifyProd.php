@@ -86,7 +86,7 @@ session_start();
   ?>
   <?php require_once '../navbar.php'; ?>
   <div class="container d-flex justify-content-center mt-5">
-    <table class="table  table-striped table-hover">
+    <table class="table  table-striped table-hover table-responsive-md">
       <thead>
         <tr>
           <th scope=" col">ID</th>
