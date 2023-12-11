@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <table class="datos">
             <tr>
                 <th class="linea_abajo" style="vertical-align: middle; "><img src="../../../media/images/LogoSF.png" alt="Logo" width="60px" height="60px"></td>
-                <th class="linea_abajo h5" id="titulo_fac" style="text-align: center;">Fluffy Hugs Factura</td>
+                <th class="linea_abajo" id="titulo_fac" style="text-align: center;">Fluffy Hugs Factura</td>
                 <th class="linea_abajo" style="vertical-align: middle;"><img src="../../../media/images/LogoSF.png" alt="Logo" width="60px" height="60px"></td>
             </tr>
             <tr>
@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </tr>
             <tr>
                 <td class="linea_derecha">Fecha</td>
-                <td class="linea_derecha">449XXXXXXX</td>
+                <td class="linea_derecha">449-338-8009</td>
                 <td><?= $result["telefono"] ?></td>
             </tr>
             <tr>
