@@ -233,8 +233,8 @@
         totcarrito += total_prod;
         var canttotal = (canttotal + producto.cantidad);
         var li = $('<li class="list-group-item d-flex justify-content-between lh-condensed"></li>');
-        html = '<div>';
-        html += '<h6 class="my-0">' + producto.prod_name + '</h6>';
+        html = '<div class="d-flex flex-column">';
+        html += '<h7 class="my-0">' + producto.prod_name + '</h7>';
         html += '<small class="text-muted">' + 'Cantidad: ' + producto.cantidad + '</small>';
         html += '</div>';
         html += '<span class="text-muted prod_price">$' + total_prod + '</span>';
