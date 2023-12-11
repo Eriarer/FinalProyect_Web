@@ -1,13 +1,30 @@
 <?php
-include_once __DIR__ . '/../../model/DB/dataBaseCredentials.php';
-include_once __DIR__ . '/../../model/DB/routes_files.php';
-include_once __DIR__ . '/../../model/DB/controllDB.php';
+include_once __DIR__ . '/../../../model/DB/dataBaseCredentials.php';
+include_once __DIR__ . '/../../../model/DB/routes_files.php';
+include_once __DIR__ . '/../../../model/DB/controllDB.php';
 
 $db = new dataBase($credentials, $CONFIG);
+$folio = '';
+$result = [];
+// Verificar si se ha enviado el formulario
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Verificar si se ha enviado un valor para el campo de correo electrónico
+    if (isset($_POST["folio"])) {
+        $folio = $_POST["folio"];
 
-$result = $db->getFactura('000000');
+        $db = new dataBase($credentials, $CONFIG);
 
-$result = json_decode($result, true);
+        $result = $db->getFactura($folio);
+
+        $result = json_decode($result, true);
+    } else {
+        header('Location: ../../../../index.php');
+        return;
+    }
+} else {
+    header('Location: ../../../../index.php');
+    return;
+}
 
 // echo $result['folio_factura'];
 // echo $result['fecha_factura'];
@@ -65,40 +82,52 @@ $total = $subtotal + $totalIva + $gastoEnvio;
 <html>
 
 <head>
-    <link rel="stylesheet" href="../css/TicketEstilos.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Boostrap v4.6.2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- agregando link para darle estilos a la alerta -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- css -->
+    <link rel="stylesheet" href="../../css/TicketEstilos.css">
+    <link href="../../css/main.css" rel="stylesheet">
+    <!-- favIcon -->
+    <link rel="icon" type="image/x-icon" href="../../../media/images/oso-de-peluche.png" />
     <title>Factura</title>
 </head>
 
 <body>
-
-    <div class="factura-container">
+    <?php include_once '../navbar.php'; ?>
+    <div class="factura-container mt-5">
         <table class="datos">
             <tr>
-                <td class="linea_abajo" style="vertical-align: middle; text-align: right "><img src="../../media/images/LogoSF.png" alt="Logo" width="60px" height="60px"></td>
-                <td class="linea_abajo" id="titulo_fac">Fluffy Hugs Factura</td>
-                <td class="linea_abajo" style="vertical-align: middle;"><img src="../../media/images/LogoSF.png" alt="Logo" width="60px" height="60px"></td>
+                <th class="linea_abajo" style="vertical-align: middle; "><img src="../../../media/images/LogoSF.png" alt="Logo" width="60px" height="60px"></td>
+                <th class="linea_abajo" id="titulo_fac" style="text-align: center;">Fluffy Hugs Factura</td>
+                <th class="linea_abajo" style="vertical-align: middle;"><img src="../../../media/images/LogoSF.png" alt="Logo" width="60px" height="60px"></td>
             </tr>
             <tr>
                 <td class="linea_derecha">Folio Factura</td>
                 <td class="linea_derecha">Fluffy Hugs</td>
-                <td><?php echo 'x' ?></td>
+                <td><?= $result["nombre"] ?></td>
             </tr>
             <tr>
-                <td class="linea_derecha"><?php echo $result['folio_factura']; ?></td>
+                <td class="linea_derecha"><?= $folio ?></td>
                 <td class="linea_derecha">fluffyhugs2023@gmail.com</td>
-                <td><?php echo 'x'?></td>
+                <td><?= $result["correo"] ?></td>
             </tr>
             <tr>
                 <td class="linea_derecha">Fecha</td>
-                <td class="linea_derecha">449-123-4567</td>
-                <td><?php echo 'X'?></td>
+                <td class="linea_derecha">449XXXXXXX</td>
+                <td><?= $result["telefono"] ?></td>
             </tr>
             <tr>
-                <td class="linea_derecha linea_abajo"><?php echo $result['fecha_factura']; ?></td>
+                <td class="linea_derecha linea_abajo"><?= $result['fecha_factura']; ?></td>
                 <td class="linea_derecha linea_abajo">Avenida Universidad 940, Ciudad Universitaria, Universidad Autónoma de Aguascalientes, 20100 Aguascalientes, Ags, MX.</td>
-                <td class="linea_abajo"><?php echo $result['direccion'];
-                                        echo ', ';
-                                        echo $result['pais']; ?></td>
+                <td class="linea_abajo"><?= $result["direccion"] ?></td>
             </tr>
         </table>
 
@@ -124,23 +153,23 @@ $total = $subtotal + $totalIva + $gastoEnvio;
 
                 <div>
                     <tr>
-                        <td colspan="2" rowspan="5" class="pago"><?php echo $metodoPago ?></td>
+                        <td colspan="2" rowspan="5" class="pago"><?= $result['metodo_pago'] ?></td>
                     </tr>
                     <tr>
                         <td class="factura_totales">Subtotal</td>
-                        <td>$<?php echo '0'?></td>
+                        <td>$<?= $result['subtotal'] ?></td>
                     </tr>
                     <tr>
                         <td class="factura_totales">Gasto de Envío</td>
-                        <td>$<?php echo '0' ?></td>
+                        <td>$<?= $result['gastos_envio'] ?></td>
                     </tr>
                     <tr>
                         <td class="factura_totales">IVA</td>
-                        <td>$<?php echo '0' ?></td>
+                        <td>$<?= $result['total_iva'] ?></td>
                     </tr>
                     <tr>
                         <td class="total"><strong>Total</strong></td>
-                        <td class="total" style="text-align: left;"><strong>$<?php echo '0' ?></strong></td>
+                        <td class="total" style="text-align: left;"><strong>$<?= $result['total'] ?></strong></td>
                     </tr>
                 </div>
 
@@ -154,14 +183,19 @@ $total = $subtotal + $totalIva + $gastoEnvio;
     <!-- <button id="botonpdf" onclick="window.open('TicketPDF.php', '_blank')">Ver PDF</button> -->
 
     <!-- Boton que mande a ejecutar código de otro archivo -->
-    <div class="botonpdf">
-        <button onclick="generarPDF()">Ver PDF</button>
+    <div class="botonpdf mt-3 mb-5">
+        <!-- Formulario que abre una nueva pestaña -->
+        <form action="TicketPDF.php" method="POST" target="_blank">
+            <input type="hidden" name="folio" value="<?= $folio ?>" style="display: none;">
+            <button class="btn btn-primary btn-lg h1">Imprimir Factura</button>
+        </form>
     </div>
     <!--  $nombreUsuario = $_POST['nombre-completo'];
     $correoUsuario = $_POST['email'];
     $direccion = $_POST['direccion'] . ', ' . $_POST['codigo-postal'] . ', ' . $_POST['ciudad'] . ', ' . $_POST['pais'];
     $metodoPago = $_POST['MetodoP'];
     $telefono = $_POST['telefono']; -->
+    <?php include_once '../footer.php'; ?>
     <script>
         // Obtener los valores del formulario
         var nombre = '<?php echo $nombreUsuario ?>';

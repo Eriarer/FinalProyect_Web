@@ -1,13 +1,30 @@
 <?php
-include_once __DIR__ . '/../../model/DB/dataBaseCredentials.php';
-include_once __DIR__ . '/../../model/DB/routes_files.php';
-include_once __DIR__ . '/../../model/DB/controllDB.php';
-
+include_once __DIR__ . '/../../../model/DB/dataBaseCredentials.php';
+include_once __DIR__ . '/../../../model/DB/routes_files.php';
+include_once __DIR__ . '/../../../model/DB/controllDB.php';
 $db = new dataBase($credentials, $CONFIG);
+$folio = '';
+$result = [];
+// Verificar si se ha enviado el formulario
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Verificar si se ha enviado un valor para el campo de correo electrónico
+    if (isset($_POST["folio"])) {
+        $folio = $_POST["folio"];
 
-$result = $db->getFactura('000000');
+        $db = new dataBase($credentials, $CONFIG);
 
-$result = json_decode($result, true);
+        $result = $db->getFactura($folio);
+
+        $result = json_decode($result, true);
+    } else {
+        // cerrar la pagina
+        echo "<script>window.close();</script>";
+        return;
+    }
+} else {
+    echo "<script>window.close();</script>";
+    return;
+}
 
 // echo $result['folio_factura'];
 // echo $result['fecha_factura'];
@@ -29,12 +46,12 @@ $result = json_decode($result, true);
 //     echo $producto['prod_imgPath'];
 // }
 
-require('../lib/fpdf186/fpdf.php'); // Asegurate de que esta ruta sea correcta
+require('../../lib/fpdf186/fpdf.php'); // Asegurate de que esta ruta sea correcta
 class PDF extends FPDF
 {
     function Header()
     {
-        $this->Image('../../media/images/LogoSF.png', 180, 5, 20);
+        $this->Image('../../../media/images/LogoSF.png', 180, 5, 20);
         $this->SetFont('Arial', 'B', 12);
         $this->Cell(80);
         $this->Cell(30, 10, 'Fluffy Hugs Factura', 0, 0, 'C');
@@ -50,6 +67,15 @@ class PDF extends FPDF
 
     function facturaContent($nombreUsuario, $correoUsuario, $direccion, $telefono, $folioFactura, $fechaFactura, $metodoPago, $productos, $subtotal, $gastoEnvio, $totalIva, $total)
     {
+        //convertir todos los caracteres a ISO-8859-1 para que se muestren los caracteres especiales
+        $nombreUsuario = mb_convert_encoding($nombreUsuario, 'ISO-8859-1', 'UTF-8');
+        $correoUsuario = mb_convert_encoding($correoUsuario, 'ISO-8859-1', 'UTF-8');
+        $direccion = mb_convert_encoding($direccion, 'ISO-8859-1', 'UTF-8');
+        $metodoPago = mb_convert_encoding($metodoPago, 'ISO-8859-1', 'UTF-8');
+        $fechaFactura = mb_convert_encoding($fechaFactura, 'ISO-8859-1', 'UTF-8');
+        $folioFactura = mb_convert_encoding($folioFactura, 'ISO-8859-1', 'UTF-8');
+        $telefono = mb_convert_encoding($telefono, 'ISO-8859-1', 'UTF-8');
+
         // Establecer el fondo del certificado
         $this->SetFont('Arial', '', 12);
 
@@ -59,7 +85,6 @@ class PDF extends FPDF
         $this->Cell(0, 10, 'Telefono: ' . $telefono, 0, 1);
         $this->Cell(0, 10, 'Fecha: ' . $fechaFactura, 0, 1);
         // Hay direcciones que son muy largas y se desbordan, si el tamaño es mayor a 100 caracteres, se divide en dos lineas
-        $direccion = 'Avenida Universidad 940, Ciudad Universitaria, Universidad Autónoma de Aguascalientes, 20100 Aguascalientes, Ags.';
         if (strlen($direccion) > 80) {
             // Encuentra la última posición de un espacio dentro de la longitud máxima permitida
             $lastSpacePos = strrpos(substr($direccion, 0, 80), ' ');
@@ -89,8 +114,10 @@ class PDF extends FPDF
         $this->Cell(35, 10, 'Precio Unitario', 1);
         $this->Cell(35, 10, 'Importe', 1);
         $this->Ln();
-        
+
         foreach ($productos as $producto) {
+            // convertir el nombre del producto a ISO-8859-1 para que se muestren los caracteres especiales
+            $producto['prod_name'] = mb_convert_encoding($producto['prod_name'], 'ISO-8859-1', 'UTF-8');
             $this->Cell(95, 10, $producto['prod_name'], 1);
             $this->Cell(22, 10, $producto['cantidad'], 1);
             $this->Cell(35, 10, '$' . number_format($producto['precio'], 2), 1);
@@ -135,7 +162,7 @@ class PDF extends FPDF
     function AddInvoiceContent($data)
     {
         // Agregar el logo
-        $this->Image('../../media/images/LogoSF.png', 10, 10, 20);
+        $this->Image('../../../media/images/LogoSF.png', 10, 10, 20);
         $this->SetFont('Arial', 'B', 18);
         $this->Cell(0, 10, 'Fluffy Hugs Factura', 0, 1, 'C');
 
@@ -189,13 +216,14 @@ $gastoEnvio = 50.00;
 $total = $subtotal + $totalIva + $gastoEnvio;
 
 // Agregar contenido al PDF
-$pdf->facturaContent($nombreUsuario, $correoUsuario, $result['direccion'] . ', ' . $result['pais'], $telefono, $result['folio_factura'], $result['fecha_factura'], $result['metodo_pago'], $result['detalles'], $result['subtotal'], $result['gastos_envio'], $result['iva'], $result['total']);
+$pdf->facturaContent($result["nombre"], $result["correo"], $result['direccion'], $result["telefono"], $result['folio_factura'], $result['fecha_factura'], $result['metodo_pago'], $result['detalles'], $result['subtotal'], $result['gastos_envio'], $result['iva'], $result['total']);
 
 // $pdf->AddInvoiceContent($data);
 
 // Imprimir la linea punteada
 $pdf->SetDottedLine(10, 100, 200, 100);
+$title = 'Factura_' . $folio;
+$pdf->SetTitle($title);
 
-// ... el resto del contenido del PDF ...
 
 $pdf->Output();
