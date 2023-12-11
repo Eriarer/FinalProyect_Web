@@ -24,7 +24,7 @@
   <?php require_once 'navbar.php'; ?>
   <div class="container mb-5">
     <div class="container d-flex justify-content-center mt-5">
-      <table class="table table-striped table-hover">
+      <table class="table table-striped table-hover table-responsive-md">
         <thead>
           <tr>
             <th scope="col">Producto</th>
@@ -190,7 +190,7 @@
             $("#msgVacio").css("display", "none");
             $("#divCuenta").css("display", "block");
             $("#comprar").css("display", "block");
-          }else{
+          } else {
             $("#msgVacio").css("display", "block");
             $("#divCuenta").css("display", "none");
             $("#comprar").css("display", "none");
