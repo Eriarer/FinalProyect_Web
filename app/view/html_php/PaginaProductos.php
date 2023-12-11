@@ -105,7 +105,7 @@ session_start();
                 </div>
                 <?php if ($producto['prod_stock'] != 0) : ?>
                   <div class='cardFooter'>
-                    <a href='#' class='btn-cart' onclick="comprarAhora(<?= $producto['prod_id'] ?>); return false;">Comprar ahora</a>
+  
                     <a href='#' onclick="agregarAlCarrito(<?= $producto['prod_id']?>); return false">
               <!-- var cant_edit = '<input id="changeCant' + producto.prod_id + '" type="number" value="' + producto.cantidad + '" min="1" max="' + producto.prod_stock + '" onchange="losefocus(' + producto.prod_id + ',this.value)">'; -->
 
