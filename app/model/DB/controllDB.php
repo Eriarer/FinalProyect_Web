@@ -961,6 +961,37 @@ class dataBase {
     }
   }
 
+  public function disminuirStock($prod_id, $cantidad) {
+    // Verificar que existen parámetros
+    if ($prod_id == null || $cantidad == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    // Obtener el stock actual del producto
+    $sql = "SELECT prod_stock FROM productos WHERE prod_id = ?";
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("i", $prod_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    $stock = $result->fetch_assoc();
+    $stock = $stock['prod_stock'];
+
+    // Verificar que hay suficiente stock
+    if ($stock < $cantidad) {
+      return false;
+    }
+
+    // Preparar la sentencia para evitar la <--inyección SQL-->
+    $sql = "UPDATE productos SET prod_stock = ? WHERE prod_id = ?";
+    $stmt = $this->connexion->prepare($sql);
+    $new_stock = $stock - $cantidad;
+    $stmt->bind_param("ii", $new_stock, $prod_id);
+    $stmt->execute();
+    $stmt->close();
+    return true;
+  }
+
   /*
   █ █ █▀ █ █ ▄▀▄ █▀▄ ▀█▀ █▀█ █▀
   █▄█ ▄█ █▄█ █▀█ █▀▄ ▄█▄ █▄█ ▄█
