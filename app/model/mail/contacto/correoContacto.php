@@ -133,9 +133,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 // Bibliotecas de PHPMailer
-require __DIR__ . '/../../../view/lib/PHPMailer/src/Exception.php';
-require __DIR__ . '/../../../view/lib/PHPMailer/src/PHPMailer.php';
-require __DIR__ . '/../../../view/lib/PHPMailer/src/SMTP.php';
+require __DIR__ . '/../../../model/lib/PHPMailer/src/Exception.php';
+require __DIR__ . '/../../../model/lib/PHPMailer/src/PHPMailer.php';
+require __DIR__ . '/../../../model/lib/PHPMailer/src/SMTP.php';
 
 // Instancia de PHPMailer
 $mail = new PHPMailer(true);
