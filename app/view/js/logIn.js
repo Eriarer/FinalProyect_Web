@@ -50,9 +50,12 @@ function initView() {
     if ($('#passwordReg').val() === $('#confirmPasswordReg').val()) {
       $('#coinciden').text('');
       $('#btnReg').prop('disabled', false);
+      $('#btnReg').removeClass('disabled');
     } else {
       $('#coinciden').text('Las contraseñas no coinciden');
       $('#btnReg').prop('disabled', true);
+      //agregar clase is-invalid
+      $('#btnReg').addClass('disabled');
     }
   });
 
@@ -78,13 +81,15 @@ function refreshCaptcha() {
     url: '../../model/captcha/captcha_generator.php',
     type: 'GET',
     success: function (data) {
-      console.log(data);
-      var data = JSON.parse(data);
-      IMAGE = data.image;
-      TEXT = data.text;
-      $('#captchaImage').attr('src', '#');
-      $('#captchaImage').attr('src', '../../media/images/captcha/' + IMAGE);
-      $('#captchaText').val(TEXT);
+      setTimeout(function () {
+        console.log(data);
+        var data = JSON.parse(data);
+        IMAGE = data.image;
+        TEXT = data.text;
+        $('#captchaImage').attr('src', '#');
+        $('#captchaImage').attr('src', '../../media/images/captcha/' + IMAGE);
+        $('#captchaText').val(TEXT);
+      }, 500);
     }
   });
 }
