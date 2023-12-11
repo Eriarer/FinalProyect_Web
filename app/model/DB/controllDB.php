@@ -506,8 +506,12 @@ class dataBase {
     }
 
     // Desactivar restricciones de clave externa
-    $sql_disable_fk = "SET foreign_key_checks = 0";
-    $this->connexion->query($sql_disable_fk);
+    $sql_disable_fk = "SET foreign_key_checks = ?";
+    $stmt = $this->connexion->prepare($sql_disable_fk);
+    $disable_fk = 0;
+    $stmt->bind_param("i", $disable_fk);
+    $stmt->execute();
+    $stmt->close();
 
     // Preparar la sentencia para evitar la <--inyección SQL-->
     $sql = "DELETE FROM carrito WHERE usr_id = ? AND prod_id = ?";
@@ -521,9 +525,12 @@ class dataBase {
     $stmt->close();
 
     // Reactivar restricciones de clave externa
-    $sql_enable_fk = "SET foreign_key_checks = 1";
-    $this->connexion->query($sql_enable_fk);
-    $this->connexion->close();
+    $sql_enable_fk = "SET foreign_key_checks = ?";
+    $stmt = $this->connexion->prepare($sql_enable_fk);
+    $enable_fk = 1;
+    $stmt->bind_param("i", $enable_fk);
+    $stmt->execute();
+    $stmt->close();
 
     if ($success) {
       return $this->obtenerTotalProductos($usr_id);
