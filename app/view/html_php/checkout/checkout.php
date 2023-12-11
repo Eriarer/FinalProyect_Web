@@ -330,11 +330,11 @@
     }
 
 
-    function validarCupon(){
+    function validarCupon() {
       console.log("validarCupon");
       //detener el submit del formulario
       var cupon = $("#cupon").val();
-      if(cupon == null || cupon == ""){
+      if (cupon == null || cupon == "") {
         Swal.fire({
           icon: 'error',
           title: 'Ingrese un cupón',
@@ -353,7 +353,7 @@
         },
         success: function(responce) {
           console.log("respuesta validarCupon:", responce);      
-          if(!responce){// Cupon no existente
+          if (!responce) { // Cupon no existente
             Swal.fire({
               icon: 'error',
               title: 'Cupón no válido',
@@ -369,7 +369,7 @@
       });
     }
 
-    function usarCupon(){
+    function usarCupon() {
       var cupon = $("#cupon").val();
       $.ajax({
         method: "POST",
@@ -381,7 +381,7 @@
         },
         success: function(responce) {
           console.log(responce);
-          if(responce == "error"){// Cupon ya usado
+          if (responce == "error") { // Cupon ya usado
             Swal.fire({
               icon: 'error',
               title: 'Cupón expirado',
