@@ -160,34 +160,6 @@ class PDF extends FPDF {
 $pdf = new PDF();
 $pdf->AddPage();
 
-// Obtener los parámetros de la URL
-// $nombreUsuario = $_GET['nombre'];
-// $correoUsuario = $_GET['email'];
-// $direccion = $_GET['direccion'];
-// $metodoPago = $_GET['metodoPago'];
-// $telefono = $_GET['telefono'];
-
-// Datos de la factura 
-// $folioFactura = "123456";
-// $fechaFactura = date("Y-m-d");
-
-// Lista de productos comprados (normalmente seria obtenida de una base de datos)
-$productos = [
-    ['nombre' => 'Producto 1', 'precio' => 200.00, 'cantidad' => 2],
-    ['nombre' => 'Producto 2', 'precio' => 150.00, 'cantidad' => 1],
-    ['nombre' => 'Producto 3', 'precio' => 300.00, 'cantidad' => 1]
-];
-
-// Calcular subtotal, IVA y total
-$subtotal = array_sum(array_map(function ($producto) {
-    return $producto['precio'] * $producto['cantidad'];
-}, $productos));
-
-$iva = 0.16;
-$totalIva = $subtotal * $iva;
-$gastoEnvio = 50.00;
-$total = $subtotal + $totalIva + $gastoEnvio;
-
 // Agregar contenido al PDF
 $pdf->facturaContent($result["nombre"], $result["correo"], $result['direccion'], $result["telefono"], $result['folio_factura'], $result['fecha_factura'], $result['metodo_pago'], $result['detalles'], $result['subtotal'], $result['gastos_envio'], $result['iva'], $result['total']);
 
