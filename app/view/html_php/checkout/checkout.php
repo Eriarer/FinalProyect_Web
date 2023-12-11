@@ -13,7 +13,7 @@
   <!-- agregando link para darle estilos a la alerta -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- css -->
-  <link href="form-validation.css" rel="stylesheet">
+  <link href="../../css/form-validation.css" rel="stylesheet">
   <link href="../../css/main.css" rel="stylesheet">
   <!-- favIcon -->
   <link rel="icon" type="image/x-icon" href="../../../media/images/oso-de-peluche.png" />
@@ -147,7 +147,7 @@
   </div>
   <?php include_once '../footer.php'; ?>
 
-  <script src="form-validation.js"></script>
+  <script src="../../js/form-validation.js"></script>
 
   <script>
     const email = "<?= $_SESSION['email'] ?>";
@@ -188,29 +188,33 @@
           ul.empty();
 
           // Agregar los productos del carrito 
-          var totcarrito = appendProductos(responce);
+          var subtotalCarrito = appendProductos(responce);
+
+          appendSubtotal(subtotalCarrito);
+
           //Actualizando el código html del carrito
-          var code = $('<li class="list-group-item d-flex justify-content-between bg-light" id="cuponContainer"></li>');
+          var code = $('<li class="list-group-item d-flex justify-content-between bg-light" id="cuponContainer" style="display:none !important;"></li>');
           html = '<div class="text-success">';
           html += '<h6 class="my-0">Código promocional</h6>';
           html += '<small id="cuponText">CUPON</small>'
           html += '</div>';
-          html += '<span class="text-success" id="desCup">-'+ 0 +'</span>';
+          html += '<span class="text-success" id="desCup">-$0</span>';
           code.html(html);
           ul.append(code);
 
           //Agregando costo de envio, para México es de 200 pesos y para Estados Unidos es de 500 pesos
           appendCostoEnvio();
 
+          appendIVA();
+
           // Actualizar el total del carrito
           var li = $('<li class="list-group-item d-flex justify-content-between"></li>');
-          html = '<span>Total (MXN)</span>';
-          html += '<strong id="total_carrito">$' + totcarrito + '</strong>';
+          html = '<h6>Total (MXN)</h6>';
+          html += '<strong id="total_carrito">$' + subtotalCarrito + '</strong>';
           li.html(html);
           ul.append(li);
-          updateTotalCostoEnvio(200, 0);
 
-          $("#cuponContainer").hide();
+          updateTotalCostoEnvio(200, 16);
         },
         error: function() {
           console.log("No se ha podido obtener la información");
@@ -229,8 +233,8 @@
         totcarrito += total_prod;
         var canttotal = (canttotal + producto.cantidad);
         var li = $('<li class="list-group-item d-flex justify-content-between lh-condensed"></li>');
-        html = '<div>';
-        html += '<h6 class="my-0">' + producto.prod_name + '</h6>';
+        html = '<div class="d-flex flex-column">';
+        html += '<h7 class="my-0">' + producto.prod_name + '</h7>';
         html += '<small class="text-muted">' + 'Cantidad: ' + producto.cantidad + '</small>';
         html += '</div>';
         html += '<span class="text-muted prod_price">$' + total_prod + '</span>';
@@ -238,6 +242,15 @@
         ul.append(li);
       }
       return totcarrito;
+    }
+
+    function appendSubtotal(subtotalCarrito) {
+      var ul = $("#carritoList");
+      var li = $('<li class="list-group-item d-flex justify-content-between"></li>');
+      html = '<h6>Subtotal</h6>';
+      html += '<strong id="subtotal_carrito">$' + subtotalCarrito + '</strong>';
+      li.html(html);
+      ul.append(li);
     }
 
     function appendCostoEnvio() {
@@ -254,44 +267,74 @@
       li.html(html);
       ul.append(li);
       // Agregar el listener para actualizar el costo de envio
-      listenerUpdateCostoEnvio();
+      listenerUpdatePais();
     }
 
-    function listenerUpdateCostoEnvio() {
+
+    function appendIVA() {
+      var ul = $("#carritoList");
+      var envio = 0;
+      var iva = 0;
+      if ($("#country").val() == "Mexico") {
+        iva = 16;
+      } else {
+        iva = 21;
+      }
+      //list-group-item d-flex justify-content-between lh-condensed
+      var li = $('<li class="list-group-item d-flex justify-content-between lh-condensed"></li>');
+      html = '<div class="d-flex flex-column">';
+      html += '<span>IVA</span>';
+      html += '<small class="text-muted" id="porcentajeIVA">' + iva + '%</small>';
+      html += '</div>';
+      html += '<strong id="costoIVA">$' + iva + '</strong>';
+      li.html(html);
+      ul.append(li);
+      // Agregar el listener para actualizar el costo de envio
+      listenerUpdatePais();
+    }
+
+    function listenerUpdatePais() {
       $("#country").change(function() {
         var envio = 0;
-        var lastEnvio = 0;
+        var iva = 0;
         if ($("#country").val() == "Mexico") {
           envio = 200;
-          lastEnvio = 500;
+          iva = 16;
         } else {
           envio = 500;
-          lastEnvio = 200;
+          iva = 21;
         }
+        $("#porcentajeIVA").html(iva + "%");
         $("#costo_envio").html("$" + envio);
-        updateTotalCostoEnvio(envio, lastEnvio);
+        updateTotalCostoEnvio(envio, iva);
       });
     }
 
-    function updateTotalCostoEnvio(envio, lastEnvio) {
+    function updateTotalCostoEnvio(envio, iva) {
       //obtener el texto del total del carrito
-      var total = $("#total_carrito").text();
-      // Obtener solo el valor numerico (sin el signo de pesos)
-      total = total.substring(1);
-      // Convertir el valor a float
-      total = parseFloat(total);
-      // Actualizar el total del carrito
-      total = total - lastEnvio + envio;
+      var subtotal = $("#subtotal_carrito").text();
+      subtotal = parseFloat(subtotal.substring(1));
+      var cuponPrice = $("#desCup").text();
+      // quitarle el -$
+      cuponPrice = cuponPrice.substring(2);
+      // convertir a float
+      cuponPrice = parseFloat(cuponPrice);
+      total = subtotal - cuponPrice + envio;
 
+      // Calcular el IVA
+      var costoIVA = (iva / 100) * total;
+      costoIVA = costoIVA.toFixed(2);
+      $("#costoIVA").html("$" + costoIVA);
+      total = total + parseFloat(costoIVA);
       $("#total_carrito").html("$" + total);
     }
 
 
-    function validarCupon(){
+    function validarCupon() {
       console.log("validarCupon");
       //detener el submit del formulario
       var cupon = $("#cupon").val();
-      if(cupon == null || cupon == ""){
+      if (cupon == null || cupon == "") {
         Swal.fire({
           icon: 'error',
           title: 'Ingrese un cupón',
@@ -309,8 +352,8 @@
           cupon: cupon
         },
         success: function(responce) {
-          console.log("respuesta validarCupon:", responce);      
-          if(!responce){// Cupon no existente
+          console.log("respuesta validarCupon:", responce);
+          if (!responce) { // Cupon no existente
             Swal.fire({
               icon: 'error',
               title: 'Cupón no válido',
@@ -326,7 +369,7 @@
       });
     }
 
-    function usarCupon(){
+    function usarCupon() {
       var cupon = $("#cupon").val();
       $.ajax({
         method: "POST",
@@ -338,7 +381,7 @@
         },
         success: function(responce) {
           console.log(responce);
-          if(responce == "error"){// Cupon ya usado
+          if (responce == "error") { // Cupon ya usado
             Swal.fire({
               icon: 'error',
               title: 'Cupón expirado',
@@ -354,46 +397,46 @@
       });
     }
 
-    function modifTabla(cupon){
+    function modifTabla(cupon) {
       console.log("modifTabla");
-      ///////Actualizando la info del cupon en la tabla
-      $("#cuponText").html(cupon);
-      var total = $("#total_carrito").text();
-      // Obtener solo el valor numerico (sin el signo de pesos)
-      total = total.substring(1);
-      // Convertir el valor a float
-      total = parseFloat(total);
-
-      //////Obtener el costo de envio
-      var envio = $("#costo_envio").text();
-      // Obtener solo el valor numerico (sin el signo de pesos)
-      envio = envio.substring(1);
-      // Convertir el valor a float
-      envio = parseFloat(envio);
-      total = total - envio;
-      
-      var totalCupon = 0;    
-      if(cupon == "NEWFLUFFY15"){
-        totalCupon = total * 0.15;
-      }else if(cupon == "FLUFFY10"){
-        totalCupon = total * 0.10;
-      }else if(cupon == "FLUFFY5"){
-        totalCupon = total * 0.05;
+      console.log("cupon:", cupon);
+      var totalCupon = 0;
+      if (cupon == "NEWFLUFFY15") {
+        totalCupon = 0.15;
+      } else if (cupon == "FLUFFY10") {
+        totalCupon = 0.10;
+      } else if (cupon == "FLUFFY5") {
+        totalCupon = 0.05;
       }
 
-      if(totalCupon != 0){
+      if (totalCupon != 0) {
         // hacer visible el cupon
         $("#cuponContainer").show('slow');
       }
-      //fixear a 2 decimales
-      totalCupon = totalCupon.toFixed(2);
-      $("#desCup").html("-$" + totalCupon);
 
-      //////Aplicndo el descuento al total
-      // Actualizar el total del carrito
-      total = total - totalCupon + envio;
-      total = total.toFixed(2);
-      $("#total_carrito").html("$" + total);
+      // calcular el descuento deacuerdo al subtotal
+      var subtotal = $("#subtotal_carrito").text();
+      subtotal = subtotal.substring(1);
+      subtotal = parseFloat(subtotal);
+      console.log("subtotal:", subtotal);
+      console.log("totalCupon:", totalCupon);
+      var descuento = subtotal * totalCupon;
+      descuento = descuento.toFixed(2);
+
+      // cambiar el texto del cupon
+      $("#desCup").html("-$" + descuento);
+      $("#cuponText").html(cupon);
+
+      var iva = $("#porcentajeIVA").text();
+      // el iva es 00% por lo que se quita el signo de porcentaje
+      iva = iva.substring(0, 2);
+      // Convertir el valor a float
+      iva = parseFloat(iva);
+      // conseguir el envio
+      var envio = $("#costo_envio").text();
+      envio = envio.substring(1);
+      envio = parseFloat(envio);
+      updateTotalCostoEnvio(envio, iva);
     }
     //Función cuando cabia de país actualizar
   </script>
