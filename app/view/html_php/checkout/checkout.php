@@ -17,6 +17,7 @@
   <link href="../../css/main.css" rel="stylesheet">
   <!-- favIcon -->
   <link rel="icon" type="image/x-icon" href="../../../media/images/oso-de-peluche.png" />
+  <title>Fluffy Hugs | Compra</title>
 </head>
 
 <body>
@@ -95,15 +96,15 @@
           <h4 class="mb-3">Formas de pago</h4>
           <div class="d-block my-3">
             <div class="custom-control custom-radio">
-              <input type="radio" id="MasterCard" name="paymentMethod" class="custom-control-input credit" value="MasterCardt" checked required>
+              <input type="radio" id="MasterCard" name="paymentMethod" class="custom-control-input credit" value="Pago con MasterCard" checked required>
               <label class="custom-control-label" for="MasterCard">Tarjeta Mastercard</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="visa" name="paymentMethod" class="custom-control-input credit" value="Visa" required>
+              <input type="radio" id="visa" name="paymentMethod" class="custom-control-input credit" value="Pago con Visa" required>
               <label class="custom-control-label" for="visa">Tarjeta VISA</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="oxxo" name="paymentMethod" class="custom-control-input" value="oxxo" required>
+              <input type="radio" id="oxxo" name="paymentMethod" class="custom-control-input" value="Pago en OXXO" required>
               <label class="custom-control-label" for="oxxo">Pago en OXXO</label>
             </div>
           </div>
@@ -529,6 +530,7 @@
       costoIVA = costoIVA.toFixed(2);
       $("#costoIVA").html("$" + costoIVA);
       total = total + parseFloat(costoIVA);
+      total = total.toFixed(2);
       $("#total_carrito").html("$" + total);
     }
 
@@ -621,6 +623,7 @@
       var subtotal = $("#subtotal_carrito").text();
       subtotal = subtotal.substring(1);
       subtotal = parseFloat(subtotal);
+      subtotal = subtotal.toFixed(2);
       console.log("subtotal:", subtotal);
       console.log("totalCupon:", totalCupon);
       var descuento = subtotal * totalCupon;

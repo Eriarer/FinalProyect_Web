@@ -1,6 +1,6 @@
 <?php
 include_once __DIR__ . '/../../../model/DB/dataBaseCredentials.php';
-include_once __DIR__ . '/../../../model/DB/routes_files.php';
+include_once __DIR__ . '/../../../model/routes_files.php';
 include_once __DIR__ . '/../../../model/DB/controllDB.php';
 $db = new dataBase($credentials, $CONFIG);
 $folio = '';
@@ -26,31 +26,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     return;
 }
 
-// echo $result['folio_factura'];
-// echo $result['fecha_factura'];
-// echo $result['iva'];
-// echo $result['subtotal'];
-// echo $result['gastos_envio'];
-// echo $result['total'];
-// echo $result['pais'];
-// echo $result['direccion'];
-// echo $result['metodo_pago'];
-
-// foreach ($result['detalles'] as $producto) {
-//     echo $producto['prod_id'];
-//     echo $producto['prod_name'];
-//     echo $producto['cantidad'];
-//     echo $producto['precio'];
-//     echo $producto['descuento'];
-//     echo  $producto['categoria'];
-//     echo $producto['prod_imgPath'];
-// }
-
 require('../../lib/fpdf186/fpdf.php'); // Asegurate de que esta ruta sea correcta
-class PDF extends FPDF
-{
-    function Header()
-    {
+class PDF extends FPDF {
+    function Header() {
         $this->Image('../../../media/images/LogoSF.png', 180, 5, 20);
         $this->SetFont('Arial', 'B', 12);
         $this->Cell(80);
@@ -58,15 +36,13 @@ class PDF extends FPDF
         $this->Ln(20);
     }
 
-    function Footer()
-    {
+    function Footer() {
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
         $this->Cell(0, 10, 'Pagina ' . $this->PageNo(), 0, 0, 'C');
     }
 
-    function facturaContent($nombreUsuario, $correoUsuario, $direccion, $telefono, $folioFactura, $fechaFactura, $metodoPago, $productos, $subtotal, $gastoEnvio, $totalIva, $total)
-    {
+    function facturaContent($nombreUsuario, $correoUsuario, $direccion, $telefono, $folioFactura, $fechaFactura, $metodoPago, $productos, $subtotal, $gastoEnvio, $totalIva, $total) {
         //convertir todos los caracteres a ISO-8859-1 para que se muestren los caracteres especiales
         $nombreUsuario = mb_convert_encoding($nombreUsuario, 'ISO-8859-1', 'UTF-8');
         $correoUsuario = mb_convert_encoding($correoUsuario, 'ISO-8859-1', 'UTF-8');
@@ -145,8 +121,7 @@ class PDF extends FPDF
     }
 
     // Funcion para añadir una linea punteada
-    function SetDottedLine($x1, $y1, $x2, $y2, $width = 1, $nb = 50)
-    {
+    function SetDottedLine($x1, $y1, $x2, $y2, $width = 1, $nb = 50) {
         $this->SetLineWidth($width);
         $longitud = sqrt(($x2 - $x1) * ($x2 - $x1) + ($y2 - $y1) * ($y2 - $y1));
         $punto = $longitud / $nb;
@@ -159,8 +134,7 @@ class PDF extends FPDF
         }
     }
 
-    function AddInvoiceContent($data)
-    {
+    function AddInvoiceContent($data) {
         // Agregar el logo
         $this->Image('../../../media/images/LogoSF.png', 10, 10, 20);
         $this->SetFont('Arial', 'B', 18);
@@ -173,8 +147,7 @@ class PDF extends FPDF
         // Resto de los detalles...
     }
 
-    function agregarTexto($pdf, $text, $tamano = 15, $alineacion = 'J', $estilo = '', $fuente = 'times')
-    {
+    function agregarTexto($pdf, $text, $tamano = 15, $alineacion = 'J', $estilo = '', $fuente = 'times') {
         $text = mb_convert_encoding($text, 'ISO-8859-1', 'UTF-8'); //Para admitir caracteres especiales como "ñ" y acentos
         $pdf->SetFont($fuente, $estilo, $tamano);
         $pdf->MultiCell(0, 10, $text, 0, $alineacion);
