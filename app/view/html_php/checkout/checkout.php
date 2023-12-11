@@ -13,7 +13,7 @@
   <!-- agregando link para darle estilos a la alerta -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- css -->
-  <link href="form-validation.css" rel="stylesheet">
+  <link href="../../css/form-validation.css" rel="stylesheet">
   <link href="../../css/main.css" rel="stylesheet">
   <!-- favIcon -->
   <link rel="icon" type="image/x-icon" href="../../../media/images/oso-de-peluche.png" />
@@ -147,7 +147,7 @@
   </div>
   <?php include_once '../footer.php'; ?>
 
-  <script src="form-validation.js"></script>
+  <script src="../../js/form-validation.js"></script>
 
   <script>
     const email = "<?= $_SESSION['email'] ?>";
