@@ -205,6 +205,8 @@
           //Agregando costo de envio, para México es de 200 pesos y para Estados Unidos es de 500 pesos
           appendCostoEnvio();
 
+          appendIVA();
+
           // Actualizar el total del carrito
           var li = $('<li class="list-group-item d-flex justify-content-between"></li>');
           html = '<span>Total (MXN)</span>';
@@ -268,6 +270,28 @@
       listenerUpdatePais();
     }
 
+
+    function appendIVA() {
+      var ul = $("#carritoList");
+      var envio = 0;
+      var iva = 0;
+      if ($("#country").val() == "Mexico") {
+        iva = 16;
+      } else {
+        iva = 21;
+      }
+      //list-group-item d-flex justify-content-between lh-condensed
+      var li = $('<li class="list-group-item d-flex justify-content-between lh-condensed"></li>');
+      html = '<div class="d-flex flex-column">';
+      html += '<span>IVA</span>';
+      html += '<small class="text-muted" id="porcentajeIVA">' + iva + '%</small>';
+      html += '</div>';
+      html += '<strong id="costoIVA">$' + iva + '</strong>';
+      li.html(html);
+      ul.append(li);
+      // Agregar el listener para actualizar el costo de envio
+      listenerUpdatePais();
+    }
 
     function listenerUpdatePais() {
       $("#country").change(function() {
