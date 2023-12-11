@@ -109,29 +109,15 @@ li {
 }
 
 
-#menu {
-    position: relative;
-    width: 3em;
+#menu_inner {
+    background: #102e62 !important;
+    border-radius: 5px;
 
-    & #menu_inner {
-        position: absolute;
-        left: 0;
-        opacity: 0;
-        background: #102e62 !important;
-        border-radius: 5px;
-
-        & a {
-            padding: 0.5em;
-        }
-    }
-
-    & a {
-        width: max-content;
+    &>a {
+        background: transparent !important;
 
         &:hover {
-            transform: scale(1.05);
-            background: transparent !important;
-            border-radius: 25px;
+            transform: scale(1.03);
         }
     }
 }

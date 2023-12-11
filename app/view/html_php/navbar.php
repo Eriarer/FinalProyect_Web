@@ -69,17 +69,24 @@ $navbarCSS = $css . 'headers/navbar.css';
         $admin = $db->validAdmin($correo);
         if ($admin == true) {
       ?>
-          <li class="nav-item no-tooltip" id="menu">
-            <a class="nav-link" href="#" id="navbarDropdown">
-              <i class="nf nf-fa-gear"></i>
+          <li class="nav-item dropdown no-tooltip mr-5">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+              <i class=" nf nf-fa-gear"></i>
             </a>
-            <div id="menu_inner">
-              <a class="nav-link" href="<?= $php . 'admin/graficas.php' ?>">Analisis</a>
-              <a class="nav-link" href="<?= $php . 'admin/AltaProd.php' ?>">Alta productos</a>
-              <a class="nav-link" href="<?= $php . 'admin/ModifyProd.php' ?>">Edición productos</a>
-              <a class="nav-link" href="<?= $php . 'admin/BajasProd.php' ?>">Baja productos</a>
+            <div class="dropdown-menu" id="menu_inner">
+              <a class=" nav-link" href="<?= $php . 'admin/graficas.php' ?>">Analisis</a>
+              <div class="dropdown-divider"></div>
+              <a class="nav-link" href="<?= $php . 'admin/AltaProd.php' ?>">Alta productos</a>
+              <a class="nav-link" href="<?= $php . 'admin/ModifyProd.php' ?>">Edición productos</a>
+              <a class="nav-link" href="<?= $php . 'admin/BajasProd.php' ?>">Baja productos</a>
             </div>
           </li>
+          <!-- <li class="nav-item no-tooltip" id="menu">
+            <a class="nav-link" href="#" id="navbarDropdown">
+            </a>
+            <div id="menu_inner">
+            </div>
+          </li> -->
         <?php
         }
       }
@@ -132,67 +139,5 @@ $navbarCSS = $css . 'headers/navbar.css';
     $('#logInNav').click(function() {
       window.location.href = pathHTML + 'Log_register.php';
     });
-
-
-    try {
-      var menuInner = $(this).find('#menu_inner');
-      menuInner.css('animation', 'none');
-      menuInner.css('opacity', '0');
-      menuInner.css('transform', 'translateX(0px)');
-      // Obtener la posición actual del menú desplegable
-      menuInner.css('display', 'block');
-      var menuPosition = $("#menu_inner").offset().left;
-      var menuWidth = $("#menu_inner").width();
-      menuInner.css('display', 'none');
-      // Obtener el ancho de la ventana
-      var windowWidth = $(window).width();
-      // Si el menú desplegable se sale de la ventana, moverlo hacia la izquierda
-      if (menuPosition + menuWidth > windowWidth) {
-        //calcular los pixeles que se salen del ancho de la ventana
-        var pixels = menuPosition + menuWidth - windowWidth + 10;
-        menuInner.css('transform', 'translateX(-' + pixels + 'px)');
-        $(":root").css("--menu-translateX", "-" + pixels + "px");
-      } else {
-        menuInner.css('transform', 'translateX(0px)');
-        $(":root").css("--menu-translateX", "0px");
-      }
-
-      var menu = $(this).find('#menu');
-      // si existe el menu
-      menu.mouseenter(function() {
-        var menuInner = $(this).find('#menu_inner');
-        menuInner.css('animation', 'none');
-        menuInner.css('opacity', '0');
-        menuInner.css('transform', 'translateX(0px)');
-        // Obtener la posición actual del menú desplegable
-        menuInner.css('display', 'block');
-        var menuPosition = $("#menu_inner").offset().left;
-        var menuWidth = $("#menu_inner").width();
-        menuInner.css('display', 'none');
-        // Obtener el ancho de la ventana
-        var windowWidth = $(window).width();
-        // Si el menú desplegable se sale de la ventana, moverlo hacia la izquierda
-        if (menuPosition + menuWidth > windowWidth) {
-          //calcular los pixeles que se salen del ancho de la ventana
-          var pixels = menuPosition + menuWidth - windowWidth + 10;
-          menuInner.css('transform', 'translateX(-' + pixels + 'px)');
-          $(":root").css("--menu-translateX", "-" + pixels + "px");
-        } else {
-          menuInner.css('transform', 'translateX(0px)');
-          $(":root").css("--menu-translateX", "0px");
-        }
-        menuInner.css('animation', 'none');
-        menuInner.css('animation', 'desplegar-menu 0.3s ease-in-out forwards');
-        menuInner.css('display', 'block');
-      });
-      menu.mouseleave(function() {
-        var menuInner = $(this).find('#menu_inner');
-        menuInner.css('animation', 'none');
-        menuInner.css('animation', 'plegar-menu 0.3s ease-in-out forwards');
-        menuInner.css('display', 'block');
-      });
-    } catch (e) {
-      console.log(e);
-    }
   });
 </script>
