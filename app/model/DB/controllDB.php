@@ -718,7 +718,40 @@ class dataBase {
     //imprimiendo el resultado en consola
     return $result;
   }
-  
+
+  //función para vaciar el carrito de un usuario
+  public function vaciarCarrito($usr_id) {
+    // Verificar que existen parámetros
+    if ($usr_id == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    // deshabilitar restricciones de clave externa
+    $sql_disable_fk = "SET foreign_key_checks = ?";
+    $stmt = $this->connexion->prepare($sql_disable_fk);
+    $disable_fk = 0;
+    $stmt->bind_param("i", $disable_fk);
+    $stmt->execute();
+    $stmt->close();
+
+    // Preparar la sentencia para evitar la <--inyección SQL-->
+    $sql = "DELETE FROM carrito WHERE usr_id = ?";
+    $stmt = $this->connexion->prepare($sql);
+    $stmt->bind_param("i", $usr_id);
+    $stmt->execute();
+    $rows = $stmt->affected_rows;
+    $stmt->close();
+
+    // reactivar restricciones de clave externa
+    $sql_enable_fk = "SET foreign_key_checks = ?";
+    $stmt = $this->connexion->prepare($sql_enable_fk);
+    $enable_fk = 1;
+    $stmt->bind_param("i", $enable_fk);
+    $stmt->execute();
+    $stmt->close();
+
+    return $rows > 0;
+  }
   /*
   █▀▀ █ █ █▀▄ █▀█ █▀█ 
   █▄▄ █▄█ █▀  █▄█ █ █
