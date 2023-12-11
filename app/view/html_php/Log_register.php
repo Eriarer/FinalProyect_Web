@@ -146,7 +146,7 @@ if (isset($_SESSION['name'])) {
               </div>
               <div class="col-12 col-md-6 d-flex align-items-center">
                 <button type="button" class="btn btn-outline-primary" id="changeCaptcha"><i class="nf nf-cod-debug_restart"></i></button>
-                <img src="../../media/images/imgRelleno.png" alt="Captcha" id="captchaImage">
+                <img src="../../media/images/imgRelleno.png" alt="Captcha" id="captchaImage" onerror="this.src='../../media/images/imgRelleno.png'" />
               </div>
             </div>
             <!-- Recordarme -->

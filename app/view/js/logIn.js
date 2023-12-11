@@ -81,15 +81,14 @@ function refreshCaptcha() {
     url: '../../model/captcha/captcha_generator.php',
     type: 'GET',
     success: function (data) {
-      setTimeout(function () {
-        console.log(data);
-        var data = JSON.parse(data);
-        IMAGE = data.image;
-        TEXT = data.text;
-        $('#captchaImage').attr('src', '#');
-        $('#captchaImage').attr('src', '../../media/images/captcha/' + IMAGE);
-        $('#captchaText').val(TEXT);
-      }, 500);
+      console.log(data);
+      var data = JSON.parse(data);
+      IMAGE = data.image;
+      TEXT = data.text;
+      $('#captchaImage').removeAttr('src');
+      $('#captchaImage').attr('src', '#');
+      $('#captchaImage').attr('src', '../../media/images/captcha/' + IMAGE);
+      $('#captchaText').val(TEXT);
     }
   });
 }
