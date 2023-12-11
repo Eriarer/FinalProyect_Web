@@ -21,22 +21,22 @@ $php = $CONFIG['P_php'];
     <!-- Social media -->
     <section class="mb-4">
       <h3>SIGUENOS EN REDES SOCIALES!</h3>
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-facebook-f"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://www.facebook.com/?_rdr" role="button"><i class="fab fa-facebook-f"></i></a>
 
       <!-- Twitter -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-twitter"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://twitter.com/i/flow/login?input_flow_data=%7B%22requested_variant%22%3A%22eyJsYW5nIjoiZXMifQ%3D%3D%22%7D" role="button"><i class="fab fa-twitter"></i></a>
 
       <!-- Google -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-google"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://www.youtube.com/" role="button"><i class="fab fa-google"></i></a>
 
       <!-- Instagram -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-instagram"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://www.instagram.com/fluffy_hugs_official/" role="button"><i class="fab fa-instagram"></i></a>
 
       <!-- Linkedin -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-linkedin-in"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://mx.linkedin.com/?src=go-pa&trk=sem-ga_campid.19001150288_asid.143806640876_crid.636777052015_kw.linkedin_d.c_tid.kwd-148086543_n.g_mt.e_geo.1010000&mcid=7000592715335761922&cid=&gclid=CjwKCAiAg9urBhB_EiwAgw88mUxXaV7fWeTs3WNFs7B4Rjy5ef2IirBSEYc1zk6H3ZE6Djl3fQ_dMBoCDR4QAvD_BwE&gclsrc=aw.ds" role="button"><i class="fab fa-linkedin-in"></i></a>
 
       <!-- Github -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-github"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://github.com/Eriarer/FinalProyect_Web" role="button"><i class="fab fa-github"></i></a>
     </section>
 
     <!-- Form -->

@@ -1,6 +1,6 @@
 <?php
 include_once __DIR__ . '/../../../model/DB/dataBaseCredentials.php';
-include_once __DIR__ . '/../../../model/DB/routes_files.php';
+include_once __DIR__ . '/../../../model/routes_files.php';
 include_once __DIR__ . '/../../../model/DB/controllDB.php';
 
 $db = new dataBase($credentials, $CONFIG);
@@ -26,56 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     return;
 }
 
-// echo $result['folio_factura'];
-// echo $result['fecha_factura'];
-// echo $result['iva'];
-// echo $result['subtotal'];
-// echo $result['gastos_envio'];
-// echo $result['total'];
-// echo $result['pais'];
-// echo $result['direccion'];
-// echo $result['metodo_pago'];
-
-// foreach ($result['detalles'] as $producto) {
-//     echo $producto['prod_id'];
-//     echo $producto['prod_name'];
-//     echo $producto['cantidad'];
-//     echo $producto['precio'];
-//     echo $producto['descuento'];
-//     echo  $producto['categoria'];
-//     echo $producto['prod_imgPath'];
-// }
-
-// if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//     $nombreUsuario = $_POST['nombre-completo'];
-//     $correoUsuario = $_POST['email'];
-//     $direccion = $_POST['direccion'] . ', ' . $_POST['codigo-postal'] . ', ' . $_POST['ciudad'] . ', ' . $_POST['pais'];
-//     $metodoPago = $_POST['MetodoP'];
-//     $telefono = $_POST['telefono'];
-// }
-// Datos de la factura 
-// $folioFactura = "123456";
-// $idUsuario = "78910";
-// $fechaFactura = date("Y-m-d"); // Fecha actual
-// $iva = 0.16; // 16% de IVA
-// $gastoEnvio = 50.00; // Costo de envío
-
-// Lista de productos comprados (normalmente sería obtenida de una base de datos)
-$productos = [
-    ['nombre' => 'Producto 1', 'precio' => 200.00, 'cantidad' => 2],
-    ['nombre' => 'Producto 2', 'precio' => 150.00, 'cantidad' => 1],
-    ['nombre' => 'Producto 3', 'precio' => 300.00, 'cantidad' => 1]
-];
-
-// Calcular subtotal, IVA y total
-$subtotal = array_sum(array_map(function ($producto) {
-    return $producto['precio'] * $producto['cantidad'];
-}, $productos));
-
-$ModoPago = array('Tarjeta', 'Efectivo');
-
-$totalIva = $subtotal * $iva;
-$total = $subtotal + $totalIva + $gastoEnvio;
 ?>
 
 <!DOCTYPE html>
@@ -106,7 +56,7 @@ $total = $subtotal + $totalIva + $gastoEnvio;
         <table class="datos">
             <tr>
                 <th class="linea_abajo" style="vertical-align: middle; "><img src="../../../media/images/LogoSF.png" alt="Logo" width="60px" height="60px"></td>
-                <th class="linea_abajo" id="titulo_fac" style="text-align: center;">Fluffy Hugs Factura</td>
+                <th class="linea_abajo h5" id="titulo_fac" style="text-align: center;">Fluffy Hugs Factura</td>
                 <th class="linea_abajo" style="vertical-align: middle;"><img src="../../../media/images/LogoSF.png" alt="Logo" width="60px" height="60px"></td>
             </tr>
             <tr>
