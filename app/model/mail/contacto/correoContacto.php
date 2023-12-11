@@ -161,14 +161,17 @@ try {
     $mail->isHTML(true);                // Establece el formato del correo electrónico en HTML
     $mail->Subject = $recipientSubject; // Asunto del correo  
     $imagen_url = file_get_contents($CONFIG['P_model'] . 'mail/contacto/gato.jpg');
+    $mail->CharSet = 'UTF-8';
     $mail->AddEmbeddedImage('LogoSF.png', 'Logo');
     $mail->Body = $recipientMessage; // Contenido del correo
-    
-    
+
+
     $mail->send();
 
     // Redireccionar al footer despues de 5 segundos
     echo 'Mensaje enviado correctamente';
+    return;
 } catch (Exception $e) {
     echo "No se pudo enviar el mensaje. Error de envío: {$mail->ErrorInfo}";
+    return;
 }
