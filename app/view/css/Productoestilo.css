@@ -6,12 +6,17 @@ body {
     margin: 0;
 }
 
-.custom-toast{
-    background-color: #dfa9c3;  /* Color de fondo */
-    color: black;  /* Color del texto */
-    font-size: 1.2em;  /* Tamaño de la letra */
-    border-radius: 10px;  /* Borde del toast */
-    padding: 10px;  /* Espacio interno */
+.custom-toast {
+    background-color: #dfa9c3;
+    /* Color de fondo */
+    color: black;
+    /* Color del texto */
+    font-size: 1.2em;
+    /* Tamaño de la letra */
+    border-radius: 10px;
+    /* Borde del toast */
+    padding: 10px;
+    /* Espacio interno */
 }
 
 hr {
@@ -45,6 +50,11 @@ hr {
         /* hacer la sombra mas intensa y visible */
         box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 5);
         z-index: 3;
+    }
+
+    /* alinear el cardFooter al bottom line */
+    &>.cardFooter {
+        bottom: 0;
     }
 }
 
@@ -135,34 +145,13 @@ hr {
         color: #000000;
         text-align: justify;
     }
-
-    &>.price {
-        align-items: center;
-        margin: auto;
-        background-color: skyblue;
-        padding: 8px 10px;
-        border-radius: 30px;
-        font-weight: 700;
-        font-size: 14px;
-    }
-
-    &>.out-stock {
-        background-color: #9a0909;
-        color: #ffffff;
-        font-weight: 700;
-    }
-
-    &.existencias {
-        text-align: center;
-    }
 }
 
 .cardFooter {
-    position: relative;
-    bottom: 0;
+    bottom: 10;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     text-align: center;
     padding-bottom: 1.5em;
     padding-left: 3em;
@@ -188,5 +177,25 @@ hr {
     &>a:hover {
         transform: scale(1.2);
         color: antiquewhite;
+    }
+
+    &>.price {
+        align-items: center;
+        margin: auto;
+        background-color: skyblue;
+        padding: 8px 10px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    &>.out-stock {
+        background-color: #9a0909;
+        color: #ffffff;
+        font-weight: 700;
+    }
+
+    &.existencias {
+        text-align: center;
     }
 }
