@@ -1,9 +1,33 @@
 <?php
-$productos = [
-    ['nombre' => 'Producto 1', 'precio' => 200.00, 'cantidad' => 2],
-    ['nombre' => 'Producto 2', 'precio' => 150.00, 'cantidad' => 1],
-    ['nombre' => 'Producto 3', 'precio' => 300.00, 'cantidad' => 1]
-];
+include_once __DIR__ . '/../../DB/dataBaseCredentials.php';
+include_once __DIR__ . '/../../DB/model/routes_files.php';
+include_once __DIR__ . '/../../DB/controllDB.php';
+
+$db = new dataBase($credentials, $CONFIG);
+
+$result = $db->getFactura('000000');
+
+$result = json_decode($result, true);
+
+// echo $result['folio_factura'];
+// echo $result['fecha_factura'];
+// echo $result['iva'];
+// echo $result['subtotal'];
+// echo $result['gastos_envio'];
+// echo $result['total'];
+// echo $result['pais'];
+// echo $result['direccion'];
+// echo $result['metodo_pago'];
+
+// foreach ($result['detalles'] as $producto) {
+//     echo $producto['prod_id'];
+//     echo $producto['prod_name'];
+//     echo $producto['cantidad'];
+//     echo $producto['precio'];
+//     echo $producto['descuento'];
+//     echo  $producto['categoria'];
+//     echo $producto['prod_imgPath'];
+// }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -77,18 +101,24 @@ $productos = [
         .factura-body {
             margin-bottom: 20px;
         }
+
         .factura-body table {
             width: 100%;
             border-collapse: collapse;
         }
-        .factura-body table, .factura-body th, .factura-body td {
+
+        .factura-body table,
+        .factura-body th,
+        .factura-body td {
             border: 1px rgb(9, 9, 9);
             padding: 5px;
-            
+
         }
+
         .productos td {
             text-align: center;
         }
+
         .pago {
             text-align: center;
             vertical-align: middle;
@@ -96,14 +126,14 @@ $productos = [
 
         .factura_totales {
             text-align: right;
-            font-weight: bold; 
+            font-weight: bold;
         }
-        .total{
+
+        .total {
             color: red;
             font-weight: bold;
             text-align: right;
         }
-        
     </style>
 </head>
 
@@ -139,7 +169,7 @@ $productos = [
                         <tr>
                             <td class="linea_abajo" style="vertical-align: middle; text-align: right "></td>
                             <td class="linea_abajo" id="titulo_fac">Fluffy Hugs Factura</td>
-                            <td class="linea_abajo" style="vertical-align: middle;"></td>
+                            <td class="linea_abajo" style="vertical-align: middle;"><?php ?></td>
                         </tr>
                         <tr>
                             <td class="linea_derecha">Folio Factura</td>
@@ -147,7 +177,7 @@ $productos = [
                             <td></td>
                         </tr>
                         <tr>
-                            <td class="linea_derecha"></td>
+                            <td class="linea_derecha"><?php echo $result['folio_factura'];?></td>
                             <td class="linea_derecha">fluffyhugs2023@gmail.com</td>
                             <td></td>
                         </tr>
@@ -157,12 +187,12 @@ $productos = [
                             <td></td>
                         </tr>
                         <tr>
-                            <td class="linea_derecha linea_abajo"></td>
+                            <td class="linea_derecha linea_abajo"><?php echo $result['fecha_factura']; ?></td>
                             <td class="linea_derecha linea_abajo">Avenida Universidad 940, Ciudad Universitaria, Universidad Autónoma de Aguascalientes, 20100 Aguascalientes, Ags, MX.</td>
-                            <td class="linea_abajo"></td>
+                            <td class="linea_abajo"><?php echo $result['direccion'] . ', ' . $result['pais'] . '.' ?></td>
                         </tr>
                     </table>
-                    
+
                     <div class="factura-body">
                         <table>
                             <tr>
@@ -171,14 +201,16 @@ $productos = [
                                 <th style="text-align: center;">Precio Unitario</th>
                                 <th style="text-align: center;">Importe</th>
                             </tr>
-                            <?php foreach ($productos as $producto) : ?>
-                                <tr class="productos">
-                                    <td><?php echo htmlspecialchars($producto['nombre']); ?></td>
-                                    <td class="cantidad"><?php echo $producto['cantidad']; ?></td>
-                                    <td class="precioU">$<?php echo number_format($producto['precio'], 2); ?></td>
-                                    <td>$<?php echo number_format($producto['precio'] * $producto['cantidad'], 2); ?></td>
-                                </tr>
-                            <?php endforeach; ?>
+                            <?php
+                            foreach ($result['detalles'] as $producto) {
+                                echo '<tr class="productos">';
+                                echo '<td>' . $producto['prod_name'] . '</td>';
+                                echo '<td>' . $producto['cantidad'] . '</td>';
+                                echo '<td>$' . $producto['precio'] . '</td>';
+                                echo '<td>$' . $producto['precio'] * $producto['cantidad'] . '</td>';
+                                echo '</tr>';
+                            }
+                            ?>
 
                             <div>
                                 <tr>
