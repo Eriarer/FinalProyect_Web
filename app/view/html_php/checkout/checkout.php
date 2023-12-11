@@ -43,8 +43,7 @@
       </div>
       <div class="col-md-8 order-md-1">
         <h4 class="mb-3">Datos de envio</h4>
-        <form class="needs-validation" novalidate>
-
+        <form class="needs-validation" id="formCheckout" novalidate action="javascript:void(0)">
           <div class="mb-3">
             <label for="name">Nombre completo (nombre y apellido)</label>
             <input type="text" class="form-control" id="name" placeholder="" value="" required>
@@ -55,7 +54,7 @@
           <div class="mb-3">
             <!-- numero telefonico -->
             <label for="phone">Número de teléfono</label>
-            <input type="tel" class="form-control" id="phone" placeholder="" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required>
+            <input type="tel" class="form-control" id="phone" placeholder="" pattern="[0-9]{10,12}" required>
           </div>
 
           <div class="mb-3">
@@ -96,11 +95,15 @@
           <h4 class="mb-3">Formas de pago</h4>
           <div class="d-block my-3">
             <div class="custom-control custom-radio">
-              <input type="radio" id="credit" name="paymentMethod" class="custom-control-input" checked required>
-              <label class="custom-control-label" for="credit">Pago con tarjeta</label>
+              <input type="radio" id="MasterCard" name="paymentMethod" class="custom-control-input credit" value="MasterCardt" checked required>
+              <label class="custom-control-label" for="MasterCard">Tarjeta Mastercard</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="oxxo" name="paymentMethod" class="custom-control-input" required>
+              <input type="radio" id="visa" name="paymentMethod" class="custom-control-input credit" value="Visa" required>
+              <label class="custom-control-label" for="visa">Tarjeta VISA</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="oxxo" name="paymentMethod" class="custom-control-input" value="oxxo" required>
               <label class="custom-control-label" for="oxxo">Pago en OXXO</label>
             </div>
           </div>
@@ -122,7 +125,7 @@
             </div>
           </div>
           <div class="row cc-container">
-            <div class="col-md-5 mb-3">
+            <div class="col-md-7 mb-3">
               <label for="cc-expiration">Fecha de vencimiento: </label>
               <!-- habilitar autoCompletado -->
               <input type="month" class="form-control" id="cc-expiration" min="2023-12" max="2043-12" required>
@@ -139,11 +142,10 @@
             </div>
           </div>
           <hr class="mb-4">
-          <button class="btn btn-primary btn-lg btn-block" type="submit">Finalizar compra</button>
+          <button class="btn btn-primary btn-lg btn-block" type="submit">Realizar compra</button>
         </form>
       </div>
     </div>
-  </div>
   </div>
   <?php include_once '../footer.php'; ?>
 
@@ -157,7 +159,174 @@
     $(document).ready(function() {
       createTable();
       toggleMetodoPago();
+      // Agregar el listener para el submit del formulario de checkout
+      $("#formCheckout").submit(function(event) {
+        var form = document.getElementById('formCheckout');
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+          console.warn("No se puede enviar el formulario");
+        } else {
+          collectData();
+        }
+      });
     });
+
+    function collectData() {
+      //email de usario
+      //correo colocado en el formulario
+      //Alta factura: 
+      var productosFactura = []; //Vector de productos
+      var productos = document.getElementsByClassName("producto_carrito");
+      for (var i = 0; i < productos.length; i++) {
+        //el vector tiene que ser un vector asociativo
+        //Estructura vector $productosFactura: $producto['prod_id'], $producto['cantidad'], $producto['precio'], $producto['descuento']
+        var array = {
+          prod_id: 0,
+          cantidad: 0,
+          precio: 0.0,
+          descuento: 0.0
+        };
+        array['prod_id'] = productos[i].children[3].innerHTML;
+        array['cantidad'] = productos[i].children[0].children[1].innerHTML;
+        // a la cantidad eliminarle el texto "Cantidad: "
+        array['cantidad'] = array['cantidad'].substring(9);
+        array['precio'] = productos[i].children[1].innerHTML;
+        // a la cantidad eliminarle el signo "$"
+        array['precio'] = array['precio'].substring(1);
+        array['descuento'] = productos[i].children[2].innerHTML;
+
+        // convertir los elementos cantidad e id a enteros
+        array['prod_id'] = parseInt(array['prod_id']);
+        array['cantidad'] = parseInt(array['cantidad']);
+        // convertir los elementos precio y descuento a float
+        array['precio'] = parseFloat(array['precio']);
+        array['descuento'] = parseFloat(array['descuento']);
+        productosFactura.push(array);
+        // Disminuir el stock del producto en la base de datos
+        disminuirStock(array['prod_id'], array['cantidad']);
+      }
+      var iva = $("#porcentajeIVA").text();
+      // el iva es 00% por lo que se quita el signo de porcentaje
+      iva = iva.substring(0, 2);
+      // Convertir el valor a float
+      iva = parseFloat(iva); // 16 o 21
+      var costo_iva = parseFloat($("#costoIVA").text().substring(1));
+      var fecha = new Date();
+      // la fecha se guarda en formato YYYY-MM-DD
+      fecha = fecha.getFullYear() + "-" + (fecha.getMonth() + 1) + "-" + fecha.getDate();
+      var gastosEnvio = parseFloat($("#costo_envio").text().substring(1));
+      var pais = $("#country").val();
+      var ciudad = $("#city").val();
+      var direccion = $("#address").val();
+      var codigoPostal = $("#zip").val();
+      var telefono = $("#phone").val();
+      var direccionCompleta = pais + "," + ciudad + ", " + direccion + ", " + codigoPostal; //juntando datos de dirección
+      var nombre = $("#name").val();
+      // conseguir el valor del elemento name="paymentMethod"	
+      var metodo_pago = $("input[name='paymentMethod']:checked").val();
+      var subtotal = parseFloat($("#subtotal_carrito").text().substring(1));
+      var total = parseFloat($("#total_carrito").text().substring(1));
+      var des_cupon = parseFloat($("#desCup").text().substring(2));
+
+
+      /*
+        $email = $_POST['email'];
+        $productosFactura = $_POST['productosFactura'];
+        $fecha = date("Y-m-d", strtotime($_POST['fecha']));
+        $iva = $_POST['iva'];
+        $gastosEnvio = $_POST['gastosEnvio'];
+        $pais = $_POST['pais'];
+        $direccion = $_POST['direccion'];
+        $metodo_pago = $_POST['metodo_pago'];
+        $nombre = $_POST['nombre'];
+        $correo = $_POST['correo'];
+        $telefono = $_POST['telefono'];
+        $subtotal = $_POST['subtotal'];
+        $total = $_POST['total'];
+        $cupon = $_POST['cupon'];
+        $costo_iva = $_POST['costo_iva'];
+       */
+      $.ajax({
+        type: "POST",
+        url: "../../../model/DB/facturas/altaFactura.php",
+        data: {
+          email: email,
+          productosFactura: productosFactura,
+          fecha: fecha,
+          iva: iva,
+          gastosEnvio: gastosEnvio,
+          pais: pais,
+          direccion: direccionCompleta,
+          metodo_pago: metodo_pago,
+          nombre: $("#name").val(),
+          correo: email,
+          telefono: telefono,
+          subtotal: subtotal,
+          total: total,
+          cupon: $("#cuponText").text(),
+          costo_iva: costo_iva
+        },
+        success: function(responce) {
+          console.log("respuesta altaFactura:", responce);
+        },
+      });
+      vaciarCarrito();
+      // lanzar sweet alert
+      Swal.fire({
+        icon: 'success',
+        title: 'Compra realizada',
+        text: 'Su compra se ha realizado con éxito',
+        // cuando se 
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // vaciar el carrito
+          setTimeout(function() {
+            window.location.href = "../../../../index.php";
+          }, 1000);
+        }
+      })
+    }
+
+    function disminuirStock(prod_id, cantidad) {
+      $.ajax({
+        type: "POST",
+        url: "../../../model/DB/manejoProductos.php",
+        data: {
+          method: "disminuirStock",
+          id: prod_id,
+          cantidad: cantidad
+        },
+        success: function(responce) {
+          console.log("respuesta disminuirStock:", responce);
+          if (responce == "error") { // Cupon no existente
+            console.warn("No se pudo disminuir el stock del producto con id:", prod_id);
+          }
+        },
+        error: function() {
+          console.log("No se ha podido obtener la información");
+        }
+      });
+    }
+
+    function vaciarCarrito() {
+      $.ajax({
+        type: "POST",
+        url: "../../../model/DB/manejoCarrito.php",
+        data: {
+          method: "vaciarCarrito",
+        },
+        success: function(responce) {
+          console.log("respuesta vaciarCarrito:", responce);
+          if (responce == "error") { // Cupon no existente
+            console.warn("No se pudo vaciar el carrito");
+          }
+        },
+        error: function() {
+          console.log("No se ha podido obtener la información");
+        }
+      });
+    }
 
     function toggleMetodoPago() {
       $("#oxxo").click(function() {
@@ -168,7 +337,7 @@
         $("#cc-expiration").removeAttr("required");
         $("#cc-cvv").removeAttr("required");
       });
-      $("#credit").click(function() {
+      $(".credit").click(function() {
         $(".cc-container").show('slow');
         //agregar el required de los campos de la tarjeta
         $("#cc-name").attr("required", true);
@@ -238,16 +407,17 @@
       for (var i = 0; i < responce.length; i++) {
         var producto = responce[i];
         var ahorro = (producto.prod_descuento / 100) * producto.prod_precio * producto.cantidad;
-        console.log(producto);
         var total_prod = (producto.prod_precio * producto.cantidad) - ahorro;
         totcarrito += total_prod;
         var canttotal = (canttotal + producto.cantidad);
-        var li = $('<li class="list-group-item d-flex justify-content-between lh-condensed"></li>');
+        var li = $('<li class="list-group-item d-flex justify-content-between lh-condensed producto_carrito"></li>');
         html = '<div class="d-flex flex-column">';
-        html += '<h7 class="my-0">' + producto.prod_name + '</h7>';
-        html += '<small class="text-muted">' + 'Cantidad: ' + producto.cantidad + '</small>';
+        html += '<h7 class="my-0 proud_name">' + producto.prod_name + '</h7>';
+        html += '<small class="text-muted prod_cantidad">' + 'Cantidad: ' + producto.cantidad + '</small>';
         html += '</div>';
-        html += '<span class="text-muted prod_price">$' + total_prod + '</span>';
+        html += '<span class="text-muted prod_price prod_precio">$' + total_prod + '</span>';
+        html += '<p class="prod_descuento" style="display:none !important;">' + producto.prod_descuento + '</p>';
+        html += '<p class="prod_id" style="display:none !important;">' + producto.prod_id + '</p>';
         li.html(html);
         ul.append(li);
       }
