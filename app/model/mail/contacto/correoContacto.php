@@ -13,6 +13,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipientEmail = $_POST["email"];
         $formMessage = $_POST["message"];
     }
+}else{
+    echo 'No se adjuntaron los datos correctamente';
+    return;
 }
 
 // Asunto y mensaje
