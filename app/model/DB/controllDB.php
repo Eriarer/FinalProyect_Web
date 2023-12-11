@@ -725,6 +725,35 @@ class dataBase {
     //imprimiendo el resultado en consola
     return $result;
   }
+  
+  /*
+  █▀▀ █ █ █▀▄ █▀█ █▀█ 
+  █▄▄ █▄█ █▀  █▄█ █ █
+  */
+
+  //función para editar el valor de 0 a 1 si usa un cupón
+  public function usarCupon($usr_id, $cupon) {
+    // Verificar que existen parámetros
+    if ($usr_id == null || $cupon == null) {
+      throw new Exception("Todos los campos son obligatorios.");
+    }
+
+    // Preparar la sentencia para evitar la <--inyección SQL-->
+    $sql = "UPDATE usuarios SET $cupon = 1 WHERE usr_id = ? AND $cupon = 0";
+    // Preparar la sentencia
+    $stmt = $this->connexion->prepare($sql);
+
+    // Vincular parámetros a la sentencia preparada como cadenas
+    $stmt->bind_param("i", $usr_id);
+
+    // Ejecutar la sentencia
+    $stmt->execute();
+
+    // Obtener el número de filas afectadas por la última consulta
+    $affected_rows = $stmt->affected_rows;
+
+    return $affected_rows > 0 ? true : false;
+  }
 
 
   /*
