@@ -1,17 +1,47 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nombreUsuario = $_POST['nombre-completo'];
-    $correoUsuario = $_POST['email'];
-    $direccion = $_POST['direccion'] . ', ' . $_POST['codigo-postal'] . ', ' . $_POST['ciudad'] . ', ' . $_POST['pais'];
-    $metodoPago = $_POST['MetodoP'];
-    $telefono = $_POST['telefono'];
-}
+include_once __DIR__ . '/../../model/DB/dataBaseCredentials.php';
+include_once __DIR__ . '/../../model/DB/routes_files.php';
+include_once __DIR__ . '/../../model/DB/controllDB.php';
+
+$db = new dataBase($credentials, $CONFIG);
+
+$result = $db->getFactura('000000');
+
+$result = json_decode($result, true);
+
+// echo $result['folio_factura'];
+// echo $result['fecha_factura'];
+// echo $result['iva'];
+// echo $result['subtotal'];
+// echo $result['gastos_envio'];
+// echo $result['total'];
+// echo $result['pais'];
+// echo $result['direccion'];
+// echo $result['metodo_pago'];
+
+// foreach ($result['detalles'] as $producto) {
+//     echo $producto['prod_id'];
+//     echo $producto['prod_name'];
+//     echo $producto['cantidad'];
+//     echo $producto['precio'];
+//     echo $producto['descuento'];
+//     echo  $producto['categoria'];
+//     echo $producto['prod_imgPath'];
+// }
+
+// if ($_SERVER["REQUEST_METHOD"] == "POST") {
+//     $nombreUsuario = $_POST['nombre-completo'];
+//     $correoUsuario = $_POST['email'];
+//     $direccion = $_POST['direccion'] . ', ' . $_POST['codigo-postal'] . ', ' . $_POST['ciudad'] . ', ' . $_POST['pais'];
+//     $metodoPago = $_POST['MetodoP'];
+//     $telefono = $_POST['telefono'];
+// }
 // Datos de la factura 
-$folioFactura = "123456";
-$idUsuario = "78910";
-$fechaFactura = date("Y-m-d"); // Fecha actual
-$iva = 0.16; // 16% de IVA
-$gastoEnvio = 50.00; // Costo de envío
+// $folioFactura = "123456";
+// $idUsuario = "78910";
+// $fechaFactura = date("Y-m-d"); // Fecha actual
+// $iva = 0.16; // 16% de IVA
+// $gastoEnvio = 50.00; // Costo de envío
 
 // Lista de productos comprados (normalmente sería obtenida de una base de datos)
 $productos = [
@@ -40,7 +70,7 @@ $total = $subtotal + $totalIva + $gastoEnvio;
 </head>
 
 <body>
-    
+
     <div class="factura-container">
         <table class="datos">
             <tr>
@@ -51,22 +81,24 @@ $total = $subtotal + $totalIva + $gastoEnvio;
             <tr>
                 <td class="linea_derecha">Folio Factura</td>
                 <td class="linea_derecha">Fluffy Hugs</td>
-                <td><?php echo $nombreUsuario ?></td>
+                <td><?php echo 'x' ?></td>
             </tr>
             <tr>
-                <td class="linea_derecha"><?php echo $folioFactura; ?></td>
+                <td class="linea_derecha"><?php echo $result['folio_factura']; ?></td>
                 <td class="linea_derecha">fluffyhugs2023@gmail.com</td>
-                <td><?php echo $correoUsuario ?></td>
+                <td><?php echo 'x'?></td>
             </tr>
             <tr>
                 <td class="linea_derecha">Fecha</td>
                 <td class="linea_derecha">449-123-4567</td>
-                <td><?php echo $telefono ?></td>
+                <td><?php echo 'X'?></td>
             </tr>
             <tr>
-                <td class="linea_derecha linea_abajo"><?php echo $fechaFactura; ?></td>
+                <td class="linea_derecha linea_abajo"><?php echo $result['fecha_factura']; ?></td>
                 <td class="linea_derecha linea_abajo">Avenida Universidad 940, Ciudad Universitaria, Universidad Autónoma de Aguascalientes, 20100 Aguascalientes, Ags, MX.</td>
-                <td class="linea_abajo"><?php echo $direccion . ', ' . $pais . '.' ?></td>
+                <td class="linea_abajo"><?php echo $result['direccion'];
+                                        echo ', ';
+                                        echo $result['pais']; ?></td>
             </tr>
         </table>
 
@@ -79,14 +111,16 @@ $total = $subtotal + $totalIva + $gastoEnvio;
                     <th style="text-align: center;">Precio Unitario</th>
                     <th style="text-align: center;">Importe</th>
                 </tr>
-                <?php foreach ($productos as $producto) : ?>
-                    <tr class="productos">
-                        <td><?php echo htmlspecialchars($producto['nombre']); ?></td>
-                        <td class="cantidad"><?php echo $producto['cantidad']; ?></td>
-                        <td class="precioU">$<?php echo number_format($producto['precio'], 2); ?></td>
-                        <td>$<?php echo number_format($producto['precio'] * $producto['cantidad'], 2); ?></td>
-                    </tr>
-                <?php endforeach; ?>
+                <?php
+                foreach ($result['detalles'] as $producto) {
+                    echo '<tr class="productos">';
+                    echo '<td>' . $producto['prod_name'] . '</td>';
+                    echo '<td>' . $producto['cantidad'] . '</td>';
+                    echo '<td>$' . $producto['precio'] . '</td>';
+                    echo '<td>$' . $producto['precio'] * $producto['cantidad'] . '</td>';
+                    echo '</tr>';
+                }
+                ?>
 
                 <div>
                     <tr>
@@ -94,19 +128,19 @@ $total = $subtotal + $totalIva + $gastoEnvio;
                     </tr>
                     <tr>
                         <td class="factura_totales">Subtotal</td>
-                        <td>$<?php echo number_format($subtotal, 2); ?></td>
+                        <td>$<?php echo '0'?></td>
                     </tr>
                     <tr>
                         <td class="factura_totales">Gasto de Envío</td>
-                        <td>$<?php echo number_format($gastoEnvio, 2); ?></td>
+                        <td>$<?php echo '0' ?></td>
                     </tr>
                     <tr>
                         <td class="factura_totales">IVA</td>
-                        <td>$<?php echo number_format($totalIva, 2); ?></td>
+                        <td>$<?php echo '0' ?></td>
                     </tr>
                     <tr>
                         <td class="total"><strong>Total</strong></td>
-                        <td class="total" style="text-align: left;"><strong>$<?php echo number_format($total, 2); ?></strong></td>
+                        <td class="total" style="text-align: left;"><strong>$<?php echo '0' ?></strong></td>
                     </tr>
                 </div>
 
@@ -123,7 +157,7 @@ $total = $subtotal + $totalIva + $gastoEnvio;
     <div class="botonpdf">
         <button onclick="generarPDF()">Ver PDF</button>
     </div>
-<!--  $nombreUsuario = $_POST['nombre-completo'];
+    <!--  $nombreUsuario = $_POST['nombre-completo'];
     $correoUsuario = $_POST['email'];
     $direccion = $_POST['direccion'] . ', ' . $_POST['codigo-postal'] . ', ' . $_POST['ciudad'] . ', ' . $_POST['pais'];
     $metodoPago = $_POST['MetodoP'];
