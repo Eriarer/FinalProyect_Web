@@ -162,9 +162,19 @@
     function toggleMetodoPago() {
       $("#oxxo").click(function() {
         $(".cc-container").hide('slow');
+        //quitar el required de los campos de la tarjeta
+        $("#cc-name").removeAttr("required");
+        $("#cc-number").removeAttr("required");
+        $("#cc-expiration").removeAttr("required");
+        $("#cc-cvv").removeAttr("required");
       });
       $("#credit").click(function() {
         $(".cc-container").show('slow');
+        //agregar el required de los campos de la tarjeta
+        $("#cc-name").attr("required", true);
+        $("#cc-number").attr("required", true);
+        $("#cc-expiration").attr("required", true);
+        $("#cc-cvv").attr("required", true);
       });
     }
 
