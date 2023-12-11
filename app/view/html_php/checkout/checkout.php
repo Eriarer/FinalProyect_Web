@@ -193,12 +193,12 @@
           appendSubtotal(subtotalCarrito);
 
           //Actualizando el código html del carrito
-          var code = $('<li class="list-group-item d-flex justify-content-between bg-light" id="cuponContainer"></li>');
+          var code = $('<li class="list-group-item d-flex justify-content-between bg-light" id="cuponContainer" style="display:none !important;"></li>');
           html = '<div class="text-success">';
           html += '<h6 class="my-0">Código promocional</h6>';
           html += '<small id="cuponText">CUPON</small>'
           html += '</div>';
-          html += '<span class="text-success" id="desCup">-'+ 0 +'</span>';
+          html += '<span class="text-success" id="desCup">-$0</span>';
           code.html(html);
           ul.append(code);
 
