@@ -208,9 +208,8 @@
           html += '<strong id="total_carrito">$' + totcarrito + '</strong>';
           li.html(html);
           ul.append(li);
-          updateTotalCostoEnvio(200, 0);
 
-          $("#cuponContainer").hide();
+          updateTotalCostoEnvio(200, 16);
         },
         error: function() {
           console.log("No se ha podido obtener la información");
@@ -275,16 +274,22 @@
       });
     }
 
-    function updateTotalCostoEnvio(envio, lastEnvio) {
+    function updateTotalCostoEnvio(envio, iva) {
       //obtener el texto del total del carrito
-      var total = $("#total_carrito").text();
-      // Obtener solo el valor numerico (sin el signo de pesos)
-      total = total.substring(1);
-      // Convertir el valor a float
-      total = parseFloat(total);
-      // Actualizar el total del carrito
-      total = total - lastEnvio + envio;
+      var subtotal = $("#subtotal_carrito").text();
+      subtotal = parseFloat(subtotal.substring(1));
+      var cuponPrice = $("#desCup").text();
+      // quitarle el -$
+      cuponPrice = cuponPrice.substring(2);
+      // convertir a float
+      cuponPrice = parseFloat(cuponPrice);
+      total = subtotal - cuponPrice + envio;
 
+      // Calcular el IVA
+      var costoIVA = (iva / 100) * total;
+      costoIVA = costoIVA.toFixed(2);
+      $("#costoIVA").html("$" + costoIVA);
+      total = total + parseFloat(costoIVA);
       $("#total_carrito").html("$" + total);
     }
 
