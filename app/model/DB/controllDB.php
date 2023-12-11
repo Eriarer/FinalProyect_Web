@@ -178,13 +178,17 @@ class dataBase {
         $factura = [
           'folio_factura' => $row['folio_factura'],
           'fecha_factura' => $row['fecha_factura'],
+          'nombre' => $row['nombre'],
+          'correo' => $row['correo'],
+          'telefono' => $row['telefono'],
+          'direccion' => $row['direccion'],
+          'pais' => $row['pais'],
           'iva' => $row['iva'],
           'subtotal' => $row['subtotal'],
           'gastos_envio' => $row['gastos_envio'],
           'total' => $row['total'],
-          'pais' => $row['pais'],
-          'direccion' => $row['direccion'],
           'metodo_pago' => $row['metodo_pago'],
+          'total_iva' => $row['costo_iva'],
           'detalles' => []  // Inicializar el array de detalles
         ];
       }
