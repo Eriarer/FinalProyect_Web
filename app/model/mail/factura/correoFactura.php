@@ -188,7 +188,7 @@ $recipientMessage = '
                         </tr>
                         <tr>
                             <td class="linea_derecha">Fecha</td>
-                            <td class="linea_derecha">449-123-4567</td>
+                            <td class="linea_derecha">449XXXXXXX</td>
                             <td>' . $result['telefono'] . '</td>
                         </tr>
                         <tr>
