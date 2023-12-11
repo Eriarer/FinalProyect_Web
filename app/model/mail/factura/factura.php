@@ -35,6 +35,8 @@ $result = json_decode($result, true);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../../../media/images/oso-de-peluche.png" />
+    <title>Fluffy Hugs | Factura</title>
     <style>
         #plantilla {
             width: 100%;
@@ -177,7 +179,7 @@ $result = json_decode($result, true);
                             <td></td>
                         </tr>
                         <tr>
-                            <td class="linea_derecha"><?php echo $result['folio_factura'];?></td>
+                            <td class="linea_derecha"><?php echo $result['folio_factura']; ?></td>
                             <td class="linea_derecha">fluffyhugs2023@gmail.com</td>
                             <td></td>
                         </tr>
@@ -214,7 +216,7 @@ $result = json_decode($result, true);
 
                             <div>
                                 <tr>
-                                    <td colspan="2" rowspan="5" class="pago"><?php echo $metodoPago ?></td>
+                                    <td colspan="2" rowspan="5" class="pago"><?php echo 'Método de pago: ' . $metodoPago ?></td>
                                 </tr>
                                 <tr>
                                     <td class="factura_totales">Subtotal</td>
