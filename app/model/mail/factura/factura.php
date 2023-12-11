@@ -217,6 +217,7 @@ $result = json_decode($result, true);
                             <div>
                                 <tr>
                                     <td colspan="2" rowspan="5" class="pago"><?php echo 'Método de pago: ' . $metodoPago ?></td>
+                                    <td id="codigoBarras" colspan="2"></td>
                                 </tr>
                                 <tr>
                                     <td class="factura_totales">Subtotal</td>

@@ -215,6 +215,7 @@ foreach ($result['detalles'] as $producto) {
 }
 $recipientMessage .=  '     <tr>
                                 <td colspan="2" rowspan="5" class="pago">' . $result['metodo_pago'] . '</td>
+                                
                             </tr>
                             <tr>
                                 <td class="factura_totales">Subtotal</td>

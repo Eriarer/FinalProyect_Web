@@ -33,19 +33,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Boostrap v4.6.2 -->
+    <!-- Bootstrap v4.6.2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-    <!-- Jquery -->
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <!-- agregando link para darle estilos a la alerta -->
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- css -->
+    <!-- JsBarcode -->
+    <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
+    <!-- CSS -->
     <link rel="stylesheet" href="../../css/TicketEstilos.css">
     <link href="../../css/main.css" rel="stylesheet">
-    <!-- favIcon -->
+    <!-- favicon -->
     <link rel="icon" type="image/x-icon" href="../../../media/images/oso-de-peluche.png" />
     <title>Factura</title>
 </head>
@@ -103,7 +106,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div>
                     <tr>
-                        <td colspan="2" rowspan="5" class="pago"><?= $result['metodo_pago'] ?></td>
+                        <td colspan="2" rowspan="5" class="pago">
+                            <p><?= $result['metodo_pago'] ?></p>
+                            <svg id="barcode"></svg>
+                        </td>
                     </tr>
                     <tr>
                         <td class="factura_totales">Subtotal</td>
@@ -147,12 +153,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $telefono = $_POST['telefono']; -->
     <?php include_once '../footer.php'; ?>
     <script>
-        // Obtener los valores del formulario
-        var nombre = '<?php echo $nombreUsuario ?>';
-        var email = '<?php echo $correoUsuario ?>';
-        var direccion = '<?php echo $direccion ?>';
-        var metodoPago = '<?php echo $metodoPago ?>';
-        var telefono = '<?php echo $telefono ?>';
+        $(document).ready(function() {
+            // Generar código de barras aleatorio  
+            JsBarcode("#barcode", generateRandomBarcode(), {
+                format: "CODE128",
+                displayValue: true,
+                fontSize: 20,
+                lineColor: "#000000",
+                background: "transparent",
+                width: 3,
+                height: 100,
+                margin: 10,
+                render: "svg"
+            });
+
+            // Función para generar un número aleatorio como código de barras
+            function generateRandomBarcode() {
+                var numeroFactura = <?php echo json_encode($folio); ?>;
+                // Verificar si el valor es numérico y no está vacío
+                    // Convertir a número entero
+                    var numeroDecimal = parseInt(numeroFactura, 10);
+                    var numeroDecimal = numeroDecimal*524876502786;
+                    //reducir el tamaño a 12 caracteres
+                    var numeroDecimal = numeroDecimal.toString().substring(0, 12);
+                    // Asegurar que siempre tenga al menos 12 dígitos
+                    var resultado = numeroDecimal;
+                    return resultado;
+            }
+        });
+
+
 
         function generarPDF() {
             // Redirigir a TicketPDF.php con los parámetros
