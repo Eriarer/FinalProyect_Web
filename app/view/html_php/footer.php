@@ -24,7 +24,7 @@ $php = $CONFIG['P_php'];
       <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://www.facebook.com/?_rdr" role="button"><i class="fab fa-facebook-f"></i></a>
 
       <!-- Twitter -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-twitter"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://twitter.com/i/flow/login?input_flow_data=%7B%22requested_variant%22%3A%22eyJsYW5nIjoiZXMifQ%3D%3D%22%7D" role="button"><i class="fab fa-twitter"></i></a>
 
       <!-- Google -->
       <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-google"></i></a>
