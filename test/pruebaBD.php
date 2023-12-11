@@ -9,7 +9,7 @@ $conn = new mysqli($credentials['host'], $credentials['user'], $credentials['pas
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-$usuario = 6;
+$usuario = 3;
 $sql = "UPDATE usuarios SET NEWFLUFFY15 = 0 WHERE usr_id = $usuario";
 echo "<br><br>";
 if ($conn->query($sql) === TRUE) {
