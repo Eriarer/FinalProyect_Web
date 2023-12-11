@@ -32,11 +32,11 @@
         </ul>
         <!--FIN CARRITO PAGO-->
 
-        <form class="card p-2">
+        <form class="card p-2" action="javascript:void(0)">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Código promocional">
+            <input type="text" class="form-control" placeholder="Código promocional" id="cupon">
             <div class="input-group-append">
-              <button type="submit" class="btn btn-secondary">Usar</button>
+              <button class="btn btn-secondary" id="btnUsar" onclick="validarCupon()">Usar</button>
             </div>
           </div>
         </form>
@@ -150,11 +150,7 @@
   <script src="form-validation.js"></script>
 
   <script>
-    const cupones = {
-      "NEWFLUFFY15": 0.15,
-      "FLUFFY10": 0.10,
-      "FLUFFY5": 0.05
-    }
+    const email = "<?= $_SESSION['email'] ?>";
     /**
      * Funcion para actualizar la tabla de productos
      */
@@ -184,7 +180,6 @@
             return;
           }
           responce = JSON.parse(responce);
-          console.log(responce);
           var canttotal = 0;
           var html = '';
           var url = "../../media/images/productos/";
@@ -194,15 +189,13 @@
 
           // Agregar los productos del carrito 
           var totcarrito = appendProductos(responce);
-
-          var descuento = (totcarrito * 0.1);
-          totcarrito = totcarrito - descuento;
           //Actualizando el código html del carrito
-          var code = $('<li class="list-group-item d-flex justify-content-between bg-light"></li>');
+          var code = $('<li class="list-group-item d-flex justify-content-between bg-light" id="cuponContainer"></li>');
           html = '<div class="text-success">';
           html += '<h6 class="my-0">Código promocional</h6>';
+          html += '<small id="cuponText">CUPON</small>'
           html += '</div>';
-          html += '<span class="text-success">-' + descuento + '</span>';
+          html += '<span class="text-success" id="desCup">-'+ 0 +'</span>';
           code.html(html);
           ul.append(code);
 
@@ -216,6 +209,8 @@
           li.html(html);
           ul.append(li);
           updateTotalCostoEnvio(200, 0);
+
+          $("#cuponContainer").hide();
         },
         error: function() {
           console.log("No se ha podido obtener la información");
@@ -227,8 +222,9 @@
       var ul = $("#carritoList");
       var totcarrito = 0;
       for (var i = 0; i < responce.length; i++) {
-        producto = responce[i];
+        var producto = responce[i];
         var ahorro = (producto.prod_descuento / 100) * producto.prod_precio * producto.cantidad;
+        console.log(producto);
         var total_prod = (producto.prod_precio * producto.cantidad) - ahorro;
         totcarrito += total_prod;
         var canttotal = (canttotal + producto.cantidad);
@@ -237,7 +233,7 @@
         html += '<h6 class="my-0">' + producto.prod_name + '</h6>';
         html += '<small class="text-muted">' + 'Cantidad: ' + producto.cantidad + '</small>';
         html += '</div>';
-        html += '<span class="text-muted">$' + total_prod + '</span>';
+        html += '<span class="text-muted prod_price">$' + total_prod + '</span>';
         li.html(html);
         ul.append(li);
       }
@@ -287,6 +283,116 @@
       // Actualizar el total del carrito
       total = total - lastEnvio + envio;
 
+      $("#total_carrito").html("$" + total);
+    }
+
+
+    function validarCupon(){
+      console.log("validarCupon");
+      //detener el submit del formulario
+      var cupon = $("#cupon").val();
+      if(cupon == null || cupon == ""){
+        Swal.fire({
+          icon: 'error',
+          title: 'Ingrese un cupón',
+          text: 'Por favor ingrese un cupón',
+        })
+        return;
+      }
+
+      //Cupon existente
+      $.ajax({
+        type: "POST",
+        url: "../../../model/DB/manejoUsuarios.php",
+        data: {
+          method: "cuponExist",
+          cupon: cupon
+        },
+        success: function(responce) {
+          console.log("respuesta validarCupon:", responce);      
+          if(!responce){// Cupon no existente
+            Swal.fire({
+              icon: 'error',
+              title: 'Cupón no válido',
+              text: 'El cupón ingresado no es válido',
+            })
+            return;
+          }
+          usarCupon();
+        },
+        error: function() {
+          console.log("No se ha podido obtener la información");
+        }
+      });
+    }
+
+    function usarCupon(){
+      var cupon = $("#cupon").val();
+      $.ajax({
+        method: "POST",
+        url: "../../../model/DB/manejoUsuarios.php",
+        data: {
+          method: "usarCupon",
+          cupon: cupon,
+          email: email
+        },
+        success: function(responce) {
+          console.log(responce);
+          if(responce == "error"){// Cupon ya usado
+            Swal.fire({
+              icon: 'error',
+              title: 'Cupón expirado',
+              text: 'El cupón ingresado ha expirado o ya ha sido usado',
+            })
+            return;
+          }
+          modifTabla(cupon);
+        },
+        error: function() {
+          console.log("No se ha podido obtener la información");
+        }
+      });
+    }
+
+    function modifTabla(cupon){
+      console.log("modifTabla");
+      ///////Actualizando la info del cupon en la tabla
+      $("#cuponText").html(cupon);
+      var total = $("#total_carrito").text();
+      // Obtener solo el valor numerico (sin el signo de pesos)
+      total = total.substring(1);
+      // Convertir el valor a float
+      total = parseFloat(total);
+
+      //////Obtener el costo de envio
+      var envio = $("#costo_envio").text();
+      // Obtener solo el valor numerico (sin el signo de pesos)
+      envio = envio.substring(1);
+      // Convertir el valor a float
+      envio = parseFloat(envio);
+      total = total - envio;
+      
+      var totalCupon = 0;    
+      if(cupon == "NEWFLUFFY15"){
+        totalCupon = total * 0.15;
+      }else if(cupon == "FLUFFY10"){
+        totalCupon = total * 0.10;
+      }else if(cupon == "FLUFFY5"){
+        totalCupon = total * 0.05;
+      }
+
+      if(totalCupon != 0){
+        // hacer visible el cupon
+        $("#cuponContainer").show('slow');
+      }
+      //fixear a 2 decimales
+      totalCupon = totalCupon.toFixed(2);
+      $("#desCup").html("-$" + totalCupon);
+
+      //////Aplicndo el descuento al total
+      // Actualizar el total del carrito
+      total = total - totalCupon + envio;
+      total = total.toFixed(2);
       $("#total_carrito").html("$" + total);
     }
     //Función cuando cabia de país actualizar
