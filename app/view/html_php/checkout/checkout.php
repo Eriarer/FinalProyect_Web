@@ -209,8 +209,8 @@
 
           // Actualizar el total del carrito
           var li = $('<li class="list-group-item d-flex justify-content-between"></li>');
-          html = '<span>Total (MXN)</span>';
-          html += '<strong id="total_carrito">$' + totcarrito + '</strong>';
+          html = '<h6>Total (MXN)</h6>';
+          html += '<strong id="total_carrito">$' + subtotalCarrito + '</strong>';
           li.html(html);
           ul.append(li);
 
