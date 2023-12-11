@@ -132,21 +132,7 @@
 /*---------------fin de estilos de categorias-------*/
 
 /*-----------------estilos de destacados-----------*/
-/* #titulo_des {
-  color: #3978c0;
-  text-align: center;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-weight: bold;
-  font-size: xx-large;
-} */
 
-/* .destacados h3 {
-  color: rgb(45, 62, 160);
-  text-align: center;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-weight: bold;
-  font-size: x-large;
-} */
 
 /* Para agregar animación */
 @keyframes desplazar {
@@ -179,43 +165,47 @@
 .card_des {
   position: relative;
   flex: 0 0 309px;
-  height: 450px;
-  overflow: hidden;
+  height: min-content;
   margin-left: 1.5em;
+  overflow: hidden;
   border-radius: 18px;
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
   scroll-snap-align: initial;
   text-align: end;
   flex-shrink: 0;
   width: 250px;
+  padding: 0;
 
+  &:hover {
+    &>img {
+      filter: none;
+      transform: scale(1.1);
+    }
+  }
 
+  &>img {
+    top: 0;
+    width: 100%;
+    height: auto;
+    filter: grayscale(0.1) brightness(0.98) contrast(1.02);
+    transition: 0.5s ease;
+  }
+
+  & .body_des {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    background-color: #00000099;
+    padding: 0.5rem 0;
+    border-radius: 18px;
+    /* agregarle sombra al texto */
+    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.9);
+  }
 }
 
-.body_des {
-  position: absolute;
-  margin-top: 275px;
-  top: 0;
-  padding: 28px;
-  font-family: "San Francisco";
-  font-weight: 600;
-}
-
-.image {
-  width: 100%;
-}
-
-.tit_des {
-  font-size: 0.75rem;
-  margin-top: 1rem;
-}
-
-.texto {
-  font-size: 1.1rem;
-  font-weight: 300;
-  text-align: center;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
 
 /*--------------estilos extra-------------------*/
 

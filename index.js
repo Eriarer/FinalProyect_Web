@@ -11,7 +11,7 @@ function infiniteScroll(productosDestacados) {
   var marginX = parseInt($('.card_des').css('margin-right').substring(0, $('.card_des').css('margin-right').length - 2) +
     $('.card_des').css('margin-left').substring(0, $('.card_des').css('margin-left').length - 2));
   var conteinerWidth = ($('.card_des').width() + marginX) * cantidadProductos;
-  var animationDuration = 30; // segundos
+  var animationDuration = 60; // segundos
 
   // Calcula la velocidad de desplazamiento necesario para cubrir el ancho en la duración deseada
 
@@ -48,12 +48,9 @@ function agregarProductosAlContenedor(productosDestacados) {
 
     // Crear un elemento de tarjeta
     var tarjeta = $('<article class="card_des">' +
-      '<img src="' + imgPath + '" alt="" class="image" onerror="this.src=\'' + relleno + '\'">' +
+      '<img src="' + imgPath + '" alt="" class="image prod_destacado" onerror="this.src=\'' + relleno + '\'">' +
       '<section class="body_des">' +
-      '<h3 class="tit_des">' + productosDestacados[index].prod_name + '</h4>' +
-      '<p class="texto">' + productosDestacados[index].categoria + '<br>' +
-      '<sub> stock: ' + productosDestacados[index].prod_stock + '</sub>' +
-      '</p>' +
+      '<h3 class="texto">' + productosDestacados[index].prod_name + '</h4>' +
       '</section>' +
       '</article>');
 
@@ -64,59 +61,35 @@ function agregarProductosAlContenedor(productosDestacados) {
 }
 
 function getAllProducts() {
+  // conseguir la fecha de inicio y final en formato date YYYY-MM-DD
+  var fechaFin = new Date();
+  var fechaInicio = new Date();
+  fechaInicio.setMonth(fechaInicio.getMonth() - 3);
+
+  // formatear la fecha
+  const formatoFecha = (fecha) => {
+    const year = fecha.getFullYear();
+    const month = String(fecha.getMonth() + 1).padStart(2, '0');
+    const day = String(fecha.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  fechaFin = formatoFecha(fechaFin);
+  fechaInicio = formatoFecha(fechaInicio);
   $.ajax({
-    url: 'app/model/DB/manejoProductos.php',
+    url: 'app/model/DB/facturas/mostSelled.php',
     type: 'POST',
     data: {
-      method: 'getAllProducts'
+      fechaInicio: fechaInicio,
+      fechaFin: fechaFin
     },
     success: function (data) {
       var productos = JSON.parse(data);
-      // Conseguir máximo 6 productos y crear un vector de productos mezclando categorías
-      var productosCategoria = {};
-      var categorias = [];
+      console.log(productos);
 
-      // Obtener categorías únicas
-      productos.forEach(function (producto) {
-        if (!categorias.includes(producto.categoria)) {
-          categorias.push(producto.categoria);
-        }
-      });
+      agregarProductosAlContenedor(productos);
 
-      // Inicializar productos agrupados por categoría
-      categorias.forEach(function (categoria) {
-        productosCategoria[categoria] = [];
-      });
-
-      // Agrupar productos por categoría
-      productos.forEach(function (producto) {
-        productosCategoria[producto.categoria].push(producto);
-      });
-
-      var productosDestacados = [];
-      // Iterar hasta alcanzar el límite de productos destacados (6) o no haya más productos
-      while (productosDestacados.length < 6) {
-        let productosDisponibles = false;
-
-        // Iterar por cada categoría
-        categorias.forEach(function (categoria) {
-          // Verificar si hay productos disponibles en la categoría actual
-          if (productosCategoria[categoria].length > 0) {
-            // Agregar un producto de la categoría actual a los destacados
-            productosDestacados.push(productosCategoria[categoria].shift());
-            productosDisponibles = true;
-          }
-        });
-
-        // Si no hay más productos disponibles en ninguna categoría, salir del bucle
-        if (!productosDisponibles) {
-          break;
-        }
-      }
-
-      agregarProductosAlContenedor(productosDestacados);
-
-      infiniteScroll(productosDestacados);
+      infiniteScroll(productos);
 
     }
   });
