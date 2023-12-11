@@ -272,20 +272,23 @@
           responce = JSON.parse(responce);
           var factura = responce['folio_factura'];
           enviarCorreo(factura);
-          // lanzar sweet alert
+          // lanzar sweet alert custom, el cual el boton de confirmar
+          // sea un formulario el cual se envia por metodo POST
+          // a la página ticket.php y se le envia el folio de la factura
+          var html = '<form action="Ticket.php" method="POST" id="formTicket">';
+          html += '<input type="text" name="folio" value="' + factura + '" style="display:none;">';
+          html += '<button type="submit" class="btn btn-primary">Confirmar</button>';
+          html += '</form>';
+
           Swal.fire({
             icon: 'success',
             title: 'Compra realizada',
             text: 'Su compra se ha realizado con éxito',
-            // cuando se 
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // vaciar el carrito
-              setTimeout(function() {
-                //window.location.href = "../../../../index.php";
-              }, 1000);
-            }
-          })
+            html: html,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          });
         },
       });
       vaciarCarrito();
