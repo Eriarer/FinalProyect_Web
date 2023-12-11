@@ -184,7 +184,6 @@ $recipientMessage = '
                             <td class="linea_derecha">' . $folio . '</td>
                             <td class="linea_derecha">fluffyhugs2023@gmail.com</td>
                             <td>' . $result['correo'] . '</td>
-                            </td>
                         </tr>
                         <tr>
                             <td class="linea_derecha">Fecha</td>
@@ -214,7 +213,7 @@ foreach ($result['detalles'] as $producto) {
     $recipientMessage .= '<td>$' . $producto['precio'] * $producto['cantidad'] . '</td>';
     $recipientMessage .= '</tr>';
 }
-$recipientMessage .=  '<div>
+$recipientMessage .=  '
                                 <tr>
                                     <td colspan="2" rowspan="5" class="pago">' . $result['metodo_pago'] . '</td>
                                 </tr>
@@ -234,11 +233,9 @@ $recipientMessage .=  '<div>
                                     <td class="total"><strong>Total</strong></td>
                                     <td class="total" style="text-align: left;"><strong>' . $result['total'] . '</strong></td>
                                 </tr>
-                            </div>
 
                         </table>
                     </div>
-
                 </div>
             </td>
             <td class="right"></td>
@@ -258,7 +255,6 @@ $recipientMessage .=  '<div>
             </td>
             <td class="right"></td>
         </tr>
-
         </tr>
     </table>
 </body>
