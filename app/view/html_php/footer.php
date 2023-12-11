@@ -30,7 +30,7 @@ $php = $CONFIG['P_php'];
       <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://www.youtube.com/" role="button"><i class="fab fa-google"></i></a>
 
       <!-- Instagram -->
-      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-instagram"></i></a>
+      <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="https://www.instagram.com/fluffy_hugs_official/" role="button"><i class="fab fa-instagram"></i></a>
 
       <!-- Linkedin -->
       <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i class="fab fa-linkedin-in"></i></a>
