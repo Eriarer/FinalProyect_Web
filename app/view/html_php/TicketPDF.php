@@ -1,11 +1,40 @@
 <?php
-require('../lib/fpdf186/fpdf.php'); // Asegurate de que esta ruta sea correcta
+include_once __DIR__ . '/../../model/DB/dataBaseCredentials.php';
+include_once __DIR__ . '/../../model/DB/routes_files.php';
+include_once __DIR__ . '/../../model/DB/controllDB.php';
 
+$db = new dataBase($credentials, $CONFIG);
+
+$result = $db->getFactura('000000');
+
+$result = json_decode($result, true);
+
+// echo $result['folio_factura'];
+// echo $result['fecha_factura'];
+// echo $result['iva'];
+// echo $result['subtotal'];
+// echo $result['gastos_envio'];
+// echo $result['total'];
+// echo $result['pais'];
+// echo $result['direccion'];
+// echo $result['metodo_pago'];
+
+// foreach ($result['detalles'] as $producto) {
+//     echo $producto['prod_id'];
+//     echo $producto['prod_name'];
+//     echo $producto['cantidad'];
+//     echo $producto['precio'];
+//     echo $producto['descuento'];
+//     echo  $producto['categoria'];
+//     echo $producto['prod_imgPath'];
+// }
+
+require('../lib/fpdf186/fpdf.php'); // Asegurate de que esta ruta sea correcta
 class PDF extends FPDF
 {
     function Header()
     {
-        $this->Image('../../media/images/LogoSF.png', 160, 10, 40);
+        $this->Image('../../media/images/LogoSF.png', 180, 5, 20);
         $this->SetFont('Arial', 'B', 12);
         $this->Cell(80);
         $this->Cell(30, 10, 'Fluffy Hugs Factura', 0, 0, 'C');
@@ -29,22 +58,43 @@ class PDF extends FPDF
         $this->Cell(0, 10, 'Correo: ' . $correoUsuario, 0, 1);
         $this->Cell(0, 10, 'Telefono: ' . $telefono, 0, 1);
         $this->Cell(0, 10, 'Fecha: ' . $fechaFactura, 0, 1);
-        $this->Cell(0, 10, 'Direccion: ' . $direccion, 0, 1);
+        // Hay direcciones que son muy largas y se desbordan, si el tamaño es mayor a 100 caracteres, se divide en dos lineas
+        $direccion = 'Avenida Universidad 940, Ciudad Universitaria, Universidad Autónoma de Aguascalientes, 20100 Aguascalientes, Ags.';
+        if (strlen($direccion) > 80) {
+            // Encuentra la última posición de un espacio dentro de la longitud máxima permitida
+            $lastSpacePos = strrpos(substr($direccion, 0, 80), ' ');
 
+            // Dividir la cadena en dos partes en el último espacio encontrado
+            if ($lastSpacePos !== false) {
+                $direccion1 = substr($direccion, 0, $lastSpacePos);
+                $direccion2 = substr($direccion, $lastSpacePos + 1, strlen($direccion));
+                $this->Cell(0, 10, 'Direccion: ' . $direccion1, 0, 1);
+                $this->Cell(0, 0, $direccion2, 0, 1);
+            } else {
+                // Si no se encuentra un espacio, simplemente corta en la posición 80
+                $direccion1 = substr($direccion, 0, 80);
+                $direccion2 = substr($direccion, 80, strlen($direccion));
+                $this->Cell(0, 10, 'Direccion: ' . $direccion1, 0, 1);
+                $this->Cell(0, 0, $direccion2, 0, 1);
+            }
+        } else {
+            $this->Cell(0, 10, 'Direccion: ' . $direccion, 0, 1);
+        }
         $this->Ln(10);
+        $this->Cell(0, 10, 'Detalles de la compra', 0, 1);
 
         $this->SetFont('Arial', 'B', 12);
-        $this->Cell(60, 10, 'Producto', 1);
-        $this->Cell(30, 10, 'Cantidad', 1);
-        $this->Cell(40, 10, 'Precio Unitario', 1);
-        $this->Cell(40, 10, 'Importe', 1);
+        $this->Cell(95, 10, 'Producto', 1);
+        $this->Cell(22, 10, 'Cantidad', 1);
+        $this->Cell(35, 10, 'Precio Unitario', 1);
+        $this->Cell(35, 10, 'Importe', 1);
         $this->Ln();
-
+        
         foreach ($productos as $producto) {
-            $this->Cell(60, 10, $producto['nombre'], 1);
-            $this->Cell(30, 10, $producto['cantidad'], 1);
-            $this->Cell(40, 10, '$' . number_format($producto['precio'], 2), 1);
-            $this->Cell(40, 10, '$' . number_format($producto['precio'] * $producto['cantidad'], 2), 1);
+            $this->Cell(95, 10, $producto['prod_name'], 1);
+            $this->Cell(22, 10, $producto['cantidad'], 1);
+            $this->Cell(35, 10, '$' . number_format($producto['precio'], 2), 1);
+            $this->Cell(35, 10, '$' . number_format($producto['precio'] * $producto['cantidad'], 2), 1);
             $this->Ln();
         }
 
@@ -52,9 +102,6 @@ class PDF extends FPDF
 
         $this->SetFont('Arial', '', 12);
         $this->Cell(60, 10, 'Metodo de Pago: ' . $metodoPago, 0, 1);
-
-        $this->Ln(10);
-
         $this->SetFont('Arial', 'B', 12);
         $this->Cell(60, 10, 'Subtotal', 1);
         $this->Cell(80, 10, '$' . number_format($subtotal, 2), 1);
@@ -114,15 +161,15 @@ $pdf = new PDF();
 $pdf->AddPage();
 
 // Obtener los parámetros de la URL
-$nombreUsuario = $_GET['nombre'];
-$correoUsuario = $_GET['email'];
-$direccion = $_GET['direccion'];
-$metodoPago = $_GET['metodoPago'];
-$telefono = $_GET['telefono'];
+// $nombreUsuario = $_GET['nombre'];
+// $correoUsuario = $_GET['email'];
+// $direccion = $_GET['direccion'];
+// $metodoPago = $_GET['metodoPago'];
+// $telefono = $_GET['telefono'];
 
 // Datos de la factura 
-$folioFactura = "123456";
-$fechaFactura = date("Y-m-d");
+// $folioFactura = "123456";
+// $fechaFactura = date("Y-m-d");
 
 // Lista de productos comprados (normalmente seria obtenida de una base de datos)
 $productos = [
@@ -142,8 +189,7 @@ $gastoEnvio = 50.00;
 $total = $subtotal + $totalIva + $gastoEnvio;
 
 // Agregar contenido al PDF
-$pdf->facturaContent($nombreUsuario, $correoUsuario, $direccion, $telefono, $folioFactura, $fechaFactura, $metodoPago, $productos, $subtotal, $gastoEnvio, $totalIva, $total);
-
+$pdf->facturaContent($nombreUsuario, $correoUsuario, $result['direccion'] . ', ' . $result['pais'], $telefono, $result['folio_factura'], $result['fecha_factura'], $result['metodo_pago'], $result['detalles'], $result['subtotal'], $result['gastos_envio'], $result['iva'], $result['total']);
 
 // $pdf->AddInvoiceContent($data);
 
