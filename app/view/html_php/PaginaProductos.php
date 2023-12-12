@@ -158,7 +158,14 @@ $lastUpdateDate = filemtime(__FILE__);
         Swal.fire({
           title: "Lo sentimos",
           text: "Debes iniciar sesión para agregar productos",
-          icon: "error"
+          icon: "error",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: true,
+          confirmButtonText: "Iniciar sesión",
+        }).then((result) => {
+          window.location.href = "Log_register.php";
         });
       <?php
       } else {
