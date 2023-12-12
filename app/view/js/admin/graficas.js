@@ -5,6 +5,7 @@ const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
   "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
 ];
 const nomDias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+var pieData, barsData;
 $(document).ready(function () {
   $("#noData").hide();
   $("#chart1").hide();
@@ -52,6 +53,7 @@ $(document).ready(function () {
   drawChart2();
 
   actualizarGraficos(anio, mes);
+  mainLoop();
 });
 
 function actualizarGraficos(anio, mes) {
@@ -75,6 +77,12 @@ function updateChart1(fechaInicio, fechaFin) {
     },
     success: function (response) {
       response = JSON.parse(response);
+      //si el data es diferente al anterior, actualizar el grafico/
+      if (JSON.stringify(response) == JSON.stringify(pieData)) {
+        return;
+      }
+      pieData = response;
+      console.log("update chart 1");
       if (response.length == 0) {
         pieChart.data = {};
       } else {
@@ -87,7 +95,10 @@ function updateChart1(fechaInicio, fechaFin) {
           }]
         };
       }
-      pieChart.update();
+      // actualizar el grafico sin causar la animacion de entrada
+      pieChart.update({
+        duration: 0
+      });
       return response.length;
     }
   });
@@ -103,7 +114,12 @@ function updateChart2(fechaInicio, fechaFin) {
     },
     success: function (response) {
       response = JSON.parse(response);
-      console.log(response);
+      //si el data es diferente al anterior, actualizar el grafico/
+      if (JSON.stringify(response) == JSON.stringify(barsData)) {
+        return;
+      }
+      console.log("update chart 2");
+      barsData = response;
       // si todos los totales son 0
       var total = 0;
       for (let i = 0; i < response.length; i++) {
@@ -124,7 +140,10 @@ function updateChart2(fechaInicio, fechaFin) {
           $("#chart2").show();
         }, 600);
       }
-      barsChart.update();
+      // actualizar el grafico sin causar la animacion de entrada
+      barsChart.update({
+        duration: 0
+      });
       return response.length;
     }
   });
@@ -163,6 +182,9 @@ function drawChart1() {
     },
     options: {
       responsive: true,
+      animation: {
+        duration: 0.1
+      },
       plugins: {
         legend: {
           position: 'bottom',
@@ -257,7 +279,6 @@ function getData(semanas) {
     datasets: dataset
   };
 
-  console.log(data);
   return data;
 }
 
@@ -278,6 +299,9 @@ function drawChart2() {
     },
     options: {
       responsive: true,
+      animation: {
+        duration: 0.1
+      },
       plugins: {
         legend: {
           position: 'bottom',
@@ -318,4 +342,23 @@ function drawChart2() {
       }
     },
   });
+}
+
+
+function mainLoop() {
+  console.log("loop");
+  // hacer un loop infinito que actualice los graficos cada 5 segundos
+  // si hubo cambios en la base de datos
+  // actualizar los graficos
+  // obtener el año de la fecha de inicio del texto
+  var anio = $("#mes").text().split(" ")[2];
+  // obtener el mes de la fecha de inicio del texto
+  var mes = meses.indexOf($("#mes").text().split(" ")[0]);
+  // darle formato a la fecha de inicio
+  anio = new Date(anio, mes, 1).getFullYear();
+  mes = new Date(anio, mes, 1).getMonth();
+  actualizarGraficos(anio, mes);
+  setTimeout(() => {
+    mainLoop();
+  }, 5000);
 }
