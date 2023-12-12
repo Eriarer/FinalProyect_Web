@@ -15,6 +15,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     return $response ? "success" : "error";
   } else if ($method === "altaUsuario") {
     $email = $_POST['usr_email'];
+    // verificar que el email no exista
+    $response = $db->emailExist($email);
+    if ($response) {
+      echo "error";
+      return "error";
+    }
     $name = $_POST['usr_name'];
     $account = $_POST['usr_account'];
     $password = $_POST['usr_pwd'];
@@ -23,7 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $respuesta = $_POST['respuesta'];
     // encriptar contraseña con BCRYPT y agregarle salt
     $password = password_hash($password, PASSWORD_BCRYPT);
-
     $response = $db->altaUsuario($email, $name, $account, $password, $admin, $pregunta, $respuesta);
     echo $response ? "success" : "error";
     return $response ? "success" : "error";
@@ -50,16 +55,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $response = $db->updatePassword($email, $password);
     echo $response ? "success" : "error";
     return $response ? "success" : "error";
-  }else if($method === "cuponExist"){
+  } else if ($method === "cuponExist") {
     $cupon = $_POST['cupon'];
-    if($cupon === "NEWFLUFFY15" || $cupon === "FLUFFY10" || $cupon === "FLUFFY5"){
+    if ($cupon === "NEWFLUFFY15" || $cupon === "FLUFFY10" || $cupon === "FLUFFY5") {
       echo true;
       return "true";
-    }else{
+    } else {
       echo false;
       return "false";
     }
-  }else if($method === "usarCupon"){
+  } else if ($method === "usarCupon") {
     $cupon = $_POST['cupon'];
     $email = $_POST['email'];
     $id = $db->getId($email);
