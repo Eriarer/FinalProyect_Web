@@ -1088,7 +1088,17 @@ class dataBase {
     // Obtener el número de filas afectadas por la última consulta
     $result = $stmt->get_result();
     $stmt->close();
-    return $result->num_rows > 0;
+    //verificar si el email existe si existe devuelve true, sino false;
+    $result = $result->fetch_assoc();
+    if (isset($result['usr_email'])) {
+      if ($result['usr_email'] == $email) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
   public function getUserByEmail($email) {
