@@ -51,6 +51,9 @@ if ($result->num_rows > 0) {
     echo "<th>intentos</th>";
     echo "<th>password</th>";
     echo "<th>admin</th>";
+    echo "<th>NEWFLUFFY15</th>";
+    echo "<th>FLUFFY10</th>";
+    echo "<th>FLUFFY5</th>";
     echo "</tr>";
     while ($row = $result->fetch_assoc()) {
         echo "<tr>";

@@ -13,13 +13,17 @@ if ($conn->connect_error) {
 $sql_disable_fk = "SET foreign_key_checks = 0";
 $conn->query($sql_disable_fk);
 
-// Acer admin (poniendo 1 a la columna usr_admin) a un usuario en especifico
-$sql_alta_admin = "UPDATE usuarios SET usr_admin = 1 WHERE usr_id = 9";
-if ($conn->query($sql_alta_admin) === TRUE) {
-    echo "Se ha dado de alta al usuario con id 1 como administrador";
-} else {
-    echo "Error al dar de alta al usuario con id 1 como administrador: " . $conn->error;
+for ($i = 1; $i <= 1; $i++) {
+    // Acer admin (poniendo 1 a la columna usr_admin) a un usuario en especifico
+    $sql_alta_admin = "UPDATE usuarios SET usr_admin = 1 WHERE usr_id = $i";
+    if ($conn->query($sql_alta_admin) === TRUE) {
+        echo "Se ha dado de alta al usuario con id 1 como administrador";
+    } else {
+        echo "Error al dar de alta al usuario con id 1 como administrador: " . $conn->error;
+    }
+    echo "<br>";
 }
+
 
 // Reactivar restricciones de clave externa
 $sql_enable_fk = "SET foreign_key_checks = 1";
