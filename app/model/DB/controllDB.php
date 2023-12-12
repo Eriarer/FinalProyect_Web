@@ -996,8 +996,8 @@ class dataBase {
     }
 
     // Preparar la sentencia para evitar la <--inyección SQL-->
-    $sql = "INSERT INTO usuarios (usr_email, usr_name, usr_account, usr_pwd, usr_admin) 
-              VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO usuarios (usr_email, usr_name, usr_account, usr_pwd, usr_admin, NEWFLUFFY15, FLUFFY10, FLUFFY5)
+              VALUES (?, ?, ?, ?, ?, 0, 0, 0)";
     // Preparar la sentencia
     $stmt = $this->connexion->prepare($sql);
 
@@ -1074,7 +1074,6 @@ class dataBase {
     if ($email == null) {
       throw new Exception("Todos los campos son obligatorios.");
     }
-
     // Preparar la sentencia para evitar la <--inyección SQL-->
     $sql = "SELECT usr_email FROM usuarios WHERE usr_email = ?";
     // Preparar la sentencia
