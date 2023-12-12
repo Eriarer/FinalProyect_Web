@@ -469,6 +469,9 @@ $lastUpdateDate = filemtime(__FILE__);
       } else {
         envio = 500;
       }
+      if (parseFloat($("#subtotal_carrito").text().substring(1)) > 3499) {
+        envio = 0;
+      }
       var li = $('<li class="list-group-item d-flex justify-content-between"></li>');
       html = '<span>Costo de envio</span>';
       html += '<strong id="costo_envio">$' + envio + '</strong>';
@@ -511,6 +514,10 @@ $lastUpdateDate = filemtime(__FILE__);
         } else {
           envio = 500;
           iva = 21;
+        }
+        // si el subtotal es superior a 3499 el envio es gratis
+        if (parseFloat($("#subtotal_carrito").text().substring(1)) > 3499) {
+          envio = 0;
         }
         $("#porcentajeIVA").html(iva + "%");
         $("#costo_envio").html("$" + envio);
