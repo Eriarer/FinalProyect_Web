@@ -1,4 +1,6 @@
 <?php
+session_start();
+$lastUpdateDate = filemtime(__FILE__);
 include_once __DIR__ . '/../../../model/DB/dataBaseCredentials.php';
 include_once __DIR__ . '/../../../model/routes_files.php';
 include_once __DIR__ . '/../../../model/DB/controllDB.php';
@@ -171,14 +173,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             function generateRandomBarcode() {
                 var numeroFactura = <?php echo json_encode($folio); ?>;
                 // Verificar si el valor es numérico y no está vacío
-                    // Convertir a número entero
-                    var numeroDecimal = parseInt(numeroFactura, 10);
-                    var numeroDecimal = numeroDecimal*524876502786;
-                    //reducir el tamaño a 12 caracteres
-                    var numeroDecimal = numeroDecimal.toString().substring(0, 12);
-                    // Asegurar que siempre tenga al menos 12 dígitos
-                    var resultado = numeroDecimal;
-                    return resultado;
+                // Convertir a número entero
+                var numeroDecimal = parseInt(numeroFactura, 10);
+                var numeroDecimal = numeroDecimal * 524876502786;
+                //reducir el tamaño a 12 caracteres
+                var numeroDecimal = numeroDecimal.toString().substring(0, 12);
+                // Asegurar que siempre tenga al menos 12 dígitos
+                var resultado = numeroDecimal;
+                return resultado;
             }
         });
 

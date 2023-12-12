@@ -1,3 +1,7 @@
+<?php
+session_start();
+$lastUpdateDate = filemtime(__FILE__);
+?>
 <!doctype html>
 <html lang="en">
 

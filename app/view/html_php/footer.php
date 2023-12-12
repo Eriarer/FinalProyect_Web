@@ -108,6 +108,7 @@ $php = $CONFIG['P_php'];
             <li>
               <p class="text-body">fluffyhugs2023@gmail.com</p>
             </li>
+
           </ul>
         </div>
         <!--Grid column-->
@@ -124,6 +125,9 @@ $php = $CONFIG['P_php'];
   <!-- Copyright -->
   <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
     © 2023 FluffyHugs
+  </div>
+  <div class="text-center p-3">
+    Ultima actualización: <?= date("Y-m-d ", $lastUpdateDate) ?>
   </div>
 </footer>
 <script>

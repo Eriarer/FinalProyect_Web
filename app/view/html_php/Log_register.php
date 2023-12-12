@@ -3,6 +3,7 @@ session_start();
 if (isset($_SESSION['name'])) {
   header('Location: ../../../index.php');
 }
+$lastUpdateDate = filemtime(__FILE__);
 ?>
 <!DOCTYPE html>
 <html lang="es">

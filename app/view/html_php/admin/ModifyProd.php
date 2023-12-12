@@ -1,5 +1,6 @@
 <?php
 session_start();
+$lastUpdateDate = filemtime(__FILE__);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,7 +88,7 @@ session_start();
   ?>
   <?php require_once '../navbar.php'; ?>
   <div class="container d-flex justify-content-center mt-5">
-    <table class="table  table-striped table-hover table-responsive-md tableF" >
+    <table class="table  table-striped table-hover table-responsive-md tableF">
       <thead>
         <tr>
           <th scope="col" class="titulo">ID</th>

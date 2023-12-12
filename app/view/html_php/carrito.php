@@ -1,3 +1,7 @@
+<?php
+session_start();
+$lastUpdateDate = filemtime(__FILE__);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,20 +24,21 @@
   <link rel="icon" type="image/x-icon" href="../../media/images/oso-de-peluche.png" />
 
 </head>
+
 <body>
   <?php require_once 'navbar.php'; ?>
   <div class="container mb-5">
-    <div class="container d-flex justify-content-center mt-5" >
+    <div class="container d-flex justify-content-center mt-5">
       <table class="table table-striped table-hover table-responsive-md" style="background-color:#D6EAF8 ;">
         <thead>
           <tr>
             <th scope="col" class="titulo">Producto</th>
-            <th scope="col"  class="titulo">Cantidad</th>
-            <th scope="col"  class="titulo">Descripción</th>
-            <th scope="col"  class="titulo">Precio unitario</th>
-            <th scope="col"  class="titulo">Ahorra</th>
-            <th scope="col"  class="titulo">Precio total</th>
-            <th scope="col"  class="titulo">Acción</th>
+            <th scope="col" class="titulo">Cantidad</th>
+            <th scope="col" class="titulo">Descripción</th>
+            <th scope="col" class="titulo">Precio unitario</th>
+            <th scope="col" class="titulo">Ahorra</th>
+            <th scope="col" class="titulo">Precio total</th>
+            <th scope="col" class="titulo">Acción</th>
           </tr>
         </thead>
         <tbody>
