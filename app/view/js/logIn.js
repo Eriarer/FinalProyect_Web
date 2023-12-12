@@ -184,7 +184,7 @@ function verifyLoginForm(e) {
 
 function verifyRegisterForm(e) {
   $.ajax({
-    url: '../../model/DB/manejoProductos.php',
+    url: '../../model/DB/manejoUsuarios.php',
     type: 'POST',
     data: {
       'method': 'altaUsuario',
@@ -199,10 +199,9 @@ function verifyRegisterForm(e) {
       if (data == 'success') {
         // loggear al usuario inmediatamente
         $.ajax({
-          url: '../../model/DB/manejoProductos.php',
+          url: '../../model/user/logIn.php',
           type: 'POST',
           data: {
-            'method': 'login',
             'email': $('#emailReg').val(),
             'password': $('#passwordReg').val()
           },
@@ -243,7 +242,7 @@ function recuperarCuenta() {
 function verificarEmailRecuperacion() {
   // verificar que el email exista en la base de datos
   $.ajax({
-    url: '../../model/DB/manejoProductos.php',
+    url: '../../model/DB/manejoUsuarios.php',
     type: 'POST',
     data: {
       'method': 'emailExist',
@@ -251,15 +250,19 @@ function verificarEmailRecuperacion() {
     },
     success: function (data) {
       if (data == 'success') {
+        console.log('existe');
+        console.log($('#emailRecuperar').val());
+
         //recuperar la pregunta de seguridad
         $.ajax({
-          url: '../../model/DB/manejoProductos.php',
+          url: '../../model/DB/manejoUsuarios.php',
           type: 'POST',
           data: {
             'method': 'getSecurityQuestion',
             'email': $('#emailRecuperar').val()
           },
           success: function (data) {
+            console.log(data);
             data = JSON.parse(data);
             if (data != 'error') {
               $('#emailRecuperar').attr('readonly', true);
@@ -286,7 +289,7 @@ function verificarEmailRecuperacion() {
 function obtenerPreguntaSeguridad() {
   if ($('#respuestaSeguridad').val() != '') {
     $.ajax({
-      url: '../../model/DB/manejoProductos.php',
+      url: '../../model/DB/manejoUsuarios.php',
       type: 'POST',
       data: {
         'method': 'verifySecurityAnswer',
@@ -326,7 +329,7 @@ function obtenerPreguntaSeguridad() {
 
 function cambiarContrasena() {
   $.ajax({
-    url: '../../model/DB/manejoProductos.php',
+    url: '../../model/DB/manejoUsuarios.php',
     type: 'POST',
     data: {
       'method': 'unblock',
