@@ -84,7 +84,15 @@ $lastUpdateDate = filemtime(__FILE__);
               <div class='myCard'>
                 <div class='cardHeader'>
                   <img src="<?= $targetImage ?>" alt="<?= $producto['prod_name'] ?>">
-                  <div class='overlay'>$<?= $producto['prod_precio'] ?>
+                  <div class='overlay'>
+                    <?php if ($producto['prod_descuento'] == 0) : ?>
+                      $<?= $producto['prod_precio'] ?>
+                    <?php else : ?>
+                      <!-- texto tachado y muteado -->
+                      <small style="text-decoration: line-through; color: #CCC;">$<?= $producto['prod_precio'] ?></small>
+                      <i class="nf nf-oct-arrow_right"></i>
+                      <h7>$<?= $producto['prod_precio'] * (1 - ($producto['prod_descuento'] / 100)) ?></h7>
+                    <?php endif; ?>
                   </div>
                   <?php if ($producto['prod_descuento'] != 0) : ?>
                     <div class='descuento'>
