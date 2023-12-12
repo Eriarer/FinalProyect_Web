@@ -797,8 +797,8 @@ class dataBase {
     }
 
     // Preparar la sentencia para evitar la inyección SQL
-    $sql = "INSERT INTO productos (categoria, prod_name, prod_description, prod_imgPath, prod_stock, prod_precio, prod_descuento) 
-              VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO productos (categoria, prod_name, prod_description, prod_imgPath, prod_stock, prod_precio, prod_descuento, deleted)
+              VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
     // Preparar la sentencia
     $stmt = $this->connexion->prepare($sql);
 
